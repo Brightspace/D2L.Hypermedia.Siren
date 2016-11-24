@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2L.Hypermedia.Siren", "D2L.Hypermedia.Siren.csproj", "{11695B7A-07C5-4F65-A1E2-8BCC5A9690A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2L.Hypermedia.Siren.Tests", "..\D2L.Hypermedia.Siren.Tests\D2L.Hypermedia.Siren.Tests.csproj", "{D070F17F-D338-4F1C-9DE7-F5367BF2482F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11695B7A-07C5-4F65-A1E2-8BCC5A9690A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11695B7A-07C5-4F65-A1E2-8BCC5A9690A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11695B7A-07C5-4F65-A1E2-8BCC5A9690A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11695B7A-07C5-4F65-A1E2-8BCC5A9690A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D070F17F-D338-4F1C-9DE7-F5367BF2482F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D070F17F-D338-4F1C-9DE7-F5367BF2482F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D070F17F-D338-4F1C-9DE7-F5367BF2482F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D070F17F-D338-4F1C-9DE7-F5367BF2482F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

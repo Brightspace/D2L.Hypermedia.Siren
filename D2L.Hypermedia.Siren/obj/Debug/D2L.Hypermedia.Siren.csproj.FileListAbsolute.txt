@@ -1,0 +1,7 @@
+C:\code\GitHub\D2L.Hypermedia.Siren\D2L.Hypermedia.Siren\bin\Debug\D2L.Hypermedia.Siren.dll
+C:\code\GitHub\D2L.Hypermedia.Siren\D2L.Hypermedia.Siren\bin\Debug\D2L.Hypermedia.Siren.pdb
+C:\code\GitHub\D2L.Hypermedia.Siren\D2L.Hypermedia.Siren\bin\Debug\Newtonsoft.Json.dll
+C:\code\GitHub\D2L.Hypermedia.Siren\D2L.Hypermedia.Siren\bin\Debug\Newtonsoft.Json.xml
+C:\code\GitHub\D2L.Hypermedia.Siren\D2L.Hypermedia.Siren\obj\Debug\D2L.Hypermedia.Siren.csprojResolveAssemblyReference.cache
+C:\code\GitHub\D2L.Hypermedia.Siren\D2L.Hypermedia.Siren\obj\Debug\D2L.Hypermedia.Siren.dll
+C:\code\GitHub\D2L.Hypermedia.Siren\D2L.Hypermedia.Siren\obj\Debug\D2L.Hypermedia.Siren.pdb
