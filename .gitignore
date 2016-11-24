@@ -1,0 +1,9 @@
+bin
+obj
+.nuget/*.exe
+*.nupkg
+*.suo
+*.user
+packages
+build/*
+project.lock.json
