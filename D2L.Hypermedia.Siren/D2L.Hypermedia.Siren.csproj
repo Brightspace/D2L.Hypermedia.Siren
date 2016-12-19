@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SirenActionExtensions.cs" />
+    <Compile Include="SirenEntityExtensions.cs" />
     <Compile Include="ISirenAction.cs" />
     <Compile Include="ISirenEntity.cs" />
     <Compile Include="ISirenField.cs" />
