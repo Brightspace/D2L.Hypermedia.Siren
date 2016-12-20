@@ -34,46 +34,44 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 		[Test]
 		public void SirenEntity_Serialized_DoesNotIncludeOptionalParametersIfNull() {
-
 			ISirenEntity sirenEntity = new SirenEntity();
 
 			string serialized = JsonConvert.SerializeObject( sirenEntity );
 
 			ISirenEntity entity = JsonConvert.DeserializeObject<SirenEntity>( serialized );
 
-			Assert.IsNull( entity.Class );
+			Assert.IsEmpty( entity.Class );
 			Assert.IsNull( entity.Properties );
-			Assert.IsNull( entity.Entities );
-			Assert.IsNull( entity.Links );
-			Assert.IsNull( entity.Actions );
+			Assert.IsEmpty( entity.Entities );
+			Assert.IsEmpty( entity.Links );
+			Assert.IsEmpty( entity.Actions );
 			Assert.IsNull( entity.Title );
-			Assert.IsNull( entity.Rel );
+			Assert.IsEmpty( entity.Rel );
 			Assert.IsNull( entity.Href );
 			Assert.IsNull( entity.Type );
-
 		}
 
 		[Test]
 		public void SirenEntity_DeserializesCorrectly() {
-
 			ISirenEntity sirenEntity = new SirenEntity(
-				properties: new {
-					foo = "bar"
-				},
-				links: new[] {
-					new SirenLink( rel: new[] { "self" }, href: new Uri( "http://example.com" ), @class: new[] { "class" } )
-				},
-				rel: new[] { "organization" },
-				@class: new[] { "some-class" },
-				entities: new[] {
-					new SirenEntity()
-				},
-				actions: new[] {
-					new SirenAction( name: "action-name", href: new Uri( "http://example.com" ), @class: new[] { "class" } )
-				},
-				title: "Entity title",
-				href: new Uri( "http://example.com/3" ),
-				type: "text/html" );
+					properties: new {
+						foo = "bar"
+					},
+					links: new[] {
+						new SirenLink( rel: new[] { "self" }, href: new Uri( "http://example.com" ), @class: new[] { "class" } )
+					},
+					rel: new[] { "organization" },
+					@class: new[] { "some-class" },
+					entities: new[] {
+						new SirenEntity()
+					},
+					actions: new[] {
+						new SirenAction( name: "action-name", href: new Uri( "http://example.com" ), @class: new[] { "class" } )
+					},
+					title: "Entity title",
+					href: new Uri( "http://example.com/3" ),
+					type: "text/html"
+				);
 
 			string serialized = JsonConvert.SerializeObject( sirenEntity );
 			ISirenEntity entity = JsonConvert.DeserializeObject<SirenEntity>( serialized );
@@ -87,7 +85,37 @@ namespace D2L.Hypermedia.Siren.Tests {
 			Assert.AreEqual( "Entity title", entity.Title );
 			Assert.AreEqual( "http://example.com/3", entity.Href.ToString() );
 			Assert.AreEqual( "text/html", entity.Type );
+		}
 
+		[Test]
+		public void SirenEntity_Serialize_ExcludesRelClassEntitiesLinksAndActionsIfEmpty() {
+			ISirenEntity entity = new SirenEntity(
+					@class: new[] { "foo" },
+					rel: new[] { "bar" },
+					entities: new[] {
+						new SirenEntity()
+					},
+					links: new[] {
+						new SirenLink( rel: new[] { "self" }, href: new Uri( "http://example.com" ), @class: new[] { "class" } )
+					},
+					actions: new[] {
+						new SirenAction( name: "action-name", href: new Uri( "http://example.com" ), @class: new[] { "class" } )
+					}
+				);
+			string serialized = JsonConvert.SerializeObject( entity );
+			Assert.GreaterOrEqual( serialized.IndexOf( "rel", StringComparison.Ordinal ), -1 );
+			Assert.GreaterOrEqual( serialized.IndexOf( "class", StringComparison.Ordinal ), -1 );
+			Assert.GreaterOrEqual( serialized.IndexOf( "entities", StringComparison.Ordinal ), -1 );
+			Assert.GreaterOrEqual( serialized.IndexOf( "links", StringComparison.Ordinal ), -1 );
+			Assert.GreaterOrEqual( serialized.IndexOf( "actions", StringComparison.Ordinal ), -1 );
+
+			entity = new SirenEntity();
+			serialized = JsonConvert.SerializeObject( entity );
+			Assert.AreEqual( -1, serialized.IndexOf( "rel", StringComparison.Ordinal ) );
+			Assert.AreEqual( -1, serialized.IndexOf( "class", StringComparison.Ordinal ) );
+			Assert.AreEqual( -1, serialized.IndexOf( "entities", StringComparison.Ordinal ) );
+			Assert.AreEqual( -1, serialized.IndexOf( "links", StringComparison.Ordinal ) );
+			Assert.AreEqual( -1, serialized.IndexOf( "actions", StringComparison.Ordinal ) );
 		}
 
 		[Test]

@@ -5,11 +5,11 @@ namespace D2L.Hypermedia.Siren {
 
 	public class SirenLink : ISirenLink {
 
-		private readonly string[] m_rel;
+		private readonly string m_type;
+		private readonly string m_title;
 		private readonly Uri m_href;
 		private readonly string[] m_class;
-		private readonly string m_title;
-		private readonly string m_type;
+		private readonly string[] m_rel;
 
 		public SirenLink(
 			string[] rel,
@@ -20,34 +20,38 @@ namespace D2L.Hypermedia.Siren {
 		) {
 			m_rel = rel;
 			m_href = href;
-			m_class = @class;
+			m_class = @class ?? new string[0];
 			m_title = title;
 			m_type = type;
 		}
 
 		[JsonProperty( "rel" )]
-		string[] ISirenLink.Rel {
+		public string[] Rel {
 			get { return m_rel; }
 		}
 
 		[JsonProperty( "class", NullValueHandling = NullValueHandling.Ignore )]
-		string[] ISirenLink.Class {
+		public string[] Class {
 			get { return m_class; }
 		}
 
 		[JsonProperty( "href" )]
-		Uri ISirenLink.Href {
+		public Uri Href {
 			get { return m_href; }
 		}
 
 		[JsonProperty( "title", NullValueHandling = NullValueHandling.Ignore )]
-		string ISirenLink.Title {
+		public string Title {
 			get { return m_title; }
 		}
 
 		[JsonProperty( "type", NullValueHandling = NullValueHandling.Ignore )]
-		string ISirenLink.Type {
+		public string Type {
 			get { return m_type; }
+		}
+
+		public bool ShouldSerializeClass() {
+			return Class.Length > 0;
 		}
 
 	}
