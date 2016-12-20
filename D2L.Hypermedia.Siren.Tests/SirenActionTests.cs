@@ -24,7 +24,6 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 		[Test]
 		public void SirenAction_Serialized_DoesNotIncludeOptionalParametersIfNull() {
-
 			ISirenAction sirenAction = new SirenAction(
 					name: "foo",
 					href: new Uri( "http://example.com" ) );
@@ -34,17 +33,15 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 			Assert.AreEqual( "foo", action.Name );
 			Assert.AreEqual( "http://example.com/", action.Href.ToString() );
-			Assert.IsNull( action.Class );
+			Assert.IsEmpty( action.Class );
 			Assert.IsNull( action.Method );
 			Assert.IsNull( action.Title );
 			Assert.IsNull( action.Type );
-			Assert.IsNull( action.Fields );
-
+			Assert.IsEmpty( action.Fields );
 		}
 
 		[Test]
 		public void SirenAction_DeserializesCorrectly() {
-
 			ISirenAction sirenAction = new SirenAction(
 				name: "foo",
 				href: new Uri( "http://example.com" ),
@@ -66,6 +63,27 @@ namespace D2L.Hypermedia.Siren.Tests {
 			Assert.AreEqual( "Some action", action.Title );
 			Assert.AreEqual( "text/html", action.Type );
 			Assert.AreEqual( 1, action.Fields.ToList().Count );
+		}
+
+		[Test]
+		public void SirenAction_Serialize_ExcludesClassAndFieldsIfEmpty() {
+			ISirenAction action = new SirenAction(
+					name: "foo",
+					href: new Uri( "http://example.com" ),
+					@class: new [] { "bar" },
+					fields: new [] { new SirenField( "baz" ) }
+				);
+			string serialized = JsonConvert.SerializeObject( action );
+			Assert.GreaterOrEqual( serialized.IndexOf( "class", StringComparison.Ordinal ), 0 );
+			Assert.GreaterOrEqual( serialized.IndexOf( "fields", StringComparison.Ordinal ), 0 );
+
+			action = new SirenAction(
+					name: "foo",
+					href: new Uri( "http://example.com" )
+				);
+			serialized = JsonConvert.SerializeObject( action );
+			Assert.AreEqual( -1, serialized.IndexOf( "class", StringComparison.Ordinal ) );
+			Assert.AreEqual( -1, serialized.IndexOf( "fields", StringComparison.Ordinal ) );
 		}
 
 		[Test]

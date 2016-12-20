@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace D2L.Hypermedia.Siren {
 
 	public class SirenEntity : ISirenEntity {
 
-		private readonly string[] m_class;
-		private readonly dynamic m_properties;
 		private readonly string m_type;
 		private readonly Uri m_href;
 		private readonly string[] m_rel;
@@ -15,6 +14,8 @@ namespace D2L.Hypermedia.Siren {
 		private readonly IEnumerable<ISirenAction> m_actions;
 		private readonly IEnumerable<ISirenLink> m_links;
 		private readonly IEnumerable<ISirenEntity> m_entities;
+		private readonly dynamic m_properties;
+		private readonly string[] m_class;
 
 		public SirenEntity(
 			string[] rel = null,
@@ -27,63 +28,83 @@ namespace D2L.Hypermedia.Siren {
 			Uri href = null,
 			string type = null
 		) {
-			m_rel = rel;
-			m_class = @class;
+			m_rel = rel ?? new string[0];
+			m_class = @class ?? new string[0];
 			m_properties = properties;
-			m_entities = entities;
-			m_links = links;
-			m_actions = actions;
+			m_entities = entities ?? new List<ISirenEntity>();
+			m_links = links ?? new List<ISirenLink>();
+			m_actions = actions ?? new List<ISirenAction>();
 			m_title = title;
 			m_href = href;
 			m_type = type;
 		}
 
 		[JsonProperty( "class", NullValueHandling = NullValueHandling.Ignore )]
-		string[] ISirenEntity.Class {
+		public string[] Class {
 			get { return m_class; }
 		}
 
 		[JsonProperty( "properties", NullValueHandling = NullValueHandling.Ignore )]
-		dynamic ISirenEntity.Properties {
+		public dynamic Properties {
 			get { return m_properties; }
 		}
 
 		[JsonProperty( "entities", NullValueHandling = NullValueHandling.Ignore )]
-		[JsonConverter( typeof( HypermediaEntityConverter ) )]
-		IEnumerable<ISirenEntity> ISirenEntity.Entities {
+		[JsonConverter( typeof(HypermediaEntityConverter) )]
+		public IEnumerable<ISirenEntity> Entities {
 			get { return m_entities; }
 		}
 
 		[JsonProperty( "links", NullValueHandling = NullValueHandling.Ignore )]
-		[JsonConverter( typeof( HypermediaLinkConverter ) )]
-		IEnumerable<ISirenLink> ISirenEntity.Links {
+		[JsonConverter( typeof(HypermediaLinkConverter) )]
+		public IEnumerable<ISirenLink> Links {
 			get { return m_links; }
 		}
 
 		[JsonProperty( "actions", NullValueHandling = NullValueHandling.Ignore )]
-		[JsonConverter( typeof( HypermediaActionConverter ) )]
-		IEnumerable<ISirenAction> ISirenEntity.Actions {
+		[JsonConverter( typeof(HypermediaActionConverter) )]
+		public IEnumerable<ISirenAction> Actions {
 			get { return m_actions; }
 		}
 
 		[JsonProperty( "title", NullValueHandling = NullValueHandling.Ignore )]
-		string ISirenEntity.Title {
+		public string Title {
 			get { return m_title; }
 		}
 
 		[JsonProperty( "rel", NullValueHandling = NullValueHandling.Ignore )]
-		string[] ISirenEntity.Rel {
+		public string[] Rel {
 			get { return m_rel; }
 		}
 
 		[JsonProperty( "href", NullValueHandling = NullValueHandling.Ignore )]
-		Uri ISirenEntity.Href {
+		public Uri Href {
 			get { return m_href; }
 		}
 
 		[JsonProperty( "type", NullValueHandling = NullValueHandling.Ignore )]
-		string ISirenEntity.Type {
+		public string Type {
 			get { return m_type; }
+		}
+
+		public bool ShouldSerializeRel() {
+			return Rel.Length > 0;
+		}
+
+		public bool ShouldSerializeClass() {
+			return Class.Length > 0;
+		}
+
+		public bool ShouldSerializeEntities() {
+			return Entities.Any();
+		}
+
+		public bool ShouldSerializeLinks() {
+			return Links.Any();
+		}
+
+		public bool ShouldSerializeActions() {
+			return Actions.Any();
 		}
 
 	}
