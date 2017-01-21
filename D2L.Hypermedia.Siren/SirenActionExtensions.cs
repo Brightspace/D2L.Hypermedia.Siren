@@ -10,7 +10,7 @@ namespace D2L.Hypermedia.Siren {
 				string name,
 				out ISirenField field
 		) {
-			field = @this.Fields.FirstOrDefault( f => f.Name.Equals( name ) );
+			field = @this.Fields.FirstOrDefault( f => f.Name != null && f.Name.Equals( name ) );
 			return field != default( ISirenField );
 		}
 
@@ -36,14 +36,14 @@ namespace D2L.Hypermedia.Siren {
 				this ISirenAction @this,
 				string @class
 		) {
-			return @this.Fields.Where( field => field.Class.Contains( @class ) );
+			return @this.Fields.Where( field => field.Class != null && field.Class.Contains( @class ) );
 		}
 
 		public static IEnumerable<ISirenField> FieldsByType(
 				this ISirenAction @this,
 				string type
 		) {
-			return @this.Fields.Where( field => field.Type.Equals( type ) );
+			return @this.Fields.Where( field => field.Type != null && field.Type.Equals( type ) );
 		}
 
 	}
