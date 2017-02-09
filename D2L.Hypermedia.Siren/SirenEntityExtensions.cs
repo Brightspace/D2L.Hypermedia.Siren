@@ -10,7 +10,7 @@ namespace D2L.Hypermedia.Siren {
 				string name,
 				out ISirenAction action
 		) {
-			action = @this.Actions.FirstOrDefault( a => a.Name.Equals( name ) );
+			action = @this.Actions.FirstOrDefault( a => a.Name != null && a.Name.Equals( name ) );
 			return action != default( ISirenAction );
 		}
 
@@ -81,49 +81,49 @@ namespace D2L.Hypermedia.Siren {
 				this ISirenEntity @this,
 				string @class
 		) {
-			return @this.Actions.Where( action => action.Class.Contains( @class ) );
+			return @this.Actions.Where( action => action.Class != null && action.Class.Contains( @class ) );
 		}
 
 		public static IEnumerable<ISirenLink> LinksByRel(
 				this ISirenEntity @this,
 				string rel
 		) {
-			return @this.Links.Where( link => link.Rel.Contains( rel ) );
+			return @this.Links.Where( link => link.Rel != null && link.Rel.Contains( rel ) );
 		}
 
 		public static IEnumerable<ISirenLink> LinksByClass(
 				this ISirenEntity @this,
 				string @class
 		) {
-			return @this.Links.Where( link => link.Class.Contains( @class ) );
+			return @this.Links.Where( link => link.Class != null && link.Class.Contains( @class ) );
 		}
 
 		public static IEnumerable<ISirenLink> LinksByType(
 				this ISirenEntity @this,
 				string type
 		) {
-			return @this.Links.Where( link => link.Type.Equals( type ) );
+			return @this.Links.Where( link => link.Type != null && link.Type.Equals( type ) );
 		}
 
 		public static IEnumerable<ISirenEntity> SubEntitiesByRel(
 				this ISirenEntity @this,
 				string rel
 		) {
-			return @this.Entities.Where( entity => entity.Rel.Contains( rel ) );
+			return @this.Entities.Where( entity => entity.Rel != null && entity.Rel.Contains( rel ) );
 		}
 
 		public static IEnumerable<ISirenEntity> SubEntitiesByClass(
 				this ISirenEntity @this,
 				string @class
 		) {
-			return @this.Entities.Where( entity => entity.Class.Contains( @class ) );
+			return @this.Entities.Where( entity => entity.Class != null && entity.Class.Contains( @class ) );
 		}
 
 		public static IEnumerable<ISirenEntity> SubEntitiesByType(
 				this ISirenEntity @this,
 				string type
 		) {
-			return @this.Entities.Where( entity => entity.Type.Equals( type ) );
+			return @this.Entities.Where( entity => entity.Type != null && entity.Type.Equals( type ) );
 		}
 
 	}
