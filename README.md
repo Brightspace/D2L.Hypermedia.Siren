@@ -18,3 +18,15 @@ Helper classes for using Siren Hypermedia in .NET.
 
 5. Submit a pull request to this repository. Wait for tests to run and someone
    to chime in.
+
+## Releasing
+
+1. Merge pull request to master - Appveyor will run on the merge
+
+2. On the Appveyor job, go to the Artifacts tab and download the `.nupkg` file (_not_ the `.symbols.nupkg` file)
+
+3. Log in to NuGet
+
+4. Click _Upload Package_ and upload the `.nupkg` file
+
+5. Verify that the details are correct, and click Submit
