@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace D2L.Hypermedia.Siren {
@@ -52,6 +53,41 @@ namespace D2L.Hypermedia.Siren {
 
 		public bool ShouldSerializeClass() {
 			return Class.Length > 0;
+		}
+
+		public bool Equals( ISirenField other ) {
+			if( other == null ) {
+				return false;
+			}
+
+			bool name = m_name == other.Name;
+			bool @class = m_class.OrderBy( x => x ).SequenceEqual( other.Class.OrderBy( x => x ) );
+			bool type = m_type == other.Type;
+			bool value = m_value == other.Value || m_value != null && m_value.Equals( other.Value );
+			bool title = m_title == other.Title;
+
+			return name && @class && type && value && title;
+		}
+
+		public int CompareTo( ISirenField other ) {
+			if( other == null ) {
+				return 1;
+			}
+
+			return string.CompareOrdinal( m_name, other.Name );
+		}
+
+		public override bool Equals( object obj ) {
+			ISirenField field = obj as ISirenField;
+			return field != null && this.Equals( field );
+		}
+
+		public override int GetHashCode() {
+			return m_name.GetHashCode()
+				^ string.Join( ",", m_class ).GetHashCode()
+				^ m_type?.GetHashCode() ?? 0
+				^ m_value?.ToString().GetHashCode() ?? 0
+				^ m_title?.GetHashCode() ?? 0;
 		}
 
 	}

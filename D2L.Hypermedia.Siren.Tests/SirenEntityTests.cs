@@ -12,6 +12,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 			ISirenEntity entity = new SirenEntity(
 					rel: new [] { "rel" },
 					@class: new [] { "class" },
+					properties: new {
+						foo = "bar"
+					},
 					links: new [] {
 						new SirenLink( rel: new[] { "self" }, href: new Uri( "http://example.com" ), @class: new [] { "class" }, type: "text/html", title: "link1" ),
 						new SirenLink( rel: new[] { "next" }, href: new Uri( "http://example.com" ), @class: new [] { "class" }, type: "text/html", title: "link2" ),
@@ -119,6 +122,18 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
+		public void SirenEntity_TryGetAction_ReturnsCorrectAction() {
+			ISirenAction find = new SirenAction( name: "action3", href: new Uri( "http://example.com" ) );
+			ISirenAction action;
+			Assert.IsFalse( GetEntity().TryGetAction( find, out action ) );
+			Assert.IsNull( action );
+
+			find = new SirenAction( name: "action3", href: new Uri( "http://example.com" ), @class: new[] { "not-class" } );
+			Assert.IsTrue( GetEntity().TryGetAction( find, out action ) );
+			Assert.AreEqual( find, action );
+		}
+
+		[Test]
 		public void SirenEntity_TryGetActionByName_ReturnsCorrectAction() {
 			ISirenAction action;
 			Assert.IsFalse( GetEntity().TryGetActionByName( "foo", out action ) );
@@ -137,6 +152,18 @@ namespace D2L.Hypermedia.Siren.Tests {
 			Assert.IsTrue( GetEntity().TryGetActionByClass( "class", out action ) );
 			Assert.Contains( "class", action.Class );
 			Assert.AreEqual( "action1", action.Name );
+		}
+
+		[Test]
+		public void SirenEntity_TryGetLink_ReturnsCorrectLink() {
+			ISirenLink find = new SirenLink( rel: new[] { "next" }, href: new Uri( "http://example.com" ) );
+			ISirenLink link;
+			Assert.IsFalse( GetEntity().TryGetLink( find, out link ) );
+			Assert.IsNull( link );
+
+			find = new SirenLink( rel: new[] { "next" }, href: new Uri( "http://example.com" ), @class: new[] { "not-class" }, type: "text/html", title: "link3" );
+			Assert.IsTrue( GetEntity().TryGetLink( find, out link ) );
+			Assert.AreEqual( find, link );
 		}
 
 		[Test]
@@ -159,6 +186,18 @@ namespace D2L.Hypermedia.Siren.Tests {
 			Assert.IsTrue( GetEntity().TryGetLinkByClass( "class", out link ) );
 			Assert.Contains( "class", link.Class );
 			Assert.AreEqual( "link1", link.Title );
+		}
+
+		[Test]
+		public void SirenEntity_TryGetSubEntity_ReturnsCorrectEntity() {
+			ISirenEntity find = new SirenEntity();
+			ISirenEntity entity;
+			Assert.IsFalse( GetEntity().TryGetSubEntity( find, out entity ) );
+			Assert.IsNull( entity );
+
+			find = new SirenEntity( rel: new[] { "not-child" }, @class: new[] { "class" }, type: "text/xml", title: "entity3" );
+			Assert.IsTrue( GetEntity().TryGetSubEntity( find, out entity ) );
+			Assert.AreEqual( find, entity );
 		}
 
 		[Test]
@@ -192,6 +231,94 @@ namespace D2L.Hypermedia.Siren.Tests {
 			Assert.IsTrue( GetEntity().TryGetSubEntityByType( "text/xml", out entity ) );
 			Assert.AreEqual( "text/xml", entity.Type );
 			Assert.AreEqual( "entity3", entity.Title );
+		}
+
+		[Test]
+		public void SirenEntity_Equality() {
+			ISirenEntity entity = new SirenEntity(
+				rel: new [] { "foo" },
+				@class: new [] { "bar" },
+				properties: new {
+					foo = "bar"
+				},
+				entities: new [] { new SirenEntity() },
+				links: new [] { new SirenLink( rel: new [] { "foo" }, href: new Uri( "http://example.com" ) ) },
+				actions: new [] { new SirenAction( name: "foo", href: new Uri( "http://example.com" ) ) },
+				title: "Entity title",
+				href: new Uri( "http://example.com" ),
+				type: "text/html"
+			);
+
+			ISirenEntity other = new SirenEntity(
+				rel: new[] { "foo" },
+				@class: new[] { "bar" },
+				properties: new {
+					foo = "bar"
+				},
+				entities: new[] { new SirenEntity() },
+				links: new[] { new SirenLink( rel: new[] { "foo" }, href: new Uri( "http://example.com" ) ) },
+				actions: new[] { new SirenAction( name: "foo", href: new Uri( "http://example.com" ) ) },
+				title: "Entity title",
+				href: new Uri( "http://example.com" ),
+				type: "text/html"
+			);
+			Assert.AreEqual( entity, other );
+			Assert.AreEqual( other, entity );
+
+			other = new SirenEntity();
+			Assert.AreNotEqual( entity, other );
+			Assert.AreNotEqual( other, entity );
+
+			other = new SirenEntity(
+				rel: new[] { "foobar" },
+				@class: new[] { "bar" },
+				properties: new {
+					foo = "bar"
+				},
+				entities: new[] { new SirenEntity() },
+				links: new[] { new SirenLink( rel: new[] { "foo" }, href: new Uri( "http://example.com" ) ) },
+				actions: new[] { new SirenAction( name: "foo", href: new Uri( "http://example.com" ) ) },
+				title: "Entity title",
+				href: new Uri( "http://example.com" ),
+				type: "text/html"
+			);
+			Assert.AreNotEqual( entity, other );
+			Assert.AreNotEqual( other, entity );
+		}
+
+		[Test]
+		public void SirenEntity_ArrayEquality() {
+			ISirenEntity[] entities = new ISirenEntity[] {
+				new SirenEntity( title: "foo" ),
+				new SirenEntity( title: "bar" )
+			};
+
+			ISirenEntity[] others = new ISirenEntity[] {
+				new SirenEntity( title: "foo" ),
+				new SirenEntity( title: "bar" )
+			};
+			Assert.IsTrue( entities.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
+			Assert.IsTrue( others.OrderBy( x => x ).SequenceEqual( entities.OrderBy( x => x ) ) );
+
+			others = new ISirenEntity[] {
+				new SirenEntity( title: "bar" ),
+				new SirenEntity( title: "foo" )
+			};
+			Assert.IsTrue( entities.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
+			Assert.IsTrue( others.OrderBy( x => x ).SequenceEqual( entities.OrderBy( x => x ) ) );
+
+			others = new ISirenEntity[] {
+				new SirenEntity( title: "foo" ),
+				new SirenEntity( title: "foo" )
+			};
+			Assert.IsFalse( entities.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
+			Assert.IsFalse( others.OrderBy( x => x ).SequenceEqual( entities.OrderBy( x => x ) ) );
+
+			others = new ISirenEntity[] {
+				new SirenEntity( title: "foo" )
+			};
+			Assert.IsFalse( entities.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
+			Assert.IsFalse( others.OrderBy( x => x ).SequenceEqual( entities.OrderBy( x => x ) ) );
 		}
 
 	}

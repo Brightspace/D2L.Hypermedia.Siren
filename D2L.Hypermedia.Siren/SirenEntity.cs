@@ -107,6 +107,51 @@ namespace D2L.Hypermedia.Siren {
 			return Actions.Any();
 		}
 
+		public bool Equals( ISirenEntity other ) {
+			if( other == null ) {
+				return false;
+			}
+
+			bool rel = m_rel.OrderBy( x => x ).SequenceEqual( other.Rel.OrderBy( x => x ) );
+			bool @class = m_class.OrderBy( x => x ).SequenceEqual( other.Class.OrderBy( x => x ) );
+			bool properties = m_properties == other.Properties
+				|| m_properties != null && other.Properties != null && m_properties.ToString().Equals( other.Properties.ToString() );
+			bool entities = m_entities.OrderBy( x => x ).SequenceEqual( other.Entities.OrderBy( x => x ) );
+			bool links = m_links.OrderBy( x => x ).SequenceEqual( other.Links.OrderBy( x => x ) );
+			bool actions = m_actions.OrderBy( x => x ).SequenceEqual( other.Actions.OrderBy( x => x ) );
+			bool title = m_title == other.Title;
+			bool href = m_href == other.Href;
+			bool type = m_type == other.Type;
+
+			return rel && @class && properties && entities && links && actions && title && href && type;
+		}
+
+		public int CompareTo( ISirenEntity other ) {
+			if( other == null ) {
+				return 1;
+			}
+
+			return string.CompareOrdinal( m_title, other.Title );
+		}
+
+		public override bool Equals( object obj ) {
+			ISirenEntity entity = obj as ISirenEntity;
+			return entity != null && this.Equals( entity );
+		}
+
+		public override int GetHashCode() {
+			return string.Join( ",", m_rel ).GetHashCode()
+				^ string.Join( ",", m_class ).GetHashCode()
+				^ m_properties?.GetHashCode() ?? 0
+				^ string.Join( ",", m_entities ).GetHashCode()
+				^ string.Join( ",", m_links ).GetHashCode()
+				^ string.Join( ",", m_actions ).GetHashCode()
+				^ m_title?.GetHashCode() ?? 0
+				^ m_href?.GetHashCode() ?? 0
+				^ m_type?.GetHashCode() ?? 0;
+
+		}
+
 	}
 
 	public class HypermediaEntityConverter : JsonConverter {

@@ -1,6 +1,8 @@
-﻿namespace D2L.Hypermedia.Siren {
+﻿using System;
 
-	public interface ISirenField {
+namespace D2L.Hypermedia.Siren {
+
+	public interface ISirenField : IEquatable<ISirenField>, IComparable<ISirenField> {
 
 		string Name { get; }
 
