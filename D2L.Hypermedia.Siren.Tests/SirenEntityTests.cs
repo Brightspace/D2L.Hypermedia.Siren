@@ -8,8 +8,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 	[TestFixture]
 	public class SirenEntityTests {
 
-		private ISirenEntity GetEntity() {
+		private ISirenEntity GetEntity( string title = null ) {
 			ISirenEntity entity = new SirenEntity(
+					title: title,
 					rel: new [] { "rel" },
 					@class: new [] { "class" },
 					properties: new {
@@ -234,91 +235,40 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenEntity_Equality() {
-			ISirenEntity entity = new SirenEntity(
-				rel: new [] { "foo" },
-				@class: new [] { "bar" },
-				properties: new {
-					foo = "bar"
-				},
-				entities: new [] { new SirenEntity() },
-				links: new [] { new SirenLink( rel: new [] { "foo" }, href: new Uri( "http://example.com" ) ) },
-				actions: new [] { new SirenAction( name: "foo", href: new Uri( "http://example.com" ) ) },
-				title: "Entity title",
-				href: new Uri( "http://example.com" ),
-				type: "text/html"
-			);
+		public void SirenEntity_Equality_SameEntity_ShouldBeEqual() {
+			ISirenEntity entity = GetEntity( "title" );
+			ISirenEntity other = GetEntity( "title" );
+			SirenTestHelpers.BidirectionalEquality( entity, other, true );
+		}
 
-			ISirenEntity other = new SirenEntity(
-				rel: new[] { "foo" },
-				@class: new[] { "bar" },
-				properties: new {
-					foo = "bar"
-				},
-				entities: new[] { new SirenEntity() },
-				links: new[] { new SirenLink( rel: new[] { "foo" }, href: new Uri( "http://example.com" ) ) },
-				actions: new[] { new SirenAction( name: "foo", href: new Uri( "http://example.com" ) ) },
-				title: "Entity title",
-				href: new Uri( "http://example.com" ),
-				type: "text/html"
-			);
-			Assert.AreEqual( entity, other );
-			Assert.AreEqual( other, entity );
+		[Test]
+		public void SirenEntity_Equality_MissingAttributes_ShouldNotBeEqual() {
+			ISirenEntity entity = GetEntity( "title" );
+			ISirenEntity other = new SirenEntity();
+			SirenTestHelpers.BidirectionalEquality( entity, other, false );
+		}
 
-			other = new SirenEntity();
-			Assert.AreNotEqual( entity, other );
-			Assert.AreNotEqual( other, entity );
-
-			other = new SirenEntity(
-				rel: new[] { "foobar" },
-				@class: new[] { "bar" },
-				properties: new {
-					foo = "bar"
-				},
-				entities: new[] { new SirenEntity() },
-				links: new[] { new SirenLink( rel: new[] { "foo" }, href: new Uri( "http://example.com" ) ) },
-				actions: new[] { new SirenAction( name: "foo", href: new Uri( "http://example.com" ) ) },
-				title: "Entity title",
-				href: new Uri( "http://example.com" ),
-				type: "text/html"
-			);
-			Assert.AreNotEqual( entity, other );
-			Assert.AreNotEqual( other, entity );
+		[Test]
+		public void SirenEntity_Equality_DifferentTitle_ShouldNotBeEqual() {
+			ISirenEntity entity = GetEntity( "title" );
+			ISirenEntity other = GetEntity( "different-title" );
+			SirenTestHelpers.BidirectionalEquality( entity, other, false );
 		}
 
 		[Test]
 		public void SirenEntity_ArrayEquality() {
-			ISirenEntity[] entities = new ISirenEntity[] {
-				new SirenEntity( title: "foo" ),
-				new SirenEntity( title: "bar" )
-			};
+			ISirenEntity[] entities = { GetEntity( "foo" ), GetEntity( "bar" ) };
+			ISirenEntity[] others = { GetEntity( "foo" ), GetEntity( "bar" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( entities, others, true );
 
-			ISirenEntity[] others = new ISirenEntity[] {
-				new SirenEntity( title: "foo" ),
-				new SirenEntity( title: "bar" )
-			};
-			Assert.IsTrue( entities.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsTrue( others.OrderBy( x => x ).SequenceEqual( entities.OrderBy( x => x ) ) );
+			others = new [] { GetEntity( "bar" ), GetEntity( "foo" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( entities, others, true );
 
-			others = new ISirenEntity[] {
-				new SirenEntity( title: "bar" ),
-				new SirenEntity( title: "foo" )
-			};
-			Assert.IsTrue( entities.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsTrue( others.OrderBy( x => x ).SequenceEqual( entities.OrderBy( x => x ) ) );
+			others = new [] { GetEntity( "foo" ), GetEntity( "foo" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( entities, others, false );
 
-			others = new ISirenEntity[] {
-				new SirenEntity( title: "foo" ),
-				new SirenEntity( title: "foo" )
-			};
-			Assert.IsFalse( entities.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsFalse( others.OrderBy( x => x ).SequenceEqual( entities.OrderBy( x => x ) ) );
-
-			others = new ISirenEntity[] {
-				new SirenEntity( title: "foo" )
-			};
-			Assert.IsFalse( entities.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsFalse( others.OrderBy( x => x ).SequenceEqual( entities.OrderBy( x => x ) ) );
+			others = new [] { GetEntity( "foo" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( entities, others, false );
 		}
 
 	}

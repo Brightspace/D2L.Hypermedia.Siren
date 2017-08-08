@@ -55,7 +55,7 @@ namespace D2L.Hypermedia.Siren {
 			return Class.Length > 0;
 		}
 
-		public bool Equals( ISirenField other ) {
+		bool IEquatable<ISirenField>.Equals( ISirenField other ) {
 			if( other == null ) {
 				return false;
 			}
@@ -69,7 +69,7 @@ namespace D2L.Hypermedia.Siren {
 			return name && @class && type && value && title;
 		}
 
-		public int CompareTo( ISirenField other ) {
+		int IComparable<ISirenField>.CompareTo( ISirenField other ) {
 			if( other == null ) {
 				return 1;
 			}
@@ -77,9 +77,15 @@ namespace D2L.Hypermedia.Siren {
 			return string.CompareOrdinal( m_name, other.Name );
 		}
 
+		int IComparable.CompareTo( object obj ) {
+			ISirenField @this = this;
+			return @this.CompareTo( (ISirenField)obj );
+		}
+
 		public override bool Equals( object obj ) {
 			ISirenField field = obj as ISirenField;
-			return field != null && this.Equals( field );
+			ISirenField @this = this;
+			return field != null && @this.Equals( field );
 		}
 
 		public override int GetHashCode() {

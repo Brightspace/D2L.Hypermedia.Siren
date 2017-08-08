@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -7,6 +6,16 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 	[TestFixture]
 	public class SirenFieldTests {
+
+		private ISirenField GetField( string name = "foo" ) {
+			return new SirenField(
+				name: name,
+				@class: new [] { "bar" },
+				type: "number",
+				value: 1,
+				title: "Some field"
+			);
+		}
 
 		[Test]
 		public void SirenField_Serialized_DoesNotIncludeOptionalParametersIfNull() {
@@ -24,13 +33,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 		[Test]
 		public void SirenField_DeserializesCorrectly() {
-			ISirenField sirenField = new SirenField(
-				name: "foo",
-				@class: new [] { "bar" },
-				type: "number",
-				value: 1,
-				title: "Some field"
-			);
+			ISirenField sirenField = GetField();
 
 			string serialized = JsonConvert.SerializeObject( sirenField );
 			ISirenField field = JsonConvert.DeserializeObject<SirenField>( serialized );
@@ -57,75 +60,42 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenField_Equality() {
-			ISirenField field = new SirenField(
-				name: "foo",
-				@class: new [] { "bar" },
-				type: "number",
-				value: 1,
-				title: "Some field"
-			);
+		public void SirenField_Equality_SameField_ShouldBeEqual() {
+			ISirenField field = GetField();
+			ISirenField other = GetField();
+			SirenTestHelpers.BidirectionalEquality( field, other, true );
+		}
 
+		[Test]
+		public void SirenField_Equality_MissingAttributes_ShouldNotBeEqual() {
+			ISirenField field = GetField();
 			ISirenField other = new SirenField(
-				name: "foo",
-				@class: new [] { "bar" },
-				type: "number",
-				value: 1,
-				title: "Some field"
-			);
-			Assert.AreEqual( field, other );
-			Assert.AreEqual( other, field );
-
-			other = new SirenField(
 				name: "foo"
 			);
-			Assert.AreNotEqual( field, other );
-			Assert.AreNotEqual( other, field );
+			SirenTestHelpers.BidirectionalEquality( field, other, false );
+		}
 
-			other = new SirenField(
-				name: "foobar",
-				@class: new [] { "bar" },
-				type: "number",
-				value: 1,
-				title: "Some field"
-			);
-			Assert.AreNotEqual( field, other );
-			Assert.AreNotEqual( other, field );
+		[Test]
+		public void SirenField_Equality_DifferentName_ShouldNotBeEqual() {
+			ISirenField field = GetField();
+			ISirenField other = GetField( "other-name" );
+			SirenTestHelpers.BidirectionalEquality( field, other, false );
 		}
 
 		[Test]
 		public void SirenField_ArrayEquality() {
-			ISirenField[] fields = new ISirenField[] {
-				new SirenField( "foo" ),
-				new SirenField( "bar" )
-			};
+			ISirenField[] fields = { GetField( "foo" ), GetField( "bar" ) };
+			ISirenField[] others = { GetField( "foo" ), GetField( "bar" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( fields, others, true );
 
-			ISirenField[] others = new ISirenField[] {
-				new SirenField( "foo" ),
-				new SirenField( "bar" )
-			};
-			Assert.IsTrue( fields.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsTrue( others.OrderBy( x => x ).SequenceEqual( fields.OrderBy( x => x ) ) );
+			others = new [] { GetField( "bar" ), GetField( "foo" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( fields, others, true );
 
-			others = new ISirenField[] {
-				new SirenField( "bar" ),
-				new SirenField( "foo" )
-			};
-			Assert.IsTrue( fields.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsTrue( others.OrderBy( x => x ).SequenceEqual( fields.OrderBy( x => x ) ) );
+			others = new [] { GetField( "foo" ), GetField( "foo" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( fields, others, false );
 
-			others = new ISirenField[] {
-				new SirenField( "foo" ),
-				new SirenField( "foo" )
-			};
-			Assert.IsFalse( fields.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsFalse( others.OrderBy( x => x ).SequenceEqual( fields.OrderBy( x => x ) ) );
-
-			others = new ISirenField[] {
-				new SirenField( "foo" )
-			};
-			Assert.IsFalse( fields.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsFalse( others.OrderBy( x => x ).SequenceEqual( fields.OrderBy( x => x ) ) );
+			others = new [] { GetField( "foo" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( fields, others, false );
 		}
 
 	}

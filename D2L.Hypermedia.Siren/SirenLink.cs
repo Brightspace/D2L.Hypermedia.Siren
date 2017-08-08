@@ -55,7 +55,7 @@ namespace D2L.Hypermedia.Siren {
 			return Class.Length > 0;
 		}
 
-		public bool Equals( ISirenLink other ) {
+		bool IEquatable<ISirenLink>.Equals( ISirenLink other ) {
 			if( other == null ) {
 				return false;
 			}
@@ -69,7 +69,7 @@ namespace D2L.Hypermedia.Siren {
 			return rel && href && @class && title && type;
 		}
 
-		public int CompareTo( ISirenLink other ) {
+		int IComparable<ISirenLink>.CompareTo( ISirenLink other ) {
 			if( other == null ) {
 				return 1;
 			}
@@ -79,9 +79,15 @@ namespace D2L.Hypermedia.Siren {
 			return string.CompareOrdinal( first, second );
 		}
 
+		int IComparable.CompareTo( object obj ) {
+			ISirenLink @this = this;
+			return @this.CompareTo( (ISirenLink)obj );
+		}
+
 		public override bool Equals( object obj ) {
 			ISirenLink link = obj as ISirenLink;
-			return link != null && this.Equals( link );
+			ISirenLink @this = this;
+			return link != null && @this.Equals( link );
 		}
 
 		public override int GetHashCode() {

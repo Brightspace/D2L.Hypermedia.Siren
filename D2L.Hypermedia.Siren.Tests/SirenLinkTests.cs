@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -7,6 +6,16 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 	[TestFixture]
 	public class SirenLinkTests {
+
+		private ISirenLink GetLink( string rel = "foo" ) {
+			return new SirenLink(
+				rel: new [] { rel },
+				href: new Uri( "http://example.com" ),
+				@class: new [] { "bar" },
+				title: "Link title",
+				type: "text/html"
+			);
+		}
 
 		[Test]
 		public void SirenLink_Serialized_DoesNotIncludeOptionalParametersIfNull() {
@@ -28,13 +37,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 		[Test]
 		public void SirenLink_DeserializesCorrectly() {
-			ISirenLink sirenLink = new SirenLink(
-				rel: new[] { "foo" },
-				href: new Uri( "http://example.com" ),
-				@class: new[] { "bar" },
-				title: "Link title",
-				type: "text/html"
-			);
+			ISirenLink sirenLink = GetLink();
 
 			string serialized = JsonConvert.SerializeObject( sirenLink );
 
@@ -66,77 +69,45 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenLink_Equality() {
-			ISirenLink link = new SirenLink(
-				rel: new [] { "foo" },
-				href: new Uri( "http://example.com" ),
-				@class: new [] { "bar" },
-				title: "Link title",
-				type: "text/html"
-			);
+		public void SirenLink_Equality_SameLink_ShouldBeEqual() {
+			ISirenLink link = GetLink();
+			ISirenLink other = GetLink();
+			SirenTestHelpers.BidirectionalEquality( link, other, true );
+		}
 
+		[Test]
+		public void SirenLink_Equality_MissingAttributes_ShouldNotBeEqual() {
+			ISirenLink link = GetLink();
 			ISirenLink other = new SirenLink(
-				rel: new [] { "foo" },
-				href: new Uri( "http://example.com" ),
-				@class: new [] { "bar" },
-				title: "Link title",
-				type: "text/html"
-			);
-			Assert.AreEqual( link, other );
-			Assert.AreEqual( other, link );
-
-			other = new SirenLink(
 				rel: new [] { "foo" },
 				href: new Uri( "http://example.com" )
 			);
-			Assert.AreNotEqual( link, other );
-			Assert.AreNotEqual( other, link );
+			SirenTestHelpers.BidirectionalEquality( link, other, false );
+		}
 
-			other = new SirenLink(
-				rel: new [] { "foobar" },
-				href: new Uri( "http://example.com" ),
-				@class: new [] { "bar" },
-				title: "Link title",
-				type: "text/html"
-			);
-			Assert.AreNotEqual( link, other );
-			Assert.AreNotEqual( other, link );
+		[Test]
+		public void SirenLink_Equality_DifferentRel_ShouldNotBeEqual() {
+			ISirenLink link = GetLink();
+			ISirenLink other = GetLink( "different-rel" );
+			SirenTestHelpers.BidirectionalEquality( link, other, false );
 		}
 
 		[Test]
 		public void SirenLink_ArrayEquality() {
-			ISirenLink[] links = new ISirenLink[] {
-				new SirenLink( new [] { "foo" }, new Uri( "http://example.com" ) ),
-				new SirenLink( new [] { "bar" }, new Uri( "http://example.com" ) )
-			};
+			ISirenLink[] links = { GetLink( "foo" ), GetLink( "bar" ) };
+			ISirenLink[] others = { GetLink( "foo" ), GetLink( "bar" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( links, others, true );
 
-			ISirenLink[] others = new ISirenLink[] {
-				new SirenLink( new [] { "foo" }, new Uri( "http://example.com" ) ),
-				new SirenLink( new [] { "bar" }, new Uri( "http://example.com" ) )
-			};
-			Assert.IsTrue( links.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsTrue( others.OrderBy( x => x ).SequenceEqual( links.OrderBy( x => x ) ) );
+			others = new [] { GetLink( "bar" ), GetLink( "foo" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( links, others, true );
 
-			others = new ISirenLink[] {
-				new SirenLink( new [] { "bar" }, new Uri( "http://example.com" ) ),
-				new SirenLink( new [] { "foo" }, new Uri( "http://example.com" ) )
-			};
-			Assert.IsTrue( links.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsTrue( others.OrderBy( x => x ).SequenceEqual( links.OrderBy( x => x ) ) );
+			others = new [] { GetLink( "foo" ), GetLink( "foo" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( links, others, false );
 
-			others = new ISirenLink[] {
-				new SirenLink( new [] { "foo" }, new Uri( "http://example.com" ) ),
-				new SirenLink( new [] { "foo" }, new Uri( "http://example.com" ) )
-			};
-			Assert.IsFalse( links.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsFalse( others.OrderBy( x => x ).SequenceEqual( links.OrderBy( x => x ) ) );
-
-			others = new ISirenLink[] {
-				new SirenLink( new [] { "foo" }, new Uri( "http://example.com" ) )
-			};
-			Assert.IsFalse( links.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsFalse( others.OrderBy( x => x ).SequenceEqual( links.OrderBy( x => x ) ) );
+			others = new [] { GetLink( "foo" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( links, others, false );
 		}
+
 	}
 
 }

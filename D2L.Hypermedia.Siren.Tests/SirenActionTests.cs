@@ -8,9 +8,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 	[TestFixture]
 	public class SirenActionTests {
 
-		private ISirenAction GetAction() {
+		private ISirenAction GetAction( string name = "action-name" ) {
 			ISirenAction action = new SirenAction(
-					name: "action-name",
+					name: name,
 					href: new Uri( "http://example.com" ),
 					fields: new [] {
 						new SirenField( name: "field1", @class: new [] { "class" }, type: "text/html" ),
@@ -133,105 +133,72 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenAction_Equality() {
-			ISirenAction action = new SirenAction(
-				name: "foo",
-				href: new Uri( "http://example.com" ),
-				@class: new [] { "bar" },
-				method: "GET",
-				title: "Action title",
-				type: "text/html",
-				fields: new [] {
-					new SirenField( "fieldName1" ),
-					new SirenField( "fieldName2" )
-				}
-			);
+		public void SirenAction_Equality_SameAction_ShouldBeEqual() {
+			ISirenAction action = GetAction();
+			ISirenAction other = GetAction();
+			SirenTestHelpers.BidirectionalEquality( action, other, true );
+		}
 
+		[Test]
+		public void SirenAction_Equality_DifferentFieldOrder_ShouldBeEqual() {
+			ISirenAction action = GetAction();
 			ISirenAction other = new SirenAction(
-				name: "foo",
-				href: new Uri( "http://example.com" ),
-				@class: new[] { "bar" },
-				method: "GET",
-				title: "Action title",
-				type: "text/html",
+				name: action.Name,
+				href: action.Href,
+				@class: action.Class,
+				method: action.Method,
+				title: action.Title,
+				type: action.Type,
 				fields: new[] {
-					new SirenField( "fieldName1" ),
-					new SirenField( "fieldName2" )
+					action.Fields.ElementAt( 1 ),
+					action.Fields.ElementAt( 2 ),
+					action.Fields.ElementAt( 0 )
 				}
 			);
-			Assert.AreEqual( action, other );
-			Assert.AreEqual( other, action );
+			SirenTestHelpers.BidirectionalEquality( action, other, true );
+		}
 
-			other = new SirenAction(
-				name: "foo",
-				href: new Uri( "http://example.com" ),
-				@class: new[] { "bar" },
-				method: "GET",
-				title: "Action title",
-				type: "text/html",
-				fields: new[] {
-					new SirenField( "fieldName2" ),
-					new SirenField( "fieldName1" )
-				}
+		[Test]
+		public void SirenAction_Equality_MissingAttributes_ShouldNotBeEqual() {
+			ISirenAction action = GetAction();
+			ISirenAction other = new SirenAction(
+				name: action.Name,
+				href: action.Href
 			);
-			Assert.AreEqual( action, other );
-			Assert.AreEqual( other, action );
+			SirenTestHelpers.BidirectionalEquality( action, other, false );
+		}
 
-			other = new SirenAction(
-				name: "foo",
-				href: new Uri( "http://example.com" )
-			);
-			Assert.AreNotEqual( action, other );
-			Assert.AreNotEqual( other, action );
-
-			other = new SirenAction(
-				name: "foo",
-				href: new Uri( "http://example.com" ),
-				@class: new[] { "bar" },
-				method: "GET",
-				title: "Action title",
-				type: "text/html",
+		[Test]
+		public void SirenAction_Equality_DifferentFields_ShouldNotBeEqual() {
+			ISirenAction action = GetAction();
+			ISirenAction other = new SirenAction(
+				name: action.Name,
+				href: action.Href,
+				@class: action.Class,
+				method: action.Method,
+				title: action.Title,
+				type: action.Type,
 				fields: new[] {
 					new SirenField( "fieldName1" )
 				}
 			);
-			Assert.AreNotEqual( action, other );
-			Assert.AreNotEqual( other, action );
+			SirenTestHelpers.BidirectionalEquality( action, other, false );
 		}
 
 		[Test]
 		public void SirenAction_ArrayEquality() {
-			ISirenAction[] actions = new ISirenAction[] {
-				new SirenAction( "foo", new Uri( "http://example.com" ), fields: new ISirenField[] { new SirenField( "foo" ) } ),
-				new SirenAction( "bar", new Uri( "http://example.com" ), fields: new ISirenField[] { new SirenField( "bar" ) } )
-			};
+			ISirenAction[] actions = { GetAction( "foo" ), GetAction( "bar" ) };
+			ISirenAction[] others = { GetAction( "foo" ), GetAction( "bar" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( actions, others, true );
 
-			ISirenAction[] others = new ISirenAction[] {
-				new SirenAction( "foo", new Uri( "http://example.com" ), fields: new ISirenField[] { new SirenField( "foo" ) } ),
-				new SirenAction( "bar", new Uri( "http://example.com" ), fields: new ISirenField[] { new SirenField( "bar" ) } )
-			};
-			Assert.IsTrue( actions.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsTrue( others.OrderBy( x => x ).SequenceEqual( actions.OrderBy( x => x ) ) );
+			others = new [] { GetAction( "bar" ), GetAction( "foo" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( actions, others, true );
 
-			others = new ISirenAction[] {
-				new SirenAction( "bar", new Uri( "http://example.com" ), fields: new ISirenField[] { new SirenField( "bar" ) } ),
-				new SirenAction( "foo", new Uri( "http://example.com" ), fields: new ISirenField[] { new SirenField( "foo" ) } )
-			};
-			Assert.IsTrue( actions.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsTrue( others.OrderBy( x => x ).SequenceEqual( actions.OrderBy( x => x ) ) );
+			others = new [] { GetAction( "foo" ), GetAction( "foo" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( actions, others, false );
 
-			others = new ISirenAction[] {
-				new SirenAction( "foo", new Uri( "http://example.com" ), fields: new ISirenField[] { new SirenField( "foo" ) } ),
-				new SirenAction( "foo", new Uri( "http://example.com" ), fields: new ISirenField[] { new SirenField( "bar" ) } )
-			};
-			Assert.IsFalse( actions.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsFalse( others.OrderBy( x => x ).SequenceEqual( actions.OrderBy( x => x ) ) );
-
-			others = new ISirenAction[] {
-				new SirenAction( "foo", new Uri( "http://example.com" ), fields: new ISirenField[] { new SirenField( "foo" ) } )
-			};
-			Assert.IsFalse( actions.OrderBy( x => x ).SequenceEqual( others.OrderBy( x => x ) ) );
-			Assert.IsFalse( others.OrderBy( x => x ).SequenceEqual( actions.OrderBy( x => x ) ) );
+			others = new [] { GetAction( "foo" ) };
+			SirenTestHelpers.ArrayBidirectionalEquality( actions, others, false );
 		}
 
 	}

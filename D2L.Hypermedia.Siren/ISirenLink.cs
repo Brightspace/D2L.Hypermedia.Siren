@@ -2,7 +2,7 @@
 
 namespace D2L.Hypermedia.Siren {
 
-	public interface ISirenLink : IEquatable<ISirenLink>, IComparable<ISirenLink> {
+	public interface ISirenLink : IEquatable<ISirenLink>, IComparable<ISirenLink>, IComparable {
 
 		string[] Rel { get; }
 

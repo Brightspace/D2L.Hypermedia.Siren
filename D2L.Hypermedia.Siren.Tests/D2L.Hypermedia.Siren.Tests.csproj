@@ -53,6 +53,7 @@
     <Compile Include="SirenEntityTests.cs" />
     <Compile Include="SirenFieldTests.cs" />
     <Compile Include="SirenLinkTests.cs" />
+    <Compile Include="SirenTestHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
