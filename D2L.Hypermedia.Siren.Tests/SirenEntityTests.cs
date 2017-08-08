@@ -128,12 +128,8 @@ namespace D2L.Hypermedia.Siren.Tests {
 		public void SirenEntity_TryGetAction_ReturnsCorrectAction() {
 			ISirenAction find = new SirenAction( name: "action3", href: new Uri( "http://example.com" ) );
 			ISirenAction action;
-			Assert.IsFalse( GetEntity().TryGetAction( find, out action ) );
-			Assert.IsNull( action );
-
-			find = new SirenAction( name: "action3", href: new Uri( "http://example.com" ), @class: new[] { "not-class" } );
 			Assert.IsTrue( GetEntity().TryGetAction( find, out action ) );
-			Assert.AreEqual( find, action );
+			Assert.IsTrue( action.Contains( find ) );
 		}
 
 		[Test]
@@ -161,12 +157,8 @@ namespace D2L.Hypermedia.Siren.Tests {
 		public void SirenEntity_TryGetLink_ReturnsCorrectLink() {
 			ISirenLink find = new SirenLink( rel: new[] { "next" }, href: new Uri( "http://example.com" ) );
 			ISirenLink link;
-			Assert.IsFalse( GetEntity().TryGetLink( find, out link ) );
-			Assert.IsNull( link );
-
-			find = new SirenLink( rel: new[] { "next" }, href: new Uri( "http://example.com" ), @class: new[] { "not-class" }, type: "text/html", title: "link3" );
 			Assert.IsTrue( GetEntity().TryGetLink( find, out link ) );
-			Assert.AreEqual( find, link );
+			Assert.IsTrue( link.Contains( find ) );
 		}
 
 		[Test]
@@ -195,12 +187,8 @@ namespace D2L.Hypermedia.Siren.Tests {
 		public void SirenEntity_TryGetSubEntity_ReturnsCorrectEntity() {
 			ISirenEntity find = new SirenEntity();
 			ISirenEntity entity;
-			Assert.IsFalse( GetEntity().TryGetSubEntity( find, out entity ) );
-			Assert.IsNull( entity );
-
-			find = new SirenEntity( rel: new[] { "not-child" }, @class: new[] { "class" }, type: "text/xml", title: "entity3" );
 			Assert.IsTrue( GetEntity().TryGetSubEntity( find, out entity ) );
-			Assert.AreEqual( find, entity );
+			Assert.IsTrue( entity.Contains( find ) );
 		}
 
 		[Test]

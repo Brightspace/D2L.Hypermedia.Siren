@@ -10,7 +10,7 @@ namespace D2L.Hypermedia.Siren {
 				ISirenField find,
 				out ISirenField field
 		) {
-			field = @this.Fields.FirstOrDefault( f => f.Equals( find ) );
+			field = @this.Fields.FirstOrDefault( f => f.Contains( find ) );
 			return field != default( ISirenField );
 		}
 

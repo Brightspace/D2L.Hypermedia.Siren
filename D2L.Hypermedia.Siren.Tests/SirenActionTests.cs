@@ -96,12 +96,8 @@ namespace D2L.Hypermedia.Siren.Tests {
 		public void SirenAction_TryGetField_ReturnsCorrectField() {
 			ISirenField find = new SirenField( "field3" );
 			ISirenField field;
-			Assert.IsFalse( GetAction().TryGetField( find, out field ) );
-			Assert.IsNull( field );
-
-			find = new SirenField( name: "field3", @class: new[] { "not-class" }, type: "text/xml" );
 			Assert.IsTrue( GetAction().TryGetField( find, out field ) );
-			Assert.AreEqual( find, field );
+			Assert.IsTrue( field.Contains( find ) );
 		}
 
 		[Test]

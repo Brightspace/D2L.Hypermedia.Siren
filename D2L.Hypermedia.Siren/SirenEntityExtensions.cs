@@ -10,7 +10,7 @@ namespace D2L.Hypermedia.Siren {
 				ISirenAction find,
 				out ISirenAction action
 		) {
-			action = @this.Actions.FirstOrDefault( a => a.Equals( find ) );
+			action = @this.Actions.FirstOrDefault( a => a.Contains( find ) );
 			return action != default( ISirenAction );
 		}
 
@@ -37,7 +37,7 @@ namespace D2L.Hypermedia.Siren {
 				ISirenLink find,
 				out ISirenLink link
 		) {
-			link = @this.Links.FirstOrDefault( l => l.Equals( find ) );
+			link = @this.Links.FirstOrDefault( l => l.Contains( find ) );
 			return link != default( ISirenLink );
 		}
 
@@ -73,7 +73,7 @@ namespace D2L.Hypermedia.Siren {
 				ISirenEntity find,
 				out ISirenEntity entity
 		) {
-			entity = @this.Entities.FirstOrDefault( e => e.Equals( find ) );
+			entity = @this.Entities.FirstOrDefault( e => e.Contains( find ) );
 			return entity != default( ISirenEntity );
 		}
 
