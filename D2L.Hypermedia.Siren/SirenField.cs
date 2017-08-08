@@ -55,6 +55,27 @@ namespace D2L.Hypermedia.Siren {
 			return Class.Length > 0;
 		}
 
+		bool IContains<ISirenField>.Contains( ISirenField other ) {
+			bool isSubset = true;
+			if( other.Name != null ) {
+				isSubset = isSubset && m_name == other.Name;
+			}
+			if( other.Class != null && other.Class.Any() ) {
+				isSubset = isSubset && other.Class.All( x => m_class.Contains( x ) );
+			}
+			if( other.Type != null ) {
+				isSubset = isSubset && m_type == other.Type;
+			}
+			if( other.Value != null ) {
+				isSubset = isSubset && ( m_value == other.Value || m_value != null && m_value.Equals( other.Value ) );
+			}
+			if( other.Title != null ) {
+				isSubset = isSubset && m_title == other.Title;
+			}
+
+			return isSubset;
+		}
+
 		bool IEquatable<ISirenField>.Equals( ISirenField other ) {
 			if( other == null ) {
 				return false;

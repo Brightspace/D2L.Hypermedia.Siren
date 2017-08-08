@@ -108,6 +108,47 @@ namespace D2L.Hypermedia.Siren.Tests {
 			SirenTestHelpers.ArrayBidirectionalEquality( links, others, false );
 		}
 
+		[Test]
+		public void SirenLink_Contains_SameLink_IsTrue() {
+			ISirenLink link = GetLink();
+			ISirenLink other = GetLink();
+			Assert.IsTrue( link.Contains( link ) );
+			Assert.IsTrue( link.Contains( other ) );
+			Assert.IsTrue( other.Contains( link ) );
+		}
+
+		[Test]
+		public void SirenLink_Contains_EmptyLink_IsTrue() {
+			ISirenLink link = GetLink();
+			ISirenLink other = new SirenLink( null, null );
+			Assert.IsTrue( link.Contains( other ) );
+		}
+
+		[Test]
+		public void SirenLink_Contains_SubsetLink_IsTrue() {
+			ISirenLink link = GetLink();
+			ISirenLink other = new SirenLink(
+				rel: link.Rel,
+				href: link.Href
+			);
+			Assert.IsTrue( link.Contains( other ) );
+			Assert.IsFalse( other.Contains( link ) );
+		}
+
+		[Test]
+		public void SirenLink_Contains_DifferentLink_IsFalse() {
+			ISirenLink link = GetLink();
+			ISirenLink other = new SirenLink(
+				rel: link.Rel,
+				href: link.Href,
+				@class: link.Class,
+				title: link.Title,
+				type: "different-type"
+			);
+			Assert.IsFalse( link.Contains( other ) );
+			Assert.IsFalse( other.Contains( link ) );
+		}
+
 	}
 
 }

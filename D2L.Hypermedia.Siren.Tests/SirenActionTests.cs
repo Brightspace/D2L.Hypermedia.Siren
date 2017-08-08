@@ -10,14 +10,18 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 		private ISirenAction GetAction( string name = "action-name" ) {
 			ISirenAction action = new SirenAction(
-					name: name,
-					href: new Uri( "http://example.com" ),
-					fields: new [] {
-						new SirenField( name: "field1", @class: new [] { "class" }, type: "text/html" ),
-						new SirenField( name: "field2", @class: new [] { "class" }, type: "text/html" ),
-						new SirenField( name: "field3", @class: new [] { "not-class" }, type: "text/xml" )
-					}
-				);
+				name: name,
+				href: new Uri( "http://example.com" ),
+				@class: new [] { "foo" },
+				method: "GET",
+				title: "Action title",
+				type: "some-type",
+				fields: new [] {
+					new SirenField( name: "field1", @class: new [] { "class" }, type: "text/html" ),
+					new SirenField( name: "field2", @class: new [] { "class" }, type: "text/html" ),
+					new SirenField( name: "field3", @class: new [] { "not-class" }, type: "text/xml" )
+				}
+			);
 
 			return action;
 		}
@@ -199,6 +203,49 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 			others = new [] { GetAction( "foo" ) };
 			SirenTestHelpers.ArrayBidirectionalEquality( actions, others, false );
+		}
+
+		[Test]
+		public void SirenAction_Contains_SameAction_IsTrue() {
+			ISirenAction action = GetAction();
+			ISirenAction other = GetAction();
+			Assert.IsTrue( action.Contains( action ) );
+			Assert.IsTrue( action.Contains( other ) );
+			Assert.IsTrue( other.Contains( action ) );
+		}
+
+		[Test]
+		public void SirenAction_Contains_EmptyAction_IsTrue() {
+			ISirenAction action = GetAction();
+			ISirenAction other = new SirenAction( null, null );
+			Assert.IsTrue( action.Contains( other ) );
+		}
+
+		[Test]
+		public void SirenAction_Contains_SubsetAction_IsTrue() {
+			ISirenAction action = GetAction();
+			ISirenAction other = new SirenAction(
+				name: action.Name,
+				href: action.Href
+			);
+			Assert.IsTrue( action.Contains( other ) );
+			Assert.IsFalse( other.Contains( action ) );
+		}
+
+		[Test]
+		public void SirenAction_Contains_DifferentAction_IsFalse() {
+			ISirenAction action = GetAction();
+			ISirenAction other = new SirenAction(
+				name: action.Name,
+				href: action.Href,
+				@class: action.Class,
+				method: action.Method,
+				title: action.Title,
+				type: "different-type",
+				fields: action.Fields
+			);
+			Assert.IsFalse( action.Contains( other ) );
+			Assert.IsFalse( other.Contains( action ) );
 		}
 
 	}

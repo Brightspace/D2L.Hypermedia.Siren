@@ -8,7 +8,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 	[TestFixture]
 	public class SirenEntityTests {
 
-		private ISirenEntity GetEntity( string title = null ) {
+		private ISirenEntity GetEntity( string title = "title" ) {
 			ISirenEntity entity = new SirenEntity(
 					title: title,
 					rel: new [] { "rel" },
@@ -16,6 +16,8 @@ namespace D2L.Hypermedia.Siren.Tests {
 					properties: new {
 						foo = "bar"
 					},
+					href: new Uri( "http://example.com" ),
+					type: "text/html",
 					links: new [] {
 						new SirenLink( rel: new[] { "self" }, href: new Uri( "http://example.com" ), @class: new [] { "class" }, type: "text/html", title: "link1" ),
 						new SirenLink( rel: new[] { "next" }, href: new Uri( "http://example.com" ), @class: new [] { "class" }, type: "text/html", title: "link2" ),
@@ -236,21 +238,21 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 		[Test]
 		public void SirenEntity_Equality_SameEntity_ShouldBeEqual() {
-			ISirenEntity entity = GetEntity( "title" );
-			ISirenEntity other = GetEntity( "title" );
+			ISirenEntity entity = GetEntity();
+			ISirenEntity other = GetEntity();
 			SirenTestHelpers.BidirectionalEquality( entity, other, true );
 		}
 
 		[Test]
 		public void SirenEntity_Equality_MissingAttributes_ShouldNotBeEqual() {
-			ISirenEntity entity = GetEntity( "title" );
+			ISirenEntity entity = GetEntity();
 			ISirenEntity other = new SirenEntity();
 			SirenTestHelpers.BidirectionalEquality( entity, other, false );
 		}
 
 		[Test]
 		public void SirenEntity_Equality_DifferentTitle_ShouldNotBeEqual() {
-			ISirenEntity entity = GetEntity( "title" );
+			ISirenEntity entity = GetEntity();
 			ISirenEntity other = GetEntity( "different-title" );
 			SirenTestHelpers.BidirectionalEquality( entity, other, false );
 		}
@@ -269,6 +271,51 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 			others = new [] { GetEntity( "foo" ) };
 			SirenTestHelpers.ArrayBidirectionalEquality( entities, others, false );
+		}
+
+		[Test]
+		public void SirenEntity_Contains_SameEntity_IsTrue() {
+			ISirenEntity entity = GetEntity();
+			ISirenEntity other = GetEntity();
+			Assert.IsTrue( entity.Contains( entity ) );
+			Assert.IsTrue( entity.Contains( other ) );
+			Assert.IsTrue( other.Contains( entity ) );
+		}
+
+		[Test]
+		public void SirenEntity_Contains_EmptyEntity_IsTrue() {
+			ISirenEntity entity = GetEntity();
+			ISirenEntity other = new SirenEntity();
+			Assert.IsTrue( entity.Contains( other ) );
+		}
+
+		[Test]
+		public void SirenEntity_Contains_SubsetEntity_IsTrue() {
+			ISirenEntity entity = GetEntity();
+			ISirenEntity other = new SirenEntity(
+				rel: entity.Rel,
+				@class: entity.Class
+			);
+			Assert.IsTrue( entity.Contains( other ) );
+			Assert.IsFalse( other.Contains( entity ) );
+		}
+
+		[Test]
+		public void SirenEntity_Contains_DifferentEntity_IsFalse() {
+			ISirenEntity entity = GetEntity();
+			ISirenEntity other = new SirenEntity(
+				rel: entity.Rel,
+				@class: entity.Class,
+				properties: entity.Properties,
+				entities: entity.Entities,
+				links: entity.Links,
+				actions: entity.Actions,
+				title: entity.Title,
+				href: entity.Href,
+				type: "different-type"
+			);
+			Assert.IsFalse( entity.Contains( other ) );
+			Assert.IsFalse( other.Contains( entity ) );
 		}
 
 	}

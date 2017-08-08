@@ -98,6 +98,47 @@ namespace D2L.Hypermedia.Siren.Tests {
 			SirenTestHelpers.ArrayBidirectionalEquality( fields, others, false );
 		}
 
+		[Test]
+		public void SirenField_Contains_SameField_IsTrue() {
+			ISirenField field = GetField();
+			ISirenField other = GetField();
+			Assert.IsTrue( field.Contains( field ) );
+			Assert.IsTrue( field.Contains( other ) );
+			Assert.IsTrue( other.Contains( field ) );
+		}
+
+		[Test]
+		public void SirenField_Contains_EmptyField_IsTrue() {
+			ISirenField field = GetField();
+			ISirenField other = new SirenField( null );
+			Assert.IsTrue( field.Contains( other ) );
+		}
+
+		[Test]
+		public void SirenField_Contains_SubsetField_IsTrue() {
+			ISirenField field = GetField();
+			ISirenField other = new SirenField(
+				name: field.Name,
+				@class: field.Class
+			);
+			Assert.IsTrue( field.Contains( other ) );
+			Assert.IsFalse( other.Contains( field ) );
+		}
+
+		[Test]
+		public void SirenField_Contains_DifferentField_IsFalse() {
+			ISirenField field = GetField();
+			ISirenField other = new SirenField(
+				name: field.Name,
+				@class: field.Class,
+				type: field.Type,
+				value: field.Value,
+				title: "different title"
+			);
+			Assert.IsFalse( field.Contains( other ) );
+			Assert.IsFalse( other.Contains( field ) );
+		}
+
 	}
 
 }

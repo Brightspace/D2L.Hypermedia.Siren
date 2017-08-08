@@ -84,6 +84,27 @@ namespace D2L.Hypermedia.Siren {
 			return @this.CompareTo( (ISirenLink)obj );
 		}
 
+		bool IContains<ISirenLink>.Contains( ISirenLink other ) {
+			bool isSubset = true;
+			if( other.Rel != null && other.Rel.Any() ) {
+				isSubset = isSubset && other.Rel.All( x => m_rel.Contains( x ) );
+			}
+			if( other.Href != null ) {
+				isSubset = isSubset && m_href.Equals( other.Href );
+			}
+			if( other.Class != null && other.Class.Any() ) {
+				isSubset = isSubset && other.Class.All( x => m_class.Contains( x ) );
+			}
+			if( other.Title != null ) {
+				isSubset = isSubset && m_title == other.Title;
+			}
+			if( other.Type != null ) {
+				isSubset = isSubset && m_type == other.Type;
+			}
+
+			return isSubset;
+		}
+
 		public override bool Equals( object obj ) {
 			ISirenLink link = obj as ISirenLink;
 			ISirenLink @this = this;
