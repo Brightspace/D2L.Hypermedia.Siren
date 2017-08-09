@@ -5,15 +5,6 @@ namespace D2L.Hypermedia.Siren {
 
 	public static class SirenActionExtensions {
 
-		public static bool TryGetField(
-				this ISirenAction @this,
-				ISirenField find,
-				out ISirenField field
-		) {
-			field = @this.Fields.FirstOrDefault( f => f.Contains( find ) );
-			return field != default( ISirenField );
-		}
-
 		public static bool TryGetFieldByName(
 				this ISirenAction @this,
 				string name,

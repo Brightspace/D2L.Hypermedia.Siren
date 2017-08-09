@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IContains.cs" />
+    <Compile Include="MatchingHelpers.cs" />
     <Compile Include="SirenActionExtensions.cs" />
     <Compile Include="SirenEntityExtensions.cs" />
     <Compile Include="ISirenAction.cs" />

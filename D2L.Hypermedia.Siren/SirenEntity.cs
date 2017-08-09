@@ -87,6 +87,29 @@ namespace D2L.Hypermedia.Siren {
 			get { return m_type; }
 		}
 
+		public bool Matches(
+			out string message,
+			string[] @class = null,
+			dynamic properties = null,
+			IEnumerable<ISirenEntity> entities = null,
+			IEnumerable<ISirenLink> links = null,
+			IEnumerable<ISirenAction> actions = null,
+			string title = null,
+			string[] rel = null,
+			Uri href = null,
+			string type = null
+		) {
+			return MatchingHelpers.Matches( rel, m_rel, out message )
+				&& MatchingHelpers.Matches( @class, m_class, out message )
+				&& MatchingHelpers.Matches( properties, m_properties, out message )
+				&& MatchingHelpers.Matches( entities, m_entities, out message )
+				&& MatchingHelpers.Matches( links, m_links, out message )
+				&& MatchingHelpers.Matches( actions, m_actions, out message )
+				&& MatchingHelpers.Matches( href, m_href, out message )
+				&& MatchingHelpers.Matches( title, m_title, out message )
+				&& MatchingHelpers.Matches( type, m_type, out message );
+		}
+
 		public bool ShouldSerializeRel() {
 			return Rel.Length > 0;
 		}
@@ -114,10 +137,8 @@ namespace D2L.Hypermedia.Siren {
 
 			bool rel = m_rel.OrderBy( x => x ).SequenceEqual( other.Rel.OrderBy( x => x ) );
 			bool @class = m_class.OrderBy( x => x ).SequenceEqual( other.Class.OrderBy( x => x ) );
-			bool properties = m_properties == other.Properties
-				|| ( m_properties != null
-					&& other.Properties != null
-					&& m_properties.ToString().Equals( other.Properties.ToString() ) );
+			bool properties = ( m_properties == null && other.Properties == null )
+				|| ( m_properties != null && other.Properties != null && m_properties.ToString().Equals( other.Properties.ToString() ) );
 			bool entities = m_entities.OrderBy( x => x ).SequenceEqual( other.Entities.OrderBy( x => x ) );
 			bool links = m_links.OrderBy( x => x ).SequenceEqual( other.Links.OrderBy( x => x ) );
 			bool actions = m_actions.OrderBy( x => x ).SequenceEqual( other.Actions.OrderBy( x => x ) );
@@ -139,43 +160,6 @@ namespace D2L.Hypermedia.Siren {
 		int IComparable.CompareTo( object obj ) {
 			ISirenEntity @this = this;
 			return @this.CompareTo( (ISirenEntity)obj );
-		}
-
-		bool IContains<ISirenEntity>.Contains( ISirenEntity other ) {
-			bool isSubset = true;
-			if( other.Rel != null && other.Rel.Any() ) {
-				isSubset = isSubset && other.Rel.All( s => m_rel.Contains( s ) );
-			}
-			if( other.Class != null && other.Class.Any() ) {
-				isSubset = isSubset && other.Class.All( s => m_class.Contains( s ) );
-			}
-			if( other.Properties != null ) {
-				isSubset = isSubset &&
-					( m_properties == other.Properties
-					|| ( m_properties != null
-						&& other.Properties != null
-						&& m_properties.ToString().Equals( other.Properties.ToString() ) ) );
-			}
-			if( other.Entities != null && other.Entities.Any() ) {
-				isSubset = isSubset && other.Entities.All( x => m_entities.Any( y => y.Contains( x ) ) );
-			}
-			if( other.Links != null && other.Links.Any() ) {
-				isSubset = isSubset && other.Links.All( x => m_links.Any( y => y.Contains( x ) ) );
-			}
-			if( other.Actions != null && other.Actions.Any() ) {
-				isSubset = isSubset && other.Actions.All( x => m_actions.Any( y => y.Contains( x ) ) );
-			}
-			if( other.Href != null ) {
-				isSubset = isSubset && m_href == other.Href;
-			}
-			if( other.Title != null ) {
-				isSubset = isSubset && m_title == other.Title;
-			}
-			if( other.Type != null ) {
-				isSubset = isSubset && m_type == other.Type;
-			}
-
-			return isSubset;
 		}
 
 		public override bool Equals( object obj ) {

@@ -19,7 +19,7 @@ namespace D2L.Hypermedia.Siren {
 			string title = null,
 			string type = null
 		) {
-			m_rel = rel;
+			m_rel = rel ?? new string[0];
 			m_href = href;
 			m_class = @class ?? new string[0];
 			m_title = title;
@@ -49,6 +49,21 @@ namespace D2L.Hypermedia.Siren {
 		[JsonProperty( "type", NullValueHandling = NullValueHandling.Ignore )]
 		public string Type {
 			get { return m_type; }
+		}
+
+		public bool Matches(
+			out string message,
+			string[] rel = null,
+			string[] @class = null,
+			Uri href = null,
+			string title = null,
+			string type = null
+		) {
+			return MatchingHelpers.Matches( title, m_title, out message )
+				&& MatchingHelpers.Matches( type, m_type, out message )
+				&& MatchingHelpers.Matches( href, m_href, out message )
+				&& MatchingHelpers.Matches( rel, m_rel, out message )
+				&& MatchingHelpers.Matches( @class, m_class, out message );
 		}
 
 		public bool ShouldSerializeClass() {
@@ -82,27 +97,6 @@ namespace D2L.Hypermedia.Siren {
 		int IComparable.CompareTo( object obj ) {
 			ISirenLink @this = this;
 			return @this.CompareTo( (ISirenLink)obj );
-		}
-
-		bool IContains<ISirenLink>.Contains( ISirenLink other ) {
-			bool isSubset = true;
-			if( other.Rel != null && other.Rel.Any() ) {
-				isSubset = isSubset && other.Rel.All( x => m_rel.Contains( x ) );
-			}
-			if( other.Href != null ) {
-				isSubset = isSubset && m_href.Equals( other.Href );
-			}
-			if( other.Class != null && other.Class.Any() ) {
-				isSubset = isSubset && other.Class.All( x => m_class.Contains( x ) );
-			}
-			if( other.Title != null ) {
-				isSubset = isSubset && m_title == other.Title;
-			}
-			if( other.Type != null ) {
-				isSubset = isSubset && m_type == other.Type;
-			}
-
-			return isSubset;
 		}
 
 		public override bool Equals( object obj ) {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace D2L.Hypermedia.Siren {
 
-	public interface ISirenEntity : IEquatable<ISirenEntity>, IContains<ISirenEntity>, IComparable<ISirenEntity>, IComparable {
+	public interface ISirenEntity : IEquatable<ISirenEntity>, IComparable<ISirenEntity>, IComparable {
 
 		string[] Class { get; }
 
@@ -22,6 +22,19 @@ namespace D2L.Hypermedia.Siren {
 		Uri Href { get; }
 
 		string Type { get; }
+
+		bool Matches(
+			out string message,
+			string[] @class = null,
+			dynamic properties = null,
+			IEnumerable<ISirenEntity> entities = null,
+			IEnumerable<ISirenLink> links = null,
+			IEnumerable<ISirenAction> actions = null,
+			string title = null,
+			string[] rel = null,
+			Uri href = null,
+			string type = null
+		);
 
 	}
 

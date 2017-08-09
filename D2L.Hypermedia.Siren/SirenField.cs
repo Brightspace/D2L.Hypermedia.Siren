@@ -51,29 +51,23 @@ namespace D2L.Hypermedia.Siren {
 			get { return m_title; }
 		}
 
-		public bool ShouldSerializeClass() {
-			return Class.Length > 0;
+		public bool Matches(
+			out string message,
+			string name = null,
+			string[] @class = null,
+			string type = null,
+			object value = null,
+			string title = null
+		) {
+			return MatchingHelpers.Matches( name, m_name, out message )
+				&& MatchingHelpers.Matches( type, m_type, out message )
+				&& MatchingHelpers.Matches( title, m_title, out message )
+				&& MatchingHelpers.Matches( @class, m_class, out message )
+				&& MatchingHelpers.Matches( value, m_value, out message );
 		}
 
-		bool IContains<ISirenField>.Contains( ISirenField other ) {
-			bool isSubset = true;
-			if( other.Name != null ) {
-				isSubset = isSubset && m_name == other.Name;
-			}
-			if( other.Class != null && other.Class.Any() ) {
-				isSubset = isSubset && other.Class.All( x => m_class.Contains( x ) );
-			}
-			if( other.Type != null ) {
-				isSubset = isSubset && m_type == other.Type;
-			}
-			if( other.Value != null ) {
-				isSubset = isSubset && ( m_value == other.Value || m_value != null && m_value.Equals( other.Value ) );
-			}
-			if( other.Title != null ) {
-				isSubset = isSubset && m_title == other.Title;
-			}
-
-			return isSubset;
+		public bool ShouldSerializeClass() {
+			return Class.Length > 0;
 		}
 
 		bool IEquatable<ISirenField>.Equals( ISirenField other ) {

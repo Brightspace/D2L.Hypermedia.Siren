@@ -8,23 +8,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 	[TestFixture]
 	public class SirenActionTests {
 
-		private ISirenAction GetAction( string name = "action-name" ) {
-			ISirenAction action = new SirenAction(
-				name: name,
-				href: new Uri( "http://example.com" ),
-				@class: new [] { "foo" },
-				method: "GET",
-				title: "Action title",
-				type: "some-type",
-				fields: new [] {
-					new SirenField( name: "field1", @class: new [] { "class" }, type: "text/html" ),
-					new SirenField( name: "field2", @class: new [] { "class" }, type: "text/html" ),
-					new SirenField( name: "field3", @class: new [] { "not-class" }, type: "text/xml" )
-				}
-			);
-
-			return action;
-		}
+		private string m_matchMessage;
 
 		[Test]
 		public void SirenAction_Serialized_DoesNotIncludeOptionalParametersIfNull() {
@@ -93,30 +77,22 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenAction_TryGetField_ReturnsCorrectField() {
-			ISirenField find = new SirenField( "field3" );
-			ISirenField field;
-			Assert.IsTrue( GetAction().TryGetField( find, out field ) );
-			Assert.IsTrue( field.Contains( find ) );
-		}
-
-		[Test]
 		public void SirenAction_TryGetFieldByName_ReturnsCorrectField() {
 			ISirenField field;
-			Assert.IsFalse( GetAction().TryGetFieldByName( "foo", out field ) );
+			Assert.IsFalse( TestHelpers.GetAction().TryGetFieldByName( "foo", out field ) );
 			Assert.IsNull( field );
 
-			Assert.IsTrue( GetAction().TryGetFieldByName( "field1", out field ) );
+			Assert.IsTrue( TestHelpers.GetAction().TryGetFieldByName( "field1", out field ) );
 			Assert.AreEqual( "field1", field.Name );
 		}
 
 		[Test]
 		public void SirenAction_TryGetFieldByClass_ReturnsCorrectField() {
 			ISirenField field;
-			Assert.IsFalse( GetAction().TryGetFieldByClass( "foo", out field ) );
+			Assert.IsFalse( TestHelpers.GetAction().TryGetFieldByClass( "foo", out field ) );
 			Assert.IsNull( field );
 
-			Assert.IsTrue( GetAction().TryGetFieldByClass( "class", out field ) );
+			Assert.IsTrue( TestHelpers.GetAction().TryGetFieldByClass( "class", out field ) );
 			Assert.Contains( "class", field.Class );
 			Assert.AreEqual( "field1", field.Name );
 		}
@@ -124,24 +100,24 @@ namespace D2L.Hypermedia.Siren.Tests {
 		[Test]
 		public void SirenAction_TryGetFieldByType_ReturnsCorrectField() {
 			ISirenField field;
-			Assert.IsFalse( GetAction().TryGetFieldByType( "foo", out field ) );
+			Assert.IsFalse( TestHelpers.GetAction().TryGetFieldByType( "foo", out field ) );
 			Assert.IsNull( field );
 
-			Assert.IsTrue( GetAction().TryGetFieldByType( "text/xml", out field ) );
+			Assert.IsTrue( TestHelpers.GetAction().TryGetFieldByType( "text/xml", out field ) );
 			Assert.AreEqual( "text/xml", field.Type );
 			Assert.AreEqual( "field3", field.Name );
 		}
 
 		[Test]
 		public void SirenAction_Equality_SameAction_ShouldBeEqual() {
-			ISirenAction action = GetAction();
-			ISirenAction other = GetAction();
-			SirenTestHelpers.BidirectionalEquality( action, other, true );
+			ISirenAction action = TestHelpers.GetAction();
+			ISirenAction other = TestHelpers.GetAction();
+			TestHelpers.BidirectionalEquality( action, other, true );
 		}
 
 		[Test]
 		public void SirenAction_Equality_DifferentFieldOrder_ShouldBeEqual() {
-			ISirenAction action = GetAction();
+			ISirenAction action = TestHelpers.GetAction();
 			ISirenAction other = new SirenAction(
 				name: action.Name,
 				href: action.Href,
@@ -155,22 +131,22 @@ namespace D2L.Hypermedia.Siren.Tests {
 					action.Fields.ElementAt( 0 )
 				}
 			);
-			SirenTestHelpers.BidirectionalEquality( action, other, true );
+			TestHelpers.BidirectionalEquality( action, other, true );
 		}
 
 		[Test]
 		public void SirenAction_Equality_MissingAttributes_ShouldNotBeEqual() {
-			ISirenAction action = GetAction();
+			ISirenAction action = TestHelpers.GetAction();
 			ISirenAction other = new SirenAction(
 				name: action.Name,
 				href: action.Href
 			);
-			SirenTestHelpers.BidirectionalEquality( action, other, false );
+			TestHelpers.BidirectionalEquality( action, other, false );
 		}
 
 		[Test]
 		public void SirenAction_Equality_DifferentFields_ShouldNotBeEqual() {
-			ISirenAction action = GetAction();
+			ISirenAction action = TestHelpers.GetAction();
 			ISirenAction other = new SirenAction(
 				name: action.Name,
 				href: action.Href,
@@ -182,66 +158,23 @@ namespace D2L.Hypermedia.Siren.Tests {
 					new SirenField( "fieldName1" )
 				}
 			);
-			SirenTestHelpers.BidirectionalEquality( action, other, false );
+			TestHelpers.BidirectionalEquality( action, other, false );
 		}
 
 		[Test]
 		public void SirenAction_ArrayEquality() {
-			ISirenAction[] actions = { GetAction( "foo" ), GetAction( "bar" ) };
-			ISirenAction[] others = { GetAction( "foo" ), GetAction( "bar" ) };
-			SirenTestHelpers.ArrayBidirectionalEquality( actions, others, true );
+			ISirenAction[] actions = { TestHelpers.GetAction( "foo" ), TestHelpers.GetAction( "bar" ) };
+			ISirenAction[] others = { TestHelpers.GetAction( "foo" ), TestHelpers.GetAction( "bar" ) };
+			TestHelpers.ArrayBidirectionalEquality( actions, others, true );
 
-			others = new [] { GetAction( "bar" ), GetAction( "foo" ) };
-			SirenTestHelpers.ArrayBidirectionalEquality( actions, others, true );
+			others = new [] { TestHelpers.GetAction( "bar" ), TestHelpers.GetAction( "foo" ) };
+			TestHelpers.ArrayBidirectionalEquality( actions, others, true );
 
-			others = new [] { GetAction( "foo" ), GetAction( "foo" ) };
-			SirenTestHelpers.ArrayBidirectionalEquality( actions, others, false );
+			others = new [] { TestHelpers.GetAction( "foo" ), TestHelpers.GetAction( "foo" ) };
+			TestHelpers.ArrayBidirectionalEquality( actions, others, false );
 
-			others = new [] { GetAction( "foo" ) };
-			SirenTestHelpers.ArrayBidirectionalEquality( actions, others, false );
-		}
-
-		[Test]
-		public void SirenAction_Contains_SameAction_IsTrue() {
-			ISirenAction action = GetAction();
-			ISirenAction other = GetAction();
-			Assert.IsTrue( action.Contains( action ) );
-			Assert.IsTrue( action.Contains( other ) );
-			Assert.IsTrue( other.Contains( action ) );
-		}
-
-		[Test]
-		public void SirenAction_Contains_EmptyAction_IsTrue() {
-			ISirenAction action = GetAction();
-			ISirenAction other = new SirenAction( null, null );
-			Assert.IsTrue( action.Contains( other ) );
-		}
-
-		[Test]
-		public void SirenAction_Contains_SubsetAction_IsTrue() {
-			ISirenAction action = GetAction();
-			ISirenAction other = new SirenAction(
-				name: action.Name,
-				href: action.Href
-			);
-			Assert.IsTrue( action.Contains( other ) );
-			Assert.IsFalse( other.Contains( action ) );
-		}
-
-		[Test]
-		public void SirenAction_Contains_DifferentAction_IsFalse() {
-			ISirenAction action = GetAction();
-			ISirenAction other = new SirenAction(
-				name: action.Name,
-				href: action.Href,
-				@class: action.Class,
-				method: action.Method,
-				title: action.Title,
-				type: "different-type",
-				fields: action.Fields
-			);
-			Assert.IsFalse( action.Contains( other ) );
-			Assert.IsFalse( other.Contains( action ) );
+			others = new [] { TestHelpers.GetAction( "foo" ) };
+			TestHelpers.ArrayBidirectionalEquality( actions, others, false );
 		}
 
 	}

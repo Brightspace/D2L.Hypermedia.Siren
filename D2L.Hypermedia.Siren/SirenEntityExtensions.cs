@@ -5,15 +5,6 @@ namespace D2L.Hypermedia.Siren {
 
 	public static class SirenEntityExtensions {
 
-		public static bool TryGetAction(
-				this ISirenEntity @this,
-				ISirenAction find,
-				out ISirenAction action
-		) {
-			action = @this.Actions.FirstOrDefault( a => a.Contains( find ) );
-			return action != default( ISirenAction );
-		}
-
 		public static bool TryGetActionByName(
 				this ISirenEntity @this,
 				string name,
@@ -30,15 +21,6 @@ namespace D2L.Hypermedia.Siren {
 		) {
 			action = @this.ActionsByClass( @class ).FirstOrDefault();
 			return action != default( ISirenAction );
-		}
-
-		public static bool TryGetLink(
-				this ISirenEntity @this,
-				ISirenLink find,
-				out ISirenLink link
-		) {
-			link = @this.Links.FirstOrDefault( l => l.Contains( find ) );
-			return link != default( ISirenLink );
 		}
 
 		public static bool TryGetLinkByRel(
@@ -66,15 +48,6 @@ namespace D2L.Hypermedia.Siren {
 		) {
 			link = @this.LinksByType( type ).FirstOrDefault();
 			return link != default( ISirenLink );
-		}
-
-		public static bool TryGetSubEntity(
-				this ISirenEntity @this,
-				ISirenEntity find,
-				out ISirenEntity entity
-		) {
-			entity = @this.Entities.FirstOrDefault( e => e.Contains( find ) );
-			return entity != default( ISirenEntity );
 		}
 
 		public static bool TryGetSubEntityByRel(

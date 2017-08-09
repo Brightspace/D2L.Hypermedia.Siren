@@ -7,15 +7,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 	[TestFixture]
 	public class SirenLinkTests {
 
-		private ISirenLink GetLink( string rel = "foo" ) {
-			return new SirenLink(
-				rel: new [] { rel },
-				href: new Uri( "http://example.com" ),
-				@class: new [] { "bar" },
-				title: "Link title",
-				type: "text/html"
-			);
-		}
+		private string m_matchMessage;
 
 		[Test]
 		public void SirenLink_Serialized_DoesNotIncludeOptionalParametersIfNull() {
@@ -37,7 +29,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 		[Test]
 		public void SirenLink_DeserializesCorrectly() {
-			ISirenLink sirenLink = GetLink();
+			ISirenLink sirenLink = TestHelpers.GetLink();
 
 			string serialized = JsonConvert.SerializeObject( sirenLink );
 
@@ -70,83 +62,42 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 		[Test]
 		public void SirenLink_Equality_SameLink_ShouldBeEqual() {
-			ISirenLink link = GetLink();
-			ISirenLink other = GetLink();
-			SirenTestHelpers.BidirectionalEquality( link, other, true );
+			ISirenLink link = TestHelpers.GetLink();
+			ISirenLink other = TestHelpers.GetLink();
+			TestHelpers.BidirectionalEquality( link, other, true );
 		}
 
 		[Test]
 		public void SirenLink_Equality_MissingAttributes_ShouldNotBeEqual() {
-			ISirenLink link = GetLink();
+			ISirenLink link = TestHelpers.GetLink();
 			ISirenLink other = new SirenLink(
 				rel: new [] { "foo" },
 				href: new Uri( "http://example.com" )
 			);
-			SirenTestHelpers.BidirectionalEquality( link, other, false );
+			TestHelpers.BidirectionalEquality( link, other, false );
 		}
 
 		[Test]
 		public void SirenLink_Equality_DifferentRel_ShouldNotBeEqual() {
-			ISirenLink link = GetLink();
-			ISirenLink other = GetLink( "different-rel" );
-			SirenTestHelpers.BidirectionalEquality( link, other, false );
+			ISirenLink link = TestHelpers.GetLink();
+			ISirenLink other = TestHelpers.GetLink( "different-rel" );
+			TestHelpers.BidirectionalEquality( link, other, false );
 		}
 
 		[Test]
 		public void SirenLink_ArrayEquality() {
-			ISirenLink[] links = { GetLink( "foo" ), GetLink( "bar" ) };
-			ISirenLink[] others = { GetLink( "foo" ), GetLink( "bar" ) };
-			SirenTestHelpers.ArrayBidirectionalEquality( links, others, true );
+			ISirenLink[] links = { TestHelpers.GetLink( "foo" ), TestHelpers.GetLink( "bar" ) };
+			ISirenLink[] others = { TestHelpers.GetLink( "foo" ), TestHelpers.GetLink( "bar" ) };
+			TestHelpers.ArrayBidirectionalEquality( links, others, true );
 
-			others = new [] { GetLink( "bar" ), GetLink( "foo" ) };
-			SirenTestHelpers.ArrayBidirectionalEquality( links, others, true );
+			others = new [] { TestHelpers.GetLink( "bar" ), TestHelpers.GetLink( "foo" ) };
+			TestHelpers.ArrayBidirectionalEquality( links, others, true );
 
-			others = new [] { GetLink( "foo" ), GetLink( "foo" ) };
-			SirenTestHelpers.ArrayBidirectionalEquality( links, others, false );
+			others = new [] { TestHelpers.GetLink( "foo" ), TestHelpers.GetLink( "foo" ) };
+			TestHelpers.ArrayBidirectionalEquality( links, others, false );
 
-			others = new [] { GetLink( "foo" ) };
-			SirenTestHelpers.ArrayBidirectionalEquality( links, others, false );
-		}
-
-		[Test]
-		public void SirenLink_Contains_SameLink_IsTrue() {
-			ISirenLink link = GetLink();
-			ISirenLink other = GetLink();
-			Assert.IsTrue( link.Contains( link ) );
-			Assert.IsTrue( link.Contains( other ) );
-			Assert.IsTrue( other.Contains( link ) );
-		}
-
-		[Test]
-		public void SirenLink_Contains_EmptyLink_IsTrue() {
-			ISirenLink link = GetLink();
-			ISirenLink other = new SirenLink( null, null );
-			Assert.IsTrue( link.Contains( other ) );
-		}
-
-		[Test]
-		public void SirenLink_Contains_SubsetLink_IsTrue() {
-			ISirenLink link = GetLink();
-			ISirenLink other = new SirenLink(
-				rel: link.Rel,
-				href: link.Href
-			);
-			Assert.IsTrue( link.Contains( other ) );
-			Assert.IsFalse( other.Contains( link ) );
-		}
-
-		[Test]
-		public void SirenLink_Contains_DifferentLink_IsFalse() {
-			ISirenLink link = GetLink();
-			ISirenLink other = new SirenLink(
-				rel: link.Rel,
-				href: link.Href,
-				@class: link.Class,
-				title: link.Title,
-				type: "different-type"
-			);
-			Assert.IsFalse( link.Contains( other ) );
-			Assert.IsFalse( other.Contains( link ) );
+			others = new [] { TestHelpers.GetLink( "foo" ) };
+			TestHelpers.ArrayBidirectionalEquality( links, others, false );
 		}
 
 	}

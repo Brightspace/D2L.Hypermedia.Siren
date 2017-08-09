@@ -69,6 +69,25 @@ namespace D2L.Hypermedia.Siren {
 			get { return m_fields; }
 		}
 
+		public bool Matches(
+			out string message,
+			string name = null,
+			string[] @class = null,
+			string method = null,
+			Uri href = null,
+			string title = null,
+			string type = null,
+			IEnumerable<ISirenField> fields = null
+		) {
+			return MatchingHelpers.Matches( name, m_name, out message )
+				&& MatchingHelpers.Matches( method, m_method, out message )
+				&& MatchingHelpers.Matches( title, m_title, out message )
+				&& MatchingHelpers.Matches( type, m_type, out message )
+				&& MatchingHelpers.Matches( href, m_href, out message )
+				&& MatchingHelpers.Matches( @class, m_class, out message )
+				&& MatchingHelpers.Matches( fields, m_fields, out message );
+		}
+
 		public bool ShouldSerializeClass() {
 			return Class.Length > 0;
 		}
@@ -104,33 +123,6 @@ namespace D2L.Hypermedia.Siren {
 		int IComparable.CompareTo( object obj ) {
 			ISirenAction @this = this;
 			return @this.CompareTo( (ISirenAction)obj );
-		}
-
-		bool IContains<ISirenAction>.Contains( ISirenAction other ) {
-			bool isSubset = true;
-			if( other.Name != null ) {
-				isSubset = isSubset && m_name == other.Name;
-			}
-			if( other.Class != null && other.Class.Any() ) {
-				isSubset = isSubset && other.Class.All( x => m_class.Contains( x ) );
-			}
-			if( other.Method != null ) {
-				isSubset = isSubset && m_method == other.Method;
-			}
-			if( other.Href != null ) {
-				isSubset = isSubset && m_href == other.Href;
-			}
-			if( other.Title != null ) {
-				isSubset = isSubset && m_title == other.Title;
-			}
-			if( other.Type != null ) {
-				isSubset = isSubset && m_type == other.Type;
-			}
-			if( other.Fields != null && other.Fields.Any() ) {
-				isSubset = isSubset && other.Fields.All( x => m_fields.Any( y=> y.Contains( x ) ) );
-			}
-
-			return isSubset;
 		}
 
 		public override bool Equals( object obj ) {

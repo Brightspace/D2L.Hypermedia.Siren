@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace D2L.Hypermedia.Siren {
 
-	public interface ISirenAction : IEquatable<ISirenAction>, IContains<ISirenAction>, IComparable<ISirenAction>, IComparable {
+	public interface ISirenAction : IEquatable<ISirenAction>, IComparable<ISirenAction>, IComparable {
 
 		string Name { get; }
 
@@ -18,6 +18,17 @@ namespace D2L.Hypermedia.Siren {
 		string Type { get; }
 
 		IEnumerable<ISirenField> Fields { get; }
+
+		bool Matches(
+			out string message,
+			string name = null,
+			string[] @class = null,
+			string method = null,
+			Uri href = null,
+			string title = null,
+			string type = null,
+			IEnumerable<ISirenField> fields = null
+		);
 
 	}
 

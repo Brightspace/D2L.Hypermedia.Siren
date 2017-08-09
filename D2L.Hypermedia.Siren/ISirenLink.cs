@@ -2,7 +2,7 @@
 
 namespace D2L.Hypermedia.Siren {
 
-	public interface ISirenLink : IEquatable<ISirenLink>, IContains<ISirenLink>, IComparable<ISirenLink>, IComparable {
+	public interface ISirenLink : IEquatable<ISirenLink>, IComparable<ISirenLink>, IComparable {
 
 		string[] Rel { get; }
 
@@ -13,6 +13,15 @@ namespace D2L.Hypermedia.Siren {
 		string Title { get; }
 
 		string Type { get; }
+
+		bool Matches(
+			out string message,
+			string[] rel = null,
+			string[] @class = null,
+			Uri href = null,
+			string title = null,
+			string type = null
+		);
 
 	}
 
