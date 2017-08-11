@@ -19,17 +19,6 @@ namespace D2L.Hypermedia.Siren {
 
 		IEnumerable<ISirenField> Fields { get; }
 
-		bool Matches(
-			out string message,
-			string name = null,
-			string[] @class = null,
-			string method = null,
-			Uri href = null,
-			string title = null,
-			string type = null,
-			IEnumerable<ISirenField> fields = null
-		);
-
 	}
 
 }

@@ -51,21 +51,6 @@ namespace D2L.Hypermedia.Siren {
 			get { return m_type; }
 		}
 
-		public bool Matches(
-			out string message,
-			string[] rel = null,
-			string[] @class = null,
-			Uri href = null,
-			string title = null,
-			string type = null
-		) {
-			return MatchingHelpers.Matches( title, m_title, out message )
-				&& MatchingHelpers.Matches( type, m_type, out message )
-				&& MatchingHelpers.Matches( href, m_href, out message )
-				&& MatchingHelpers.Matches( rel, m_rel, out message )
-				&& MatchingHelpers.Matches( @class, m_class, out message );
-		}
-
 		public bool ShouldSerializeClass() {
 			return Class.Length > 0;
 		}

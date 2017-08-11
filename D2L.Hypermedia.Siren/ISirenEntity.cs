@@ -23,19 +23,6 @@ namespace D2L.Hypermedia.Siren {
 
 		string Type { get; }
 
-		bool Matches(
-			out string message,
-			string[] @class = null,
-			dynamic properties = null,
-			IEnumerable<ISirenEntity> entities = null,
-			IEnumerable<ISirenLink> links = null,
-			IEnumerable<ISirenAction> actions = null,
-			string title = null,
-			string[] rel = null,
-			Uri href = null,
-			string type = null
-		);
-
 	}
 
 }

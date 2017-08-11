@@ -14,15 +14,6 @@ namespace D2L.Hypermedia.Siren {
 
 		string Title { get; }
 
-		bool Matches(
-			out string message,
-			string name = null,
-			string[] @class = null,
-			string type = null,
-			object value = null,
-			string title = null
-		);
-
 	}
 
 }
