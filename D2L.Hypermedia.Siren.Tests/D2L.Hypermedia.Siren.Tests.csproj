@@ -48,11 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MatchersTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SirenActionTests.cs" />
     <Compile Include="SirenEntityTests.cs" />
     <Compile Include="SirenFieldTests.cs" />
     <Compile Include="SirenLinkTests.cs" />
+    <Compile Include="TestHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

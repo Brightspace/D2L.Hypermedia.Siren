@@ -7,6 +7,8 @@ namespace D2L.Hypermedia.Siren.Tests {
 	[TestFixture]
 	public class SirenFieldTests {
 
+		private string m_matchMessage;
+
 		[Test]
 		public void SirenField_Serialized_DoesNotIncludeOptionalParametersIfNull() {
 			ISirenField sirenField = new SirenField( name: "foo" );
@@ -23,12 +25,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 		[Test]
 		public void SirenField_DeserializesCorrectly() {
-			ISirenField sirenField = new SirenField(
-				name: "foo",
-				@class: new[] { "bar" },
-				type: "number",
-				value: 1,
-				title: "Some field" );
+			ISirenField sirenField = TestHelpers.GetField();
 
 			string serialized = JsonConvert.SerializeObject( sirenField );
 			ISirenField field = JsonConvert.DeserializeObject<SirenField>( serialized );
@@ -43,17 +40,54 @@ namespace D2L.Hypermedia.Siren.Tests {
 		[Test]
 		public void SirenField_Serialize_ExcludesClassIfEmpty() {
 			ISirenField field = new SirenField(
-					name: "foo",
-					@class: new[] { "bar" }
-				);
+				name: "foo",
+				@class: new [] { "bar" }
+			);
 			string serialized = JsonConvert.SerializeObject( field );
 			Assert.GreaterOrEqual( serialized.IndexOf( "class", StringComparison.Ordinal ), 0 );
 
-			field = new SirenField(
-					name: "foo"
-				);
+			field = new SirenField( name: "foo" );
 			serialized = JsonConvert.SerializeObject( field );
 			Assert.AreEqual( -1, serialized.IndexOf( "class", StringComparison.Ordinal ) );
+		}
+
+		[Test]
+		public void SirenField_Equality_SameField_ShouldBeEqual() {
+			ISirenField field = TestHelpers.GetField();
+			ISirenField other = TestHelpers.GetField();
+			TestHelpers.BidirectionalEquality( field, other, true );
+		}
+
+		[Test]
+		public void SirenField_Equality_MissingAttributes_ShouldNotBeEqual() {
+			ISirenField field = TestHelpers.GetField();
+			ISirenField other = new SirenField(
+				name: "foo"
+			);
+			TestHelpers.BidirectionalEquality( field, other, false );
+		}
+
+		[Test]
+		public void SirenField_Equality_DifferentName_ShouldNotBeEqual() {
+			ISirenField field = TestHelpers.GetField();
+			ISirenField other = TestHelpers.GetField( "other-name" );
+			TestHelpers.BidirectionalEquality( field, other, false );
+		}
+
+		[Test]
+		public void SirenField_ArrayEquality() {
+			ISirenField[] fields = { TestHelpers.GetField( "foo" ), TestHelpers.GetField( "bar" ) };
+			ISirenField[] others = { TestHelpers.GetField( "foo" ), TestHelpers.GetField( "bar" ) };
+			TestHelpers.ArrayBidirectionalEquality( fields, others, true );
+
+			others = new [] { TestHelpers.GetField( "bar" ), TestHelpers.GetField( "foo" ) };
+			TestHelpers.ArrayBidirectionalEquality( fields, others, true );
+
+			others = new [] { TestHelpers.GetField( "foo" ), TestHelpers.GetField( "foo" ) };
+			TestHelpers.ArrayBidirectionalEquality( fields, others, false );
+
+			others = new [] { TestHelpers.GetField( "foo" ) };
+			TestHelpers.ArrayBidirectionalEquality( fields, others, false );
 		}
 
 	}

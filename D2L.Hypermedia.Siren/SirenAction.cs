@@ -77,6 +77,51 @@ namespace D2L.Hypermedia.Siren {
 			return Fields.Any();
 		}
 
+		bool IEquatable<ISirenAction>.Equals( ISirenAction other ) {
+			if( other == null ) {
+				return false;
+			}
+
+			bool name = m_name == other.Name;
+			bool @class = m_class.OrderBy( x => x ).SequenceEqual( other.Class.OrderBy( x => x ) );
+			bool method = m_method == other.Method;
+			bool href = m_href == other.Href;
+			bool title = m_title == other.Title;
+			bool type = m_type == other.Type;
+			bool fields = m_fields.OrderBy( x => x ).SequenceEqual( other.Fields.OrderBy( x => x ) );
+
+			return name && @class && method && href && title && type && fields;
+		}
+
+		int IComparable<ISirenAction>.CompareTo( ISirenAction other ) {
+			if( other == null ) {
+				return 1;
+			}
+
+			return string.CompareOrdinal( m_name, other.Name );
+		}
+
+		int IComparable.CompareTo( object obj ) {
+			ISirenAction @this = this;
+			return @this.CompareTo( (ISirenAction)obj );
+		}
+
+		public override bool Equals( object obj ) {
+			ISirenAction action = obj as ISirenAction;
+			ISirenAction @this = this;
+			return action != null && @this.Equals( action );
+		}
+
+		public override int GetHashCode() {
+			return m_name.GetHashCode()
+				^ string.Join( ",", m_class ).GetHashCode()
+				^ m_method?.GetHashCode() ?? 0
+				^ m_href?.GetHashCode() ?? 0
+				^ m_title?.GetHashCode() ?? 0
+				^ m_type?.GetHashCode() ?? 0
+				^ m_fields.Select( x => x.GetHashCode() ).GetHashCode();
+		}
+
 	}
 
 	public class HypermediaActionConverter : JsonConverter {
