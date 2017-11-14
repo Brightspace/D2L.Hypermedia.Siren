@@ -29,6 +29,8 @@ ISirenEntity entity = new SirenEntity(
 );
 ```
 
+Each `ISiren*` implements the `ISirenSerializable` interface, which includes the `ToJson` method. This is a custom JSON serializer, as it was found that using the default `JsonConvert.SerializeObject` could be very slow for large entities. The supporting attributes and functions for using `JsonConvert.SerializeObject` will be removed in a future release, meaning entities will no longer serialize correctly this way - `ToJson` will be the way to go.
+
 ### Extension methods and SirenMatchers
 
 There are numerous extension methods which allow you to extract a Siren representation from its parent, e.g. 
