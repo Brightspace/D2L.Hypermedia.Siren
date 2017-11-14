@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace D2L.Hypermedia.Siren {
@@ -159,7 +161,25 @@ namespace D2L.Hypermedia.Siren {
 		}
 
 		string ISirenSerializable.ToJson() {
-			throw new NotImplementedException();
+			StringBuilder sb = new StringBuilder();
+			StringWriter sw = new StringWriter( sb );
+			using( JsonWriter writer = new JsonTextWriter( sw ) ) {
+				writer.WriteStartObject();
+
+				JsonUtilities.WriteJsonArray( writer, "class", m_class );
+				JsonUtilities.WriteJsonArray( writer, "rel", m_rel );
+				JsonUtilities.WriteJsonString( writer, "type", m_type );
+				JsonUtilities.WriteJsonString( writer, "title", m_title );
+				JsonUtilities.WriteJsonUri( writer, "href", m_href );
+				JsonUtilities.WriteJsonObject( writer, "properties", m_properties );
+				JsonUtilities.WriteJsonSerializable( writer, "entities", m_entities );
+				JsonUtilities.WriteJsonSerializable( writer, "actions", m_actions );
+				JsonUtilities.WriteJsonSerializable( writer, "links", m_links );
+
+				writer.WriteEndObject();
+			}
+
+			return sb.ToString();
 		}
 
 	}
