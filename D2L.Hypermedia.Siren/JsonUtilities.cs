@@ -61,7 +61,7 @@ namespace D2L.Hypermedia.Siren {
 			}
 
 			writer.WritePropertyName( propertyName );
-			writer.WriteValue( JsonConvert.SerializeObject( value ) );
+			writer.WriteRawValue( JsonConvert.SerializeObject( value ) );
 		}
 
 	}

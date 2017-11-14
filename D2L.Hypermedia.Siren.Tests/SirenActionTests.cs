@@ -11,13 +11,15 @@ namespace D2L.Hypermedia.Siren.Tests {
 		private string m_matchMessage;
 
 		[Test]
-		public void SirenAction_Serialized_DoesNotIncludeOptionalParametersIfNull() {
+		public void SirenAction_Serialized_DoesNotIncludeOptionalParametersIfNull(
+			[Values] bool useToJson
+		) {
 			ISirenAction sirenAction = new SirenAction(
 				name: "foo",
 				href: new Uri( "http://example.com" )
 			);
 
-			string serialized = JsonConvert.SerializeObject( sirenAction );
+			string serialized = useToJson ? sirenAction.ToJson() : JsonConvert.SerializeObject( sirenAction );
 			ISirenAction action = JsonConvert.DeserializeObject<SirenAction>( serialized );
 
 			Assert.AreEqual( "foo", action.Name );
@@ -30,7 +32,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenAction_DeserializesCorrectly() {
+		public void SirenAction_DeserializesCorrectly(
+			[Values] bool useToJson
+		) {
 			ISirenAction sirenAction = new SirenAction(
 				name: "foo",
 				href: new Uri( "http://example.com" ),
@@ -43,7 +47,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 				}
 			);
 
-			string serialized = JsonConvert.SerializeObject( sirenAction );
+			string serialized = useToJson ? sirenAction.ToJson() : JsonConvert.SerializeObject( sirenAction );
 			ISirenAction action = JsonConvert.DeserializeObject<SirenAction>( serialized );
 
 			Assert.AreEqual( "foo", action.Name );
@@ -56,14 +60,16 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenAction_Serialize_ExcludesClassAndFieldsIfEmpty() {
+		public void SirenAction_Serialize_ExcludesClassAndFieldsIfEmpty(
+			[Values] bool useToJson
+		) {
 			ISirenAction action = new SirenAction(
 				name: "foo",
 				href: new Uri( "http://example.com" ),
 				@class: new [] { "bar" },
 				fields: new [] { new SirenField( "baz" ) }
 			);
-			string serialized = JsonConvert.SerializeObject( action );
+			string serialized = useToJson ? action.ToJson() : JsonConvert.SerializeObject( action );
 			Assert.GreaterOrEqual( serialized.IndexOf( "class", StringComparison.Ordinal ), 0 );
 			Assert.GreaterOrEqual( serialized.IndexOf( "fields", StringComparison.Ordinal ), 0 );
 
@@ -71,7 +77,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 				name: "foo",
 				href: new Uri( "http://example.com" )
 			);
-			serialized = JsonConvert.SerializeObject( action );
+			serialized = useToJson ? action.ToJson() : JsonConvert.SerializeObject( action );
 			Assert.AreEqual( -1, serialized.IndexOf( "class", StringComparison.Ordinal ) );
 			Assert.AreEqual( -1, serialized.IndexOf( "fields", StringComparison.Ordinal ) );
 		}

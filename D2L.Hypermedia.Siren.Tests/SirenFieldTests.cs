@@ -10,10 +10,12 @@ namespace D2L.Hypermedia.Siren.Tests {
 		private string m_matchMessage;
 
 		[Test]
-		public void SirenField_Serialized_DoesNotIncludeOptionalParametersIfNull() {
+		public void SirenField_Serialized_DoesNotIncludeOptionalParametersIfNull(
+			[Values] bool useToJson
+		) {
 			ISirenField sirenField = new SirenField( name: "foo" );
 
-			string serialized = JsonConvert.SerializeObject( sirenField );
+			string serialized = useToJson ? sirenField.ToJson() : JsonConvert.SerializeObject( sirenField );
 			ISirenField field = JsonConvert.DeserializeObject<SirenField>( serialized );
 
 			Assert.AreEqual( "foo", field.Name );
@@ -24,10 +26,12 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenField_DeserializesCorrectly() {
+		public void SirenField_DeserializesCorrectly(
+			[Values] bool useToJson
+		) {
 			ISirenField sirenField = TestHelpers.GetField();
 
-			string serialized = JsonConvert.SerializeObject( sirenField );
+			string serialized = useToJson ? sirenField.ToJson() : JsonConvert.SerializeObject( sirenField );
 			ISirenField field = JsonConvert.DeserializeObject<SirenField>( serialized );
 
 			Assert.AreEqual( "foo", field.Name );
@@ -38,16 +42,18 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenField_Serialize_ExcludesClassIfEmpty() {
+		public void SirenField_Serialize_ExcludesClassIfEmpty(
+			[Values] bool useToJson
+		) {
 			ISirenField field = new SirenField(
 				name: "foo",
 				@class: new [] { "bar" }
 			);
-			string serialized = JsonConvert.SerializeObject( field );
+			string serialized = useToJson ? field.ToJson() : JsonConvert.SerializeObject( field );
 			Assert.GreaterOrEqual( serialized.IndexOf( "class", StringComparison.Ordinal ), 0 );
 
 			field = new SirenField( name: "foo" );
-			serialized = JsonConvert.SerializeObject( field );
+			serialized = useToJson ? field.ToJson() : JsonConvert.SerializeObject( field );
 			Assert.AreEqual( -1, serialized.IndexOf( "class", StringComparison.Ordinal ) );
 		}
 
