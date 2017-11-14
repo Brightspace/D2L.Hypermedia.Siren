@@ -122,6 +122,10 @@ namespace D2L.Hypermedia.Siren {
 				^ m_fields.Select( x => x.GetHashCode() ).GetHashCode();
 		}
 
+		string ISirenSerializable.ToJson() {
+			throw new NotImplementedException();
+		}
+
 	}
 
 	public class HypermediaActionConverter : JsonConverter {

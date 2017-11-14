@@ -158,6 +158,10 @@ namespace D2L.Hypermedia.Siren {
 
 		}
 
+		string ISirenSerializable.ToJson() {
+			throw new NotImplementedException();
+		}
+
 	}
 
 	public class HypermediaEntityConverter : JsonConverter {

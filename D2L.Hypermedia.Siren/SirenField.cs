@@ -96,6 +96,10 @@ namespace D2L.Hypermedia.Siren {
 				^ m_title?.GetHashCode() ?? 0;
 		}
 
+		string ISirenSerializable.ToJson() {
+			throw new NotImplementedException();
+		}
+
 	}
 
 	public class HypermediaFieldConverter : JsonConverter {
