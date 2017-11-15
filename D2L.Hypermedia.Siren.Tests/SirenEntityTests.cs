@@ -11,10 +11,12 @@ namespace D2L.Hypermedia.Siren.Tests {
 		private string m_matchMessage;
 
 		[Test]
-		public void SirenEntity_Serialized_DoesNotIncludeOptionalParametersIfNull() {
+		public void SirenEntity_Serialized_DoesNotIncludeOptionalParametersIfNull(
+			[Values] bool useToJson
+		) {
 			ISirenEntity sirenEntity = new SirenEntity();
 
-			string serialized = JsonConvert.SerializeObject( sirenEntity );
+			string serialized = useToJson ? sirenEntity.ToJson() : JsonConvert.SerializeObject( sirenEntity );
 
 			ISirenEntity entity = JsonConvert.DeserializeObject<SirenEntity>( serialized );
 
@@ -30,10 +32,17 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenEntity_DeserializesCorrectly() {
+		public void SirenEntity_DeserializesCorrectly(
+			[Values] bool useToJson
+		) {
 			ISirenEntity sirenEntity = new SirenEntity(
 					properties: new {
-						foo = "bar"
+						foo = "bar",
+						baz = new {
+							baz1 = "cats",
+							baz2 = 2,
+							baz3 = true
+						}
 					},
 					links: new[] {
 						new SirenLink( rel: new[] { "self" }, href: new Uri( "http://example.com" ), @class: new[] { "class" } )
@@ -51,10 +60,13 @@ namespace D2L.Hypermedia.Siren.Tests {
 					type: "text/html"
 				);
 
-			string serialized = JsonConvert.SerializeObject( sirenEntity );
+			string serialized = useToJson ? sirenEntity.ToJson() : JsonConvert.SerializeObject( sirenEntity );
 			ISirenEntity entity = JsonConvert.DeserializeObject<SirenEntity>( serialized );
 
 			Assert.AreEqual( "bar", (string)entity.Properties.foo );
+			Assert.AreEqual( "cats", (string)entity.Properties.baz.baz1 );
+			Assert.AreEqual( 2, (int)entity.Properties.baz.baz2 );
+			Assert.AreEqual( true, (bool)entity.Properties.baz.baz3 );
 			Assert.AreEqual( 1, entity.Links.ToList().Count );
 			Assert.Contains( "organization", entity.Rel );
 			Assert.Contains( "some-class", entity.Class );
@@ -66,7 +78,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenEntity_Serialize_ExcludesRelClassEntitiesLinksAndActionsIfEmpty() {
+		public void SirenEntity_Serialize_ExcludesRelClassEntitiesLinksAndActionsIfEmpty(
+			[Values] bool useToJson
+		) {
 			ISirenEntity entity = new SirenEntity(
 					@class: new[] { "foo" },
 					rel: new[] { "bar" },
@@ -80,7 +94,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 						new SirenAction( name: "action-name", href: new Uri( "http://example.com" ), @class: new[] { "class" } )
 					}
 				);
-			string serialized = JsonConvert.SerializeObject( entity );
+			string serialized = useToJson ? entity.ToJson() : JsonConvert.SerializeObject( entity );
 			Assert.GreaterOrEqual( serialized.IndexOf( "rel", StringComparison.Ordinal ), -1 );
 			Assert.GreaterOrEqual( serialized.IndexOf( "class", StringComparison.Ordinal ), -1 );
 			Assert.GreaterOrEqual( serialized.IndexOf( "entities", StringComparison.Ordinal ), -1 );
@@ -88,7 +102,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 			Assert.GreaterOrEqual( serialized.IndexOf( "actions", StringComparison.Ordinal ), -1 );
 
 			entity = new SirenEntity();
-			serialized = JsonConvert.SerializeObject( entity );
+			serialized = useToJson ? entity.ToJson() : JsonConvert.SerializeObject( entity );
 			Assert.AreEqual( -1, serialized.IndexOf( "rel", StringComparison.Ordinal ) );
 			Assert.AreEqual( -1, serialized.IndexOf( "class", StringComparison.Ordinal ) );
 			Assert.AreEqual( -1, serialized.IndexOf( "entities", StringComparison.Ordinal ) );

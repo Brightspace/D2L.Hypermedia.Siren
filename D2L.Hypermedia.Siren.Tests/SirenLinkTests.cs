@@ -10,13 +10,15 @@ namespace D2L.Hypermedia.Siren.Tests {
 		private string m_matchMessage;
 
 		[Test]
-		public void SirenLink_Serialized_DoesNotIncludeOptionalParametersIfNull() {
+		public void SirenLink_Serialized_DoesNotIncludeOptionalParametersIfNull(
+			[Values] bool useToJson
+		) {
 			ISirenLink sirenLink = new SirenLink(
 				rel: new[] { "foo" },
 				href: new Uri( "http://example.com" )
 			);
 
-			string serialized = JsonConvert.SerializeObject( sirenLink );
+			string serialized = useToJson ? sirenLink.ToJson() : JsonConvert.SerializeObject( sirenLink );
 
 			ISirenLink link = JsonConvert.DeserializeObject<SirenLink>( serialized );
 
@@ -28,10 +30,12 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenLink_DeserializesCorrectly() {
+		public void SirenLink_DeserializesCorrectly(
+			[Values] bool useToJson
+		) {
 			ISirenLink sirenLink = TestHelpers.GetLink();
 
-			string serialized = JsonConvert.SerializeObject( sirenLink );
+			string serialized = useToJson ? sirenLink.ToJson() : JsonConvert.SerializeObject( sirenLink );
 
 			ISirenLink link = JsonConvert.DeserializeObject<SirenLink>( serialized );
 
@@ -43,20 +47,22 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenLink_Serialize_ExcludesClassIfEmptyArray() {
+		public void SirenLink_Serialize_ExcludesClassIfEmptyArray(
+			[Values] bool useToJson
+		) {
 			ISirenLink link = new SirenLink(
 				rel: new [] { "foo" },
 				href: new Uri( "http://example.com" ),
 				@class: new [] { "bar" }
 			);
-			string serialized = JsonConvert.SerializeObject( link );
+			string serialized = useToJson ? link.ToJson() : JsonConvert.SerializeObject( link );
 			Assert.GreaterOrEqual( serialized.IndexOf( "class", StringComparison.Ordinal ), 0 );
 
 			link = new SirenLink(
 				rel: new [] { "foo" },
 				href: new Uri( "http://example.com" )
 			);
-			serialized = JsonConvert.SerializeObject( link );
+			serialized = useToJson ? link.ToJson() : JsonConvert.SerializeObject( link );
 			Assert.AreEqual( -1, serialized.IndexOf( "class", StringComparison.Ordinal ) );
 		}
 

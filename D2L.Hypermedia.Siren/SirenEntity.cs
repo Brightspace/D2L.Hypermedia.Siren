@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace D2L.Hypermedia.Siren {
@@ -156,6 +158,33 @@ namespace D2L.Hypermedia.Siren {
 				^ m_href?.GetHashCode() ?? 0
 				^ m_type?.GetHashCode() ?? 0;
 
+		}
+
+		string ISirenSerializable.ToJson() {
+			StringBuilder sb = new StringBuilder();
+			StringWriter sw = new StringWriter( sb );
+			using( JsonWriter writer = new JsonTextWriter( sw ) ) {
+				ISirenSerializable @this = this;
+				@this.ToJson( writer );
+			}
+
+			return sb.ToString();
+		}
+
+		void ISirenSerializable.ToJson( JsonWriter writer ) {
+			writer.WriteStartObject();
+
+			JsonUtilities.WriteJsonArray( writer, "class", m_class );
+			JsonUtilities.WriteJsonArray( writer, "rel", m_rel );
+			JsonUtilities.WriteJsonString( writer, "type", m_type );
+			JsonUtilities.WriteJsonString( writer, "title", m_title );
+			JsonUtilities.WriteJsonUri( writer, "href", m_href );
+			JsonUtilities.WriteJsonObject( writer, "properties", m_properties );
+			JsonUtilities.WriteJsonSerializables( writer, "entities", m_entities );
+			JsonUtilities.WriteJsonSerializables( writer, "actions", m_actions );
+			JsonUtilities.WriteJsonSerializables( writer, "links", m_links );
+
+			writer.WriteEndObject();
 		}
 
 	}

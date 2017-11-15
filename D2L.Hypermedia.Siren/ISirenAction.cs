@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace D2L.Hypermedia.Siren {
 
-	public interface ISirenAction : IEquatable<ISirenAction>, IComparable<ISirenAction>, IComparable {
+	public interface ISirenAction : ISirenSerializable, IEquatable<ISirenAction>, IComparable<ISirenAction>, IComparable {
 
 		string Name { get; }
 
