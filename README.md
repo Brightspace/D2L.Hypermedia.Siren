@@ -72,10 +72,12 @@ This will verify that `actualEntity` at least contains what was specified in `ex
 
 1. Merge pull request to master - Appveyor will run on the merge
 
-2. On the Appveyor job, go to the Artifacts tab and download the `.nupkg` file (_not_ the `.symbols.nupkg` file)
+2. Go to the Deployments tab in Appveyor
 
-3. Log in to NuGet
+3. Click New Deployment
 
-4. Click _Upload Package_ and upload the `.nupkg` file
+4. Select the NuGet environment
 
-5. Verify that the details are correct, and click Submit
+5. Click Deploy on the build you want to deploy (probably the most recent one)
+
+6. Verify that the package deployed successfully
