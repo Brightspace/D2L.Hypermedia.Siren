@@ -54,7 +54,7 @@ namespace D2L.Hypermedia.Siren {
 		public string Type => m_type;
 
 		[JsonProperty( "fields", NullValueHandling = NullValueHandling.Ignore )]
-		[JsonConverter( typeof(HypermediaFieldConverter) )]
+		[JsonConverter( typeof(HypermediaFieldEnumerableConverter) )]
 		public IEnumerable<ISirenField> Fields => m_fields;
 
 		public bool ShouldSerializeClass() {
@@ -137,10 +137,18 @@ namespace D2L.Hypermedia.Siren {
 
 	}
 
-	public class HypermediaActionConverter : JsonConverter {
+	public class HypermediaActionEnumerableConverter : JsonConverter {
 
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer ) {
-			serializer.Serialize( writer, value );
+			if( !( value is IEnumerable<ISirenAction> actions ) ) {
+				return;
+			}
+
+			writer.WriteStartArray();
+			foreach( ISirenAction action in actions ) {
+				action.ToJson( writer );
+			}
+			writer.WriteEndArray();
 		}
 
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer ) {
@@ -148,7 +156,7 @@ namespace D2L.Hypermedia.Siren {
 		}
 
 		public override bool CanConvert( Type objectType ) {
-			return objectType == typeof( SirenAction );
+			return typeof( IEnumerable<ISirenAction> ).IsAssignableFrom( objectType );
 		}
 
 	}

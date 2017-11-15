@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -115,10 +116,18 @@ namespace D2L.Hypermedia.Siren {
 
 	}
 
-	public class HypermediaLinkConverter : JsonConverter {
+	public class HypermediaLinkEnumerableConverter : JsonConverter {
 
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer ) {
-			serializer.Serialize( writer, value );
+			if( !( value is IEnumerable<ISirenLink> links ) ) {
+				return;
+			}
+
+			writer.WriteStartArray();
+			foreach( ISirenLink link in links ) {
+				link.ToJson( writer );
+			}
+			writer.WriteEndArray();
 		}
 
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer ) {
@@ -126,7 +135,7 @@ namespace D2L.Hypermedia.Siren {
 		}
 
 		public override bool CanConvert( Type objectType ) {
-			return objectType == typeof( SirenLink );
+			return typeof( IEnumerable<ISirenLink> ).IsAssignableFrom( objectType );
 		}
 
 	}
