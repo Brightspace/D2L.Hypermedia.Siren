@@ -42,52 +42,34 @@ namespace D2L.Hypermedia.Siren {
 		}
 
 		[JsonProperty( "class", NullValueHandling = NullValueHandling.Ignore )]
-		public string[] Class {
-			get { return m_class; }
-		}
+		public string[] Class => m_class;
 
 		[JsonProperty( "properties", NullValueHandling = NullValueHandling.Ignore )]
-		public dynamic Properties {
-			get { return m_properties; }
-		}
+		public dynamic Properties => m_properties;
 
 		[JsonProperty( "entities", NullValueHandling = NullValueHandling.Ignore )]
 		[JsonConverter( typeof(HypermediaEntityConverter) )]
-		public IEnumerable<ISirenEntity> Entities {
-			get { return m_entities; }
-		}
+		public IEnumerable<ISirenEntity> Entities => m_entities;
 
 		[JsonProperty( "links", NullValueHandling = NullValueHandling.Ignore )]
 		[JsonConverter( typeof(HypermediaLinkConverter) )]
-		public IEnumerable<ISirenLink> Links {
-			get { return m_links; }
-		}
+		public IEnumerable<ISirenLink> Links => m_links;
 
 		[JsonProperty( "actions", NullValueHandling = NullValueHandling.Ignore )]
 		[JsonConverter( typeof(HypermediaActionConverter) )]
-		public IEnumerable<ISirenAction> Actions {
-			get { return m_actions; }
-		}
+		public IEnumerable<ISirenAction> Actions => m_actions;
 
 		[JsonProperty( "title", NullValueHandling = NullValueHandling.Ignore )]
-		public string Title {
-			get { return m_title; }
-		}
+		public string Title => m_title;
 
 		[JsonProperty( "rel", NullValueHandling = NullValueHandling.Ignore )]
-		public string[] Rel {
-			get { return m_rel; }
-		}
+		public string[] Rel => m_rel;
 
 		[JsonProperty( "href", NullValueHandling = NullValueHandling.Ignore )]
-		public Uri Href {
-			get { return m_href; }
-		}
+		public Uri Href => m_href;
 
 		[JsonProperty( "type", NullValueHandling = NullValueHandling.Ignore )]
-		public string Type {
-			get { return m_type; }
-		}
+		public string Type => m_type;
 
 		public bool ShouldSerializeRel() {
 			return Rel.Length > 0;
