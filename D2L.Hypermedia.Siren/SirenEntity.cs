@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace D2L.Hypermedia.Siren {
@@ -48,15 +46,15 @@ namespace D2L.Hypermedia.Siren {
 		public dynamic Properties => m_properties;
 
 		[JsonProperty( "entities", NullValueHandling = NullValueHandling.Ignore )]
-		[JsonConverter( typeof(HypermediaEntityConverter) )]
+		[JsonConverter( typeof(HypermediaEntityEnumerableConverter) )]
 		public IEnumerable<ISirenEntity> Entities => m_entities;
 
 		[JsonProperty( "links", NullValueHandling = NullValueHandling.Ignore )]
-		[JsonConverter( typeof(HypermediaLinkConverter) )]
+		[JsonConverter( typeof(HypermediaLinkEnumerableConverter) )]
 		public IEnumerable<ISirenLink> Links => m_links;
 
 		[JsonProperty( "actions", NullValueHandling = NullValueHandling.Ignore )]
-		[JsonConverter( typeof(HypermediaActionConverter) )]
+		[JsonConverter( typeof(HypermediaActionEnumerableConverter) )]
 		public IEnumerable<ISirenAction> Actions => m_actions;
 
 		[JsonProperty( "title", NullValueHandling = NullValueHandling.Ignore )]
@@ -142,17 +140,6 @@ namespace D2L.Hypermedia.Siren {
 
 		}
 
-		string ISirenSerializable.ToJson() {
-			StringBuilder sb = new StringBuilder();
-			StringWriter sw = new StringWriter( sb );
-			using( JsonWriter writer = new JsonTextWriter( sw ) ) {
-				ISirenSerializable @this = this;
-				@this.ToJson( writer );
-			}
-
-			return sb.ToString();
-		}
-
 		void ISirenSerializable.ToJson( JsonWriter writer ) {
 			writer.WriteStartObject();
 
@@ -171,11 +158,19 @@ namespace D2L.Hypermedia.Siren {
 
 	}
 
-	public class HypermediaEntityConverter : JsonConverter {
-
+	public class HypermediaEntityEnumerableConverter : JsonConverter {
 
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer ) {
-			serializer.Serialize( writer, value );
+			if( !( value is IEnumerable<ISirenEntity> ) ) {
+				return;
+			}
+
+			IEnumerable<ISirenEntity> entities = (IEnumerable<ISirenEntity>)value;
+			writer.WriteStartArray();
+			foreach( ISirenEntity entity in entities ) {
+				entity.ToJson( writer );
+			}
+			writer.WriteEndArray();
 		}
 
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer ) {
@@ -183,7 +178,7 @@ namespace D2L.Hypermedia.Siren {
 		}
 
 		public override bool CanConvert( Type objectType ) {
-			return objectType == typeof( SirenEntity );
+			return typeof( IEnumerable<ISirenEntity> ).IsAssignableFrom( objectType );
 		}
 
 	}

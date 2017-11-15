@@ -1,7 +1,6 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace D2L.Hypermedia.Siren {
@@ -88,17 +87,6 @@ namespace D2L.Hypermedia.Siren {
 				^ m_title?.GetHashCode() ?? 0;
 		}
 
-		string ISirenSerializable.ToJson() {
-			StringBuilder sb = new StringBuilder();
-			StringWriter sw = new StringWriter( sb );
-			using( JsonWriter writer = new JsonTextWriter( sw ) ) {
-				ISirenSerializable @this = this;
-				@this.ToJson( writer );
-			}
-
-			return sb.ToString();
-		}
-
 		void ISirenSerializable.ToJson( JsonWriter writer ) {
 			writer.WriteStartObject();
 
@@ -113,10 +101,19 @@ namespace D2L.Hypermedia.Siren {
 
 	}
 
-	public class HypermediaFieldConverter : JsonConverter {
+	public class HypermediaFieldEnumerableConverter : JsonConverter {
 
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer ) {
-			serializer.Serialize( writer, value );
+			if( !( value is IEnumerable<ISirenField> ) ) {
+				return;
+			}
+
+			IEnumerable<ISirenField> fields = (IEnumerable<ISirenField>)value;
+			writer.WriteStartArray();
+			foreach( ISirenField field in fields ) {
+				field.ToJson( writer );
+			}
+			writer.WriteEndArray();
 		}
 
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer ) {
@@ -124,7 +121,7 @@ namespace D2L.Hypermedia.Siren {
 		}
 
 		public override bool CanConvert( Type objectType ) {
-			return objectType == typeof( SirenField );
+			return typeof( IEnumerable<ISirenField> ).IsAssignableFrom( objectType );
 		}
 
 	}

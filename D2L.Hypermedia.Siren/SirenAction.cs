@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace D2L.Hypermedia.Siren {
@@ -54,7 +52,7 @@ namespace D2L.Hypermedia.Siren {
 		public string Type => m_type;
 
 		[JsonProperty( "fields", NullValueHandling = NullValueHandling.Ignore )]
-		[JsonConverter( typeof(HypermediaFieldConverter) )]
+		[JsonConverter( typeof(HypermediaFieldEnumerableConverter) )]
 		public IEnumerable<ISirenField> Fields => m_fields;
 
 		public bool ShouldSerializeClass() {
@@ -110,17 +108,6 @@ namespace D2L.Hypermedia.Siren {
 				^ m_fields.Select( x => x.GetHashCode() ).GetHashCode();
 		}
 
-		string ISirenSerializable.ToJson() {
-			StringBuilder sb = new StringBuilder();
-			StringWriter sw = new StringWriter( sb );
-			using( JsonWriter writer = new JsonTextWriter( sw ) ) {
-				ISirenSerializable @this = this;
-				@this.ToJson( writer );
-			}
-
-			return sb.ToString();
-		}
-
 		void ISirenSerializable.ToJson( JsonWriter writer ) {
 			writer.WriteStartObject();
 
@@ -137,10 +124,19 @@ namespace D2L.Hypermedia.Siren {
 
 	}
 
-	public class HypermediaActionConverter : JsonConverter {
+	public class HypermediaActionEnumerableConverter : JsonConverter {
 
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer ) {
-			serializer.Serialize( writer, value );
+			if( !( value is IEnumerable<ISirenAction> ) ) {
+				return;
+			}
+
+			IEnumerable<ISirenAction> actions = (IEnumerable<ISirenAction>)value;
+			writer.WriteStartArray();
+			foreach( ISirenAction action in actions ) {
+				action.ToJson( writer );
+			}
+			writer.WriteEndArray();
 		}
 
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer ) {
@@ -148,7 +144,7 @@ namespace D2L.Hypermedia.Siren {
 		}
 
 		public override bool CanConvert( Type objectType ) {
-			return objectType == typeof( SirenAction );
+			return typeof( IEnumerable<ISirenAction> ).IsAssignableFrom( objectType );
 		}
 
 	}

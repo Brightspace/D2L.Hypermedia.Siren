@@ -1,7 +1,6 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace D2L.Hypermedia.Siren {
@@ -90,17 +89,6 @@ namespace D2L.Hypermedia.Siren {
 				^ m_type?.GetHashCode() ?? 0;
 		}
 
-		string ISirenSerializable.ToJson() {
-			StringBuilder sb = new StringBuilder();
-			StringWriter sw = new StringWriter( sb );
-			using( JsonWriter writer = new JsonTextWriter( sw ) ) {
-				ISirenSerializable @this = this;
-				@this.ToJson( writer );
-			}
-
-			return sb.ToString();
-		}
-
 		void ISirenSerializable.ToJson( JsonWriter writer ) {
 			writer.WriteStartObject();
 
@@ -115,10 +103,19 @@ namespace D2L.Hypermedia.Siren {
 
 	}
 
-	public class HypermediaLinkConverter : JsonConverter {
+	public class HypermediaLinkEnumerableConverter : JsonConverter {
 
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer ) {
-			serializer.Serialize( writer, value );
+			if( !( value is IEnumerable<ISirenLink> ) ) {
+				return;
+			}
+
+			IEnumerable<ISirenLink> links = (IEnumerable<ISirenLink>)value;
+			writer.WriteStartArray();
+			foreach( ISirenLink link in links ) {
+				link.ToJson( writer );
+			}
+			writer.WriteEndArray();
 		}
 
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer ) {
@@ -126,7 +123,7 @@ namespace D2L.Hypermedia.Siren {
 		}
 
 		public override bool CanConvert( Type objectType ) {
-			return objectType == typeof( SirenLink );
+			return typeof( IEnumerable<ISirenLink> ).IsAssignableFrom( objectType );
 		}
 
 	}
