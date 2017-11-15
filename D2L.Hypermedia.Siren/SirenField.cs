@@ -104,10 +104,11 @@ namespace D2L.Hypermedia.Siren {
 	public class HypermediaFieldEnumerableConverter : JsonConverter {
 
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer ) {
-			if( !( value is IEnumerable<ISirenField> fields ) ) {
+			if( !( value is IEnumerable<ISirenField> ) ) {
 				return;
 			}
 
+			IEnumerable<ISirenField> fields = (IEnumerable<ISirenField>)value;
 			writer.WriteStartArray();
 			foreach( ISirenField field in fields ) {
 				field.ToJson( writer );

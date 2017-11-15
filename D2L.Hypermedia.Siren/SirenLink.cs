@@ -106,10 +106,11 @@ namespace D2L.Hypermedia.Siren {
 	public class HypermediaLinkEnumerableConverter : JsonConverter {
 
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer ) {
-			if( !( value is IEnumerable<ISirenLink> links ) ) {
+			if( !( value is IEnumerable<ISirenLink> ) ) {
 				return;
 			}
 
+			IEnumerable<ISirenLink> links = (IEnumerable<ISirenLink>)value;
 			writer.WriteStartArray();
 			foreach( ISirenLink link in links ) {
 				link.ToJson( writer );

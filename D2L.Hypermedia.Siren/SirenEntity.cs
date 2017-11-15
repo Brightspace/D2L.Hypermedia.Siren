@@ -161,10 +161,11 @@ namespace D2L.Hypermedia.Siren {
 	public class HypermediaEntityEnumerableConverter : JsonConverter {
 
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer ) {
-			if( !( value is IEnumerable<ISirenEntity> entities ) ) {
+			if( !( value is IEnumerable<ISirenEntity> ) ) {
 				return;
 			}
 
+			IEnumerable<ISirenEntity> entities = (IEnumerable<ISirenEntity>)value;
 			writer.WriteStartArray();
 			foreach( ISirenEntity entity in entities ) {
 				entity.ToJson( writer );

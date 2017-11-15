@@ -127,10 +127,11 @@ namespace D2L.Hypermedia.Siren {
 	public class HypermediaActionEnumerableConverter : JsonConverter {
 
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer ) {
-			if( !( value is IEnumerable<ISirenAction> actions ) ) {
+			if( !( value is IEnumerable<ISirenAction> ) ) {
 				return;
 			}
 
+			IEnumerable<ISirenAction> actions = (IEnumerable<ISirenAction>)value;
 			writer.WriteStartArray();
 			foreach( ISirenAction action in actions ) {
 				action.ToJson( writer );
