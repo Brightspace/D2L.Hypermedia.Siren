@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace D2L.Hypermedia.Siren {
@@ -108,17 +106,6 @@ namespace D2L.Hypermedia.Siren {
 				^ m_title?.GetHashCode() ?? 0
 				^ m_type?.GetHashCode() ?? 0
 				^ m_fields.Select( x => x.GetHashCode() ).GetHashCode();
-		}
-
-		string ISirenSerializable.ToJson() {
-			StringBuilder sb = new StringBuilder();
-			StringWriter sw = new StringWriter( sb );
-			using( JsonWriter writer = new JsonTextWriter( sw ) ) {
-				ISirenSerializable @this = this;
-				@this.ToJson( writer );
-			}
-
-			return sb.ToString();
 		}
 
 		void ISirenSerializable.ToJson( JsonWriter writer ) {
