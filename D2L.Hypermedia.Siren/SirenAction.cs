@@ -128,20 +128,25 @@ namespace D2L.Hypermedia.Siren {
 			StringBuilder sb = new StringBuilder();
 			StringWriter sw = new StringWriter( sb );
 			using( JsonWriter writer = new JsonTextWriter( sw ) ) {
-				writer.WriteStartObject();
-
-				JsonUtilities.WriteJsonArray( writer, "class", m_class );
-				JsonUtilities.WriteJsonString( writer, "type", m_type );
-				JsonUtilities.WriteJsonString( writer, "title", m_title );
-				JsonUtilities.WriteJsonUri( writer, "href", m_href );
-				JsonUtilities.WriteJsonString( writer, "name", m_name );
-				JsonUtilities.WriteJsonString( writer, "method", m_method );
-				JsonUtilities.WriteJsonSerializable( writer, "fields", m_fields );
-
-				writer.WriteEndObject();
+				ISirenSerializable @this = this;
+				@this.ToJson( writer );
 			}
 
 			return sb.ToString();
+		}
+
+		void ISirenSerializable.ToJson( JsonWriter writer ) {
+			writer.WriteStartObject();
+
+			JsonUtilities.WriteJsonArray( writer, "class", m_class );
+			JsonUtilities.WriteJsonString( writer, "type", m_type );
+			JsonUtilities.WriteJsonString( writer, "title", m_title );
+			JsonUtilities.WriteJsonUri( writer, "href", m_href );
+			JsonUtilities.WriteJsonString( writer, "name", m_name );
+			JsonUtilities.WriteJsonString( writer, "method", m_method );
+			JsonUtilities.WriteJsonSerializables( writer, "fields", m_fields );
+
+			writer.WriteEndObject();
 		}
 
 	}

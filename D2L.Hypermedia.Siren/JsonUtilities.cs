@@ -22,7 +22,7 @@ namespace D2L.Hypermedia.Siren {
 			writer.WriteEndArray();
 		}
 
-		public static void WriteJsonSerializable( JsonWriter writer, string propertyName, IEnumerable<ISirenSerializable> values ) {
+		public static void WriteJsonSerializables( JsonWriter writer, string propertyName, IEnumerable<ISirenSerializable> values ) {
 			if( values == null || !values.Any() ) {
 				return;
 			}
@@ -31,7 +31,7 @@ namespace D2L.Hypermedia.Siren {
 			writer.WriteStartArray();
 
 			foreach( ISirenSerializable serializable in values ) {
-				writer.WriteRawValue( serializable.ToJson() );
+				serializable.ToJson( writer );
 			}
 
 			writer.WriteEndArray();
