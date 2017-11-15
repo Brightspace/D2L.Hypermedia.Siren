@@ -36,40 +36,26 @@ namespace D2L.Hypermedia.Siren {
 		}
 
 		[JsonProperty( "name" )]
-		public string Name {
-			get { return m_name; }
-		}
+		public string Name => m_name;
 
 		[JsonProperty( "class", NullValueHandling = NullValueHandling.Ignore )]
-		public string[] Class {
-			get { return m_class; }
-		}
+		public string[] Class => m_class;
 
 		[JsonProperty( "method", NullValueHandling = NullValueHandling.Ignore )]
-		public string Method {
-			get { return m_method; }
-		}
+		public string Method => m_method;
 
 		[JsonProperty( "href" )]
-		public Uri Href {
-			get { return m_href; }
-		}
+		public Uri Href => m_href;
 
 		[JsonProperty( "title", NullValueHandling = NullValueHandling.Ignore )]
-		public string Title {
-			get { return m_title; }
-		}
+		public string Title => m_title;
 
 		[JsonProperty( "type", NullValueHandling = NullValueHandling.Ignore )]
-		public string Type {
-			get { return m_type; }
-		}
+		public string Type => m_type;
 
 		[JsonProperty( "fields", NullValueHandling = NullValueHandling.Ignore )]
 		[JsonConverter( typeof(HypermediaFieldConverter) )]
-		public IEnumerable<ISirenField> Fields {
-			get { return m_fields; }
-		}
+		public IEnumerable<ISirenField> Fields => m_fields;
 
 		public bool ShouldSerializeClass() {
 			return Class.Length > 0;

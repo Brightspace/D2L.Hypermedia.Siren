@@ -29,29 +29,19 @@ namespace D2L.Hypermedia.Siren {
 		}
 
 		[JsonProperty( "rel" )]
-		public string[] Rel {
-			get { return m_rel; }
-		}
+		public string[] Rel => m_rel;
 
 		[JsonProperty( "class", NullValueHandling = NullValueHandling.Ignore )]
-		public string[] Class {
-			get { return m_class; }
-		}
+		public string[] Class => m_class;
 
 		[JsonProperty( "href" )]
-		public Uri Href {
-			get { return m_href; }
-		}
+		public Uri Href => m_href;
 
 		[JsonProperty( "title", NullValueHandling = NullValueHandling.Ignore )]
-		public string Title {
-			get { return m_title; }
-		}
+		public string Title => m_title;
 
 		[JsonProperty( "type", NullValueHandling = NullValueHandling.Ignore )]
-		public string Type {
-			get { return m_type; }
-		}
+		public string Type => m_type;
 
 		public bool ShouldSerializeClass() {
 			return Class.Length > 0;
