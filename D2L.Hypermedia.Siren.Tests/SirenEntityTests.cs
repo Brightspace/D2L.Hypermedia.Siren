@@ -11,12 +11,10 @@ namespace D2L.Hypermedia.Siren.Tests {
 		private string m_matchMessage;
 
 		[Test]
-		public void SirenEntity_Serialized_DoesNotIncludeOptionalParametersIfNull(
-			[Values] bool useToJson
-		) {
+		public void SirenEntity_Serialized_DoesNotIncludeOptionalParametersIfNull() {
 			ISirenEntity sirenEntity = new SirenEntity();
 
-			string serialized = useToJson ? sirenEntity.ToJson() : JsonConvert.SerializeObject( sirenEntity );
+			string serialized = JsonConvert.SerializeObject( sirenEntity );
 
 			ISirenEntity entity = JsonConvert.DeserializeObject<SirenEntity>( serialized );
 
@@ -32,9 +30,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenEntity_DeserializesCorrectly(
-			[Values] bool useToJson
-		) {
+		public void SirenEntity_DeserializesCorrectly() {
 			ISirenEntity sirenEntity = new SirenEntity(
 					properties: new {
 						foo = "bar",
@@ -60,7 +56,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 					type: "text/html"
 				);
 
-			string serialized = useToJson ? sirenEntity.ToJson() : JsonConvert.SerializeObject( sirenEntity );
+			string serialized = JsonConvert.SerializeObject( sirenEntity );
 			ISirenEntity entity = JsonConvert.DeserializeObject<SirenEntity>( serialized );
 
 			Assert.AreEqual( "bar", (string)entity.Properties.foo );
@@ -78,9 +74,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 		}
 
 		[Test]
-		public void SirenEntity_Serialize_ExcludesRelClassEntitiesLinksAndActionsIfEmpty(
-			[Values] bool useToJson
-		) {
+		public void SirenEntity_Serialize_ExcludesRelClassEntitiesLinksAndActionsIfEmpty() {
 			ISirenEntity entity = new SirenEntity(
 					@class: new[] { "foo" },
 					rel: new[] { "bar" },
@@ -94,7 +88,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 						new SirenAction( name: "action-name", href: new Uri( "http://example.com" ), @class: new[] { "class" } )
 					}
 				);
-			string serialized = useToJson ? entity.ToJson() : JsonConvert.SerializeObject( entity );
+			string serialized = JsonConvert.SerializeObject( entity );
 			Assert.GreaterOrEqual( serialized.IndexOf( "rel", StringComparison.Ordinal ), -1 );
 			Assert.GreaterOrEqual( serialized.IndexOf( "class", StringComparison.Ordinal ), -1 );
 			Assert.GreaterOrEqual( serialized.IndexOf( "entities", StringComparison.Ordinal ), -1 );
@@ -102,7 +96,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 			Assert.GreaterOrEqual( serialized.IndexOf( "actions", StringComparison.Ordinal ), -1 );
 
 			entity = new SirenEntity();
-			serialized = useToJson ? entity.ToJson() : JsonConvert.SerializeObject( entity );
+			serialized = JsonConvert.SerializeObject( entity );
 			Assert.AreEqual( -1, serialized.IndexOf( "rel", StringComparison.Ordinal ) );
 			Assert.AreEqual( -1, serialized.IndexOf( "class", StringComparison.Ordinal ) );
 			Assert.AreEqual( -1, serialized.IndexOf( "entities", StringComparison.Ordinal ) );
