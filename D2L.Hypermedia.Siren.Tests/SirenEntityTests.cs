@@ -8,8 +8,6 @@ namespace D2L.Hypermedia.Siren.Tests {
 	[TestFixture]
 	public class SirenEntityTests {
 
-		private string m_matchMessage;
-
 		[Test]
 		public void SirenEntity_Serialized_DoesNotIncludeOptionalParametersIfNull() {
 			ISirenEntity sirenEntity = new SirenEntity();

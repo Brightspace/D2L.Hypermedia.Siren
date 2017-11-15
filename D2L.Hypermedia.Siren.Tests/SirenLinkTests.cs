@@ -7,8 +7,6 @@ namespace D2L.Hypermedia.Siren.Tests {
 	[TestFixture]
 	public class SirenLinkTests {
 
-		private string m_matchMessage;
-
 		[Test]
 		public void SirenLink_Serialized_DoesNotIncludeOptionalParametersIfNull() {
 			ISirenLink sirenLink = new SirenLink(

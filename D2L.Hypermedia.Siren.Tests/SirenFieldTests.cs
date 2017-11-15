@@ -7,8 +7,6 @@ namespace D2L.Hypermedia.Siren.Tests {
 	[TestFixture]
 	public class SirenFieldTests {
 
-		private string m_matchMessage;
-
 		[Test]
 		public void SirenField_Serialized_DoesNotIncludeOptionalParametersIfNull() {
 			ISirenField sirenField = new SirenField( name: "foo" );
