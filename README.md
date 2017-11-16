@@ -70,14 +70,8 @@ This will verify that `actualEntity` at least contains what was specified in `ex
 
 ## Releasing
 
-1. Merge pull request to master - Appveyor will run on the merge
+1. Merge pull request to master
 
-2. Go to the Deployments tab in Appveyor
+2. Create release in GitHub, with a semver name of the format "v1.2.3"
 
-3. Click New Deployment
-
-4. Select the NuGet environment
-
-5. Click Deploy on the build you want to deploy (probably the most recent one)
-
-6. Verify that the package deployed successfully
+3. Appveyor will run on the new tag, and upload the new version to NuGet automatically
