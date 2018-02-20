@@ -54,6 +54,8 @@ Assert.IsTrue( SirenMatchers.Matches( expectedEntity, actualEntity, out message 
 
 This will verify that `actualEntity` at least contains what was specified in `expectedEntity`. If a match is not found, `message` will identify where it differs.
 
+> **Note**: Currently, `SirenMatchers` will not properly check Siren Properties. This is because `ISirenEntity.Properties` is `dynamic`, which is difficult to test equality in a reliable on. A future version may change this, but until then, properties must be manually checked for equality.
+
 ## Contributing
 
 1. **Fork** the repository. Committing directly against this repository is
