@@ -4,7 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 
 namespace D2L.Hypermedia.Siren {
-
+	[Serializable]
 	public class SirenAction : ISirenAction {
 
 		private readonly string m_name;

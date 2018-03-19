@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Routing;
 using Newtonsoft.Json;
 
 namespace D2L.Hypermedia.Siren {
-
+	[Serializable]
 	public class SirenEntity : ISirenEntity {
 
 		private readonly string m_type;
@@ -14,13 +15,13 @@ namespace D2L.Hypermedia.Siren {
 		private readonly IEnumerable<ISirenAction> m_actions;
 		private readonly IEnumerable<ISirenLink> m_links;
 		private readonly IEnumerable<ISirenEntity> m_entities;
-		private readonly dynamic m_properties;
 		private readonly string[] m_class;
+		private readonly IDictionary<string, object> m_properties;
 
 		public SirenEntity(
 			string[] rel = null,
 			string[] @class = null,
-			dynamic properties = null,
+			IDictionary<string, object> properties = null,
 			IEnumerable<ISirenEntity> entities = null,
 			IEnumerable<ISirenLink> links = null,
 			IEnumerable<ISirenAction> actions = null,
@@ -30,7 +31,7 @@ namespace D2L.Hypermedia.Siren {
 		) {
 			m_rel = rel ?? new string[0];
 			m_class = @class ?? new string[0];
-			m_properties = properties;
+			m_properties = properties ?? new Dictionary<string, object>();
 			m_entities = entities ?? new List<ISirenEntity>();
 			m_links = links ?? new List<ISirenLink>();
 			m_actions = actions ?? new List<ISirenAction>();
@@ -38,12 +39,12 @@ namespace D2L.Hypermedia.Siren {
 			m_href = href;
 			m_type = type;
 		}
-
+	
 		[JsonProperty( "class", NullValueHandling = NullValueHandling.Ignore )]
 		public string[] Class => m_class;
 
 		[JsonProperty( "properties", NullValueHandling = NullValueHandling.Ignore )]
-		public dynamic Properties => m_properties;
+		public IDictionary<string, object> Properties => m_properties;
 
 		[JsonProperty( "entities", NullValueHandling = NullValueHandling.Ignore )]
 		[JsonConverter( typeof(HypermediaEntityEnumerableConverter) )]

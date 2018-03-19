@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -96,6 +98,17 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 			others = new [] { TestHelpers.GetLink( "foo" ) };
 			TestHelpers.ArrayBidirectionalEquality( links, others, false );
+		}
+
+		[Test]
+		public void TestSerialization() {
+			ISirenLink expectedLink = TestHelpers.GetLink();
+			MemoryStream stream = new MemoryStream();
+			BinaryFormatter formatter = new BinaryFormatter();
+			formatter.Serialize( stream, expectedLink );
+			stream.Position = 0;
+			ISirenLink actualLink = formatter.Deserialize( stream ) as ISirenLink;
+			TestHelpers.BidirectionalEquality( expectedLink, actualLink, true );
 		}
 
 	}
