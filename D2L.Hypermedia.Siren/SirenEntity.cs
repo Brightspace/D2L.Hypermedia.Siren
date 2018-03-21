@@ -17,8 +17,9 @@ namespace D2L.Hypermedia.Siren {
 		private readonly IEnumerable<ISirenAction> m_actions;
 		private readonly IEnumerable<ISirenLink> m_links;
 		private readonly IEnumerable<ISirenEntity> m_entities;
-		private readonly string[] m_class;
 		private readonly dynamic m_properties;
+		private readonly string[] m_class;
+
 		[JsonConstructor]
 		public SirenEntity(
 			string[] rel = null,
@@ -42,14 +43,15 @@ namespace D2L.Hypermedia.Siren {
 			m_type = type;
 		}
 
-		public SirenEntity( SerializationInfo info, StreamingContext context ) : 
-			this( (string[])info.GetValue( "rel", typeof(string[]) ), 
+		public SirenEntity( SerializationInfo info, StreamingContext context ) :
+			this(
+				(string[])info.GetValue( "rel", typeof(string[]) ),
 				(string[])info.GetValue( "class", typeof(string[]) ),
-				JsonConvert.DeserializeObject( info.GetString( "properties" ), typeof(ExpandoObject)), 
-				(IEnumerable<ISirenEntity>)info.GetValue( "entities", typeof(IEnumerable<ISirenEntity>) ), 
-				(IEnumerable<ISirenLink>)info.GetValue( "links", typeof(IEnumerable<ISirenLink>) ), 
-				(IEnumerable<ISirenAction>)info.GetValue( "actions", typeof(IEnumerable<ISirenAction>) ), 
-				info.GetString( "title" ), (Uri)info.GetValue( "href", typeof(Uri) ), 
+				JsonConvert.DeserializeObject( info.GetString( "properties" ), typeof(ExpandoObject) ),
+				(IEnumerable<ISirenEntity>)info.GetValue( "entities", typeof(IEnumerable<ISirenEntity>) ),
+				(IEnumerable<ISirenLink>)info.GetValue( "links", typeof(IEnumerable<ISirenLink>) ),
+				(IEnumerable<ISirenAction>)info.GetValue( "actions", typeof(IEnumerable<ISirenAction>) ),
+				info.GetString( "title" ), (Uri)info.GetValue( "href", typeof(Uri) ),
 				info.GetString( "type" ) ) { }
 
 		[JsonProperty( "class", NullValueHandling = NullValueHandling.Ignore )]

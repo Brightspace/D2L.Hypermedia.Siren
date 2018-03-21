@@ -35,13 +35,13 @@ namespace D2L.Hypermedia.Siren.Tests {
 		public void SirenEntity_DeserializesCorrectly() {
 			ISirenEntity sirenEntity = new SirenEntity(
 					properties: new {
-						 foo = "bar" ,
-						 baz = new {
+						foo = "bar",
+						baz = new {
 							baz1 = "cats",
 							baz2 = 2,
 							baz3 = true
-						} }
-					,
+						}
+					},
 					links: new[] {
 						new SirenLink( rel: new[] { "self" }, href: new Uri( "http://example.com" ), @class: new[] { "class" } )
 					},
@@ -62,9 +62,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 			ISirenEntity entity = JsonConvert.DeserializeObject<SirenEntity>( serialized );
 
 			Assert.AreEqual( "bar", (string)entity.Properties["foo"] );
-			Assert.AreEqual( "cats", (string)( (dynamic)entity.Properties["baz"] ).baz1 );
-			Assert.AreEqual( 2, (int)( (dynamic)entity.Properties["baz"] ).baz2 );
-			Assert.AreEqual( true, (bool)( (dynamic)entity.Properties["baz"] ).baz3 );
+			Assert.AreEqual( "cats", (string)entity.Properties.baz.baz1 );
+			Assert.AreEqual( 2, (int)entity.Properties.baz.baz2 );
+			Assert.AreEqual( true, (bool)entity.Properties.baz.baz3 );
 			Assert.AreEqual( 1, entity.Links.ToList().Count );
 			Assert.Contains( "organization", entity.Rel );
 			Assert.Contains( "some-class", entity.Class );
