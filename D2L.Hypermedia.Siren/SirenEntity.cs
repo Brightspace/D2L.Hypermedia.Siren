@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace D2L.Hypermedia.Siren {
-	[Serializable]
-	public class SirenEntity : ISirenEntity {
+	[Serializable, JsonObject]
+	public class SirenEntity : ISirenEntity, ISerializable {
 
 		private readonly string m_type;
 		private readonly Uri m_href;
@@ -15,12 +18,12 @@ namespace D2L.Hypermedia.Siren {
 		private readonly IEnumerable<ISirenLink> m_links;
 		private readonly IEnumerable<ISirenEntity> m_entities;
 		private readonly string[] m_class;
-		private readonly IDictionary<string, object> m_properties;
-
+		private readonly dynamic m_properties;
+		[JsonConstructor]
 		public SirenEntity(
 			string[] rel = null,
 			string[] @class = null,
-			IDictionary<string, object> properties = null,
+			dynamic properties = null,
 			IEnumerable<ISirenEntity> entities = null,
 			IEnumerable<ISirenLink> links = null,
 			IEnumerable<ISirenAction> actions = null,
@@ -30,7 +33,7 @@ namespace D2L.Hypermedia.Siren {
 		) {
 			m_rel = rel ?? new string[0];
 			m_class = @class ?? new string[0];
-			m_properties = properties ?? new Dictionary<string, object>();
+			m_properties = properties;
 			m_entities = entities ?? new List<ISirenEntity>();
 			m_links = links ?? new List<ISirenLink>();
 			m_actions = actions ?? new List<ISirenAction>();
@@ -38,12 +41,22 @@ namespace D2L.Hypermedia.Siren {
 			m_href = href;
 			m_type = type;
 		}
-	
+
+		public SirenEntity( SerializationInfo info, StreamingContext context ) : 
+			this( (string[])info.GetValue( "rel", typeof(string[]) ), 
+				(string[])info.GetValue( "class", typeof(string[]) ),
+				JsonConvert.DeserializeObject( info.GetString( "properties" ), typeof(ExpandoObject)), 
+				(IEnumerable<ISirenEntity>)info.GetValue( "entities", typeof(IEnumerable<ISirenEntity>) ), 
+				(IEnumerable<ISirenLink>)info.GetValue( "links", typeof(IEnumerable<ISirenLink>) ), 
+				(IEnumerable<ISirenAction>)info.GetValue( "actions", typeof(IEnumerable<ISirenAction>) ), 
+				info.GetString( "title" ), (Uri)info.GetValue( "href", typeof(Uri) ), 
+				info.GetString( "type" ) ) { }
+
 		[JsonProperty( "class", NullValueHandling = NullValueHandling.Ignore )]
 		public string[] Class => m_class;
 
 		[JsonProperty( "properties", NullValueHandling = NullValueHandling.Ignore )]
-		public IDictionary<string, object> Properties => m_properties;
+		public dynamic Properties => m_properties;
 
 		[JsonProperty( "entities", NullValueHandling = NullValueHandling.Ignore )]
 		[JsonConverter( typeof(HypermediaEntityEnumerableConverter) )]
@@ -97,7 +110,7 @@ namespace D2L.Hypermedia.Siren {
 			bool rel = m_rel.OrderBy( x => x ).SequenceEqual( other.Rel.OrderBy( x => x ) );
 			bool @class = m_class.OrderBy( x => x ).SequenceEqual( other.Class.OrderBy( x => x ) );
 			bool properties = ( m_properties == null && other.Properties == null )
-				|| ( m_properties != null && other.Properties != null && m_properties.ToString().Equals( other.Properties.ToString() ) );
+				|| ( m_properties != null && other.Properties != null && JsonConvert.SerializeObject( m_properties ).Equals( JsonConvert.SerializeObject( other.Properties ) ) );
 			bool entities = m_entities.OrderBy( x => x ).SequenceEqual( other.Entities.OrderBy( x => x ) );
 			bool links = m_links.OrderBy( x => x ).SequenceEqual( other.Links.OrderBy( x => x ) );
 			bool actions = m_actions.OrderBy( x => x ).SequenceEqual( other.Actions.OrderBy( x => x ) );
@@ -138,6 +151,18 @@ namespace D2L.Hypermedia.Siren {
 				^ m_href?.GetHashCode() ?? 0
 				^ m_type?.GetHashCode() ?? 0;
 
+		}
+
+		public void GetObjectData( SerializationInfo info, StreamingContext context ) {
+			info.AddValue( "class", m_class );
+			info.AddValue( "rel", m_rel );
+			info.AddValue( "type", m_type );
+			info.AddValue( "title", m_title );
+			info.AddValue( "href", m_href );
+			info.AddValue( "properties", JsonConvert.SerializeObject( m_properties ) );
+			info.AddValue( "entities", m_entities );
+			info.AddValue( "actions", m_actions );
+			info.AddValue( "links", m_links );
 		}
 
 		void ISirenSerializable.ToJson( JsonWriter writer ) {

@@ -48,8 +48,8 @@ namespace D2L.Hypermedia.Siren.Tests {
 					title: title,
 					rel: new[] { "rel" },
 					@class: new[] { "class" },
-					properties:  new Dictionary<string, object>() {
-						{ "foo", "bar"}
+					properties:  new {
+						foo = "bar"
 					},
 					href: new Uri( "http://example.com" ),
 					type: "text/html",

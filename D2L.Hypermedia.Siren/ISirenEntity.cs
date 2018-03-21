@@ -7,7 +7,7 @@ namespace D2L.Hypermedia.Siren {
 
 		string[] Class { get; }
 
-		IDictionary<string, object> Properties { get; }
+		dynamic Properties { get; }
 
 		IEnumerable<ISirenEntity> Entities { get; }
 

@@ -21,7 +21,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 			ISirenEntity entity = JsonConvert.DeserializeObject<SirenEntity>( serialized );
 
 			Assert.IsEmpty( entity.Class );
-			Assert.IsEmpty( entity.Properties );
+			Assert.IsNull( entity.Properties );
 			Assert.IsEmpty( entity.Entities );
 			Assert.IsEmpty( entity.Links );
 			Assert.IsEmpty( entity.Actions );
@@ -34,14 +34,14 @@ namespace D2L.Hypermedia.Siren.Tests {
 		[Test]
 		public void SirenEntity_DeserializesCorrectly() {
 			ISirenEntity sirenEntity = new SirenEntity(
-					properties: new Dictionary<string, object>(){
-						{ "foo", "bar" },
-						{ "baz", new {
+					properties: new {
+						 foo = "bar" ,
+						 baz = new {
 							baz1 = "cats",
 							baz2 = 2,
 							baz3 = true
 						} }
-					},
+					,
 					links: new[] {
 						new SirenLink( rel: new[] { "self" }, href: new Uri( "http://example.com" ), @class: new[] { "class" } )
 					},
@@ -226,7 +226,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 			formatter.Serialize( stream, expectedSirenEntity );
 			stream.Position = 0;
 			ISirenEntity actualEntity = formatter.Deserialize( stream ) as ISirenEntity;
+
 			TestHelpers.BidirectionalEquality( expectedSirenEntity, actualEntity, true );
+			
 		}
 	}
 
