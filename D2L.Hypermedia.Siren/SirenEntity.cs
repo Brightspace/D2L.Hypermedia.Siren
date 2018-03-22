@@ -51,7 +51,8 @@ namespace D2L.Hypermedia.Siren {
 				(IEnumerable<ISirenEntity>)info.GetValue( "entities", typeof(IEnumerable<ISirenEntity>) ),
 				(IEnumerable<ISirenLink>)info.GetValue( "links", typeof(IEnumerable<ISirenLink>) ),
 				(IEnumerable<ISirenAction>)info.GetValue( "actions", typeof(IEnumerable<ISirenAction>) ),
-				info.GetString( "title" ), (Uri)info.GetValue( "href", typeof(Uri) ),
+				info.GetString( "title" ), 
+				(Uri)info.GetValue( "href", typeof(Uri) ),
 				info.GetString( "type" ) ) { }
 
 		[JsonProperty( "class", NullValueHandling = NullValueHandling.Ignore )]
