@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Desire2Learn")]
 [assembly: AssemblyProduct("D2L.Hypermedia.Siren.Tests")]
-[assembly: AssemblyCopyright("Copyright © Desire2Learn 2016")]
+[assembly: AssemblyCopyright("Copyright © Desire2Learn 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

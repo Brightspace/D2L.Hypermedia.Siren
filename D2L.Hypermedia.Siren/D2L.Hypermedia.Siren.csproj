@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="ISirenSerializable.cs" />
     <Compile Include="JsonUtilities.cs" />
+    <Compile Include="SirenFieldType.cs" />
     <Compile Include="SirenMatchers.cs" />
     <Compile Include="SirenActionExtensions.cs" />
     <Compile Include="SirenEntityExtensions.cs" />
