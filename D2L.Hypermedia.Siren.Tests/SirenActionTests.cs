@@ -101,8 +101,8 @@ namespace D2L.Hypermedia.Siren.Tests {
 			Assert.IsFalse( TestHelpers.GetAction().TryGetFieldByType( "foo", out field ) );
 			Assert.IsNull( field );
 
-			Assert.IsTrue( TestHelpers.GetAction().TryGetFieldByType( "text/xml", out field ) );
-			Assert.AreEqual( "text/xml", field.Type );
+			Assert.IsTrue( TestHelpers.GetAction().TryGetFieldByType( "range", out field ) );
+			Assert.AreEqual( "range", field.Type );
 			Assert.AreEqual( "field3", field.Name );
 		}
 

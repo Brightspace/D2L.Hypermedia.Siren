@@ -158,7 +158,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 				fields: new [] {
 					action.Fields.ElementAt( 0 ),
 					action.Fields.ElementAt( 1 ),
-					new SirenField( name: "field3", @class: new [] { "not-class" }, type: "text/xml", value: 1 )
+					new SirenField( name: "field3", @class: new [] { "not-class" }, type: SirenFieldType.Range, value: 1 )
 				}
 			) };
 			actual = new [] { action };
