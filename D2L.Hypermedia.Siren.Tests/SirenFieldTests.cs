@@ -88,6 +88,13 @@ namespace D2L.Hypermedia.Siren.Tests {
 			TestHelpers.ArrayBidirectionalEquality( fields, others, false );
 		}
 
+		[Test]
+		public void SirenField_ValidatesType() {
+			Assert.Throws<ArgumentException>( () => new SirenField( "foo", type: "invalid-type" ) );
+			Assert.DoesNotThrow( () => new SirenField( "foo", type: "search" ) );
+			Assert.DoesNotThrow( () => new SirenField( "foo", type: SirenFieldType.Search ) );
+		}
+
 	}
 
 }

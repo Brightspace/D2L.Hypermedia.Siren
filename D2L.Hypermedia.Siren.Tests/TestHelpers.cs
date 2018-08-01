@@ -34,9 +34,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 				title: "Action title",
 				type: "some-type",
 				fields: new[] {
-					new SirenField( name: "field1", @class: new [] { "class" }, type: "text/html" ),
-					new SirenField( name: "field2", @class: new [] { "class" }, type: "text/html" ),
-					new SirenField( name: "field3", @class: new [] { "not-class" }, type: "text/xml" )
+					new SirenField( name: "field1", @class: new [] { "class" }, type: SirenFieldType.Text ),
+					new SirenField( name: "field2", @class: new [] { "class" }, type: SirenFieldType.Text ),
+					new SirenField( name: "field3", @class: new [] { "not-class" }, type: SirenFieldType.Range )
 				}
 			);
 

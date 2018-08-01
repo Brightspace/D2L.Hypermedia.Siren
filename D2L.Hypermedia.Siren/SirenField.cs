@@ -22,9 +22,22 @@ namespace D2L.Hypermedia.Siren {
 		) {
 			m_name = name;
 			m_class = @class ?? new string[0];
-			m_type = type;
+			m_type = ValidateType( type );
 			m_value = value;
 			m_title = title;
+		}
+
+		private string ValidateType( string type ) {
+			if( type == null ) {
+				return null;
+			}
+
+			type = type.ToLowerInvariant();
+			if (SirenFieldType.ValidTypes.Contains( type ) ) {
+				return type;
+			}
+
+			throw new ArgumentException( $"\"{type}\" is not a valid type for a Siren Field. See the Siren documentation, or use SirenFieldTypes.");
 		}
 
 		[JsonProperty( "name" )]
