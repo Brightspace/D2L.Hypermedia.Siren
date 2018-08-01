@@ -2,6 +2,28 @@
 
 	public class SirenFieldType {
 
+		internal static string[] ValidTypes = {
+			"hidden",
+			"text",
+			"search",
+			"tel",
+			"url",
+			"email",
+			"password",
+			"datetime",
+			"date",
+			"month",
+			"week",
+			"time",
+			"datetime-local",
+			"number",
+			"range",
+			"color",
+			"checkbox",
+			"radio",
+			"file"
+		};
+
 		public static string Hidden => "hidden";
 		public static string Text => "text";
 		public static string Search => "search";

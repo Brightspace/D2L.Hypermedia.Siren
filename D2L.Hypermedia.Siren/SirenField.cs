@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Newtonsoft.Json;
 
 namespace D2L.Hypermedia.Siren {
@@ -34,13 +33,8 @@ namespace D2L.Hypermedia.Siren {
 			}
 
 			type = type.ToLowerInvariant();
-
-			PropertyInfo[] properties = typeof( SirenFieldType ).GetProperties();
-			foreach( PropertyInfo property in properties ) {
-				string validType = (string)property.GetValue( null );
-				if( type == validType ) {
-					return type;
-				}
+			if (SirenFieldType.ValidTypes.Contains( type ) ) {
+				return type;
 			}
 
 			throw new ArgumentException( $"\"{type}\" is not a valid type for a Siren Field. See the Siren documentation, or use SirenFieldTypes.");
