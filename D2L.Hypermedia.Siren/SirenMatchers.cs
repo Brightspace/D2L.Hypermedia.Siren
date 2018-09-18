@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace D2L.Hypermedia.Siren {
@@ -6,6 +7,7 @@ namespace D2L.Hypermedia.Siren {
 	public static class SirenMatchers {
 
 		private const string m_messageTemplate = "Expected {0}, but was {1}";
+		private const string m_arrayMessageTemplate = "Expected [{0}], but was [{1}]";
 
 		public static bool Matches( string expected, string actual, out string message ) {
 			if( expected == null || expected == actual || expected.Equals( actual ) ) {
@@ -38,6 +40,10 @@ namespace D2L.Hypermedia.Siren {
 		}
 
 		public static bool Matches( ISirenEntity expected, ISirenEntity actual, out string message ) {
+			if( expected.Properties != null ) {
+				throw new ArgumentException( "SirenMatchers cannot compare properties - remove them from the expected entity" );
+			}
+
 			return Matches( expected.Rel, actual.Rel, out message )
 				&& Matches( expected.Class, actual.Class, out message )
 				// Need to figure out a good way to match dynamics - considering moving away from dynamic for Properties
@@ -75,28 +81,28 @@ namespace D2L.Hypermedia.Siren {
 			string tempMessage = null;
 			bool matches = false;
 
-			if( typeof(T) == typeof(ISirenAction) ) {
-				matches = ((IEnumerable<ISirenAction>)expectedSet).All(
+			if( typeof( T ) == typeof( ISirenAction ) ) {
+				matches = ( (IEnumerable<ISirenAction>)expectedSet ).All(
 					expectedAction => actualSet.Any(
 						actualAction => Matches( expectedAction, (ISirenAction)actualAction, out tempMessage )
 					) );
-			} else if( typeof(T) == typeof(ISirenEntity) ) {
+			} else if( typeof( T ) == typeof( ISirenEntity ) ) {
 				matches = ( (IEnumerable<ISirenEntity>)expectedSet ).All(
-					expectedAction => actualSet.Any(
-						actualAction => Matches( expectedAction, (ISirenEntity)actualAction, out tempMessage )
+					expectedEntity => actualSet.Any(
+						actualEntity => Matches( expectedEntity, (ISirenEntity)actualEntity, out tempMessage )
 					) );
-			} else if( typeof(T) == typeof(ISirenField) ) {
+			} else if( typeof( T ) == typeof( ISirenField ) ) {
 				matches = ( (IEnumerable<ISirenField>)expectedSet ).All(
-					expectedAction => actualSet.Any(
-						actualAction => Matches( expectedAction, (ISirenField)actualAction, out tempMessage )
+					expectedField => actualSet.Any(
+						actualField => Matches( expectedField, (ISirenField)actualField, out tempMessage )
 					) );
-			} else if ( typeof(T) == typeof(ISirenLink) ) {
+			} else if( typeof( T ) == typeof( ISirenLink ) ) {
 				matches = ( (IEnumerable<ISirenLink>)expectedSet ).All(
-					expectedAction => actualSet.Any(
-						actualAction => Matches( expectedAction, (ISirenLink)actualAction, out tempMessage )
+					expectedLink => actualSet.Any(
+						actualLink => Matches( expectedLink, (ISirenLink)actualLink, out tempMessage )
 					) );
 			} else {
-				tempMessage = string.Format( m_messageTemplate, expectedSet, actualSet );
+				tempMessage = string.Format( m_arrayMessageTemplate, string.Join( ",", expectedSet ), string.Join( ",", actualSet ) );
 			}
 
 			if( matches ) {
