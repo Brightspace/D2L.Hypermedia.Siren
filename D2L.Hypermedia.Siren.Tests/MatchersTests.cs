@@ -40,7 +40,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 			expected = new Uri( "http://foo.com" );
 			actual = new Uri( "http://example.com" );
 			Assert.IsFalse( SirenMatchers.Matches( expected, actual, out message ) );
-			Assert.IsTrue( Regex.IsMatch( message, $"Expected {expected}, but was {actual}" ) );
+			Assert.AreEqual( message, "Expected http://foo.com/, but was http://example.com/" );
 		}
 
 		[Test]
@@ -60,12 +60,12 @@ namespace D2L.Hypermedia.Siren.Tests {
 			expected = 1;
 			actual = "foo";
 			Assert.IsFalse( SirenMatchers.Matches( expected, actual, out message ) );
-			Assert.IsTrue( Regex.IsMatch( message, $"Expected {expected}, but was {actual}" ) );
+			Assert.AreEqual( message, "Expected 1, but was foo" );
 
 			expected = "foo";
 			actual = "bar";
 			Assert.IsFalse( SirenMatchers.Matches( expected, actual, out message ) );
-			Assert.IsTrue( Regex.IsMatch( message, $"Expected {expected}, but was {actual}" ) );
+			Assert.AreEqual( message, "Expected foo, but was bar" );
 
 			expected = "foo";
 			actual = "foo";
@@ -80,14 +80,14 @@ namespace D2L.Hypermedia.Siren.Tests {
 			IEnumerable<object> actual = new string[] { };
 			Assert.IsTrue( SirenMatchers.Matches( expected, actual, out message ) );
 
-			expected = new[] { "foo" };
-			actual = new[] { "foo" };
+			expected = new[] { "foo", "bar" };
+			actual = new[] { "foo", "bar" };
 			Assert.IsTrue( SirenMatchers.Matches( expected, actual, out message ) );
 
-			expected = new[] { "foo" };
-			actual = new[] { "bar" };
+			expected = new[] { "foo", "bar" };
+			actual = new[] { "baz" };
 			Assert.IsFalse( SirenMatchers.Matches( expected, actual, out message ) );
-			Assert.IsTrue( Regex.IsMatch( message, $"Expected {expected}, but was {actual}" ) );
+			Assert.AreEqual( message, "Expected [foo,bar], but was [baz]" );
 		}
 
 		[Test]
@@ -146,7 +146,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 			) };
 			actual = new[] { action };
 			Assert.IsFalse( SirenMatchers.Matches( expected, actual, out message ) );
-			Assert.IsTrue( Regex.IsMatch( message, "Expected action-name-foobar, but was action-name" ), message );
+			Assert.AreEqual( message, "Expected action-name-foobar, but was action-name" );
 
 			expected = new[] { new SirenAction(
 				name: action.Name,
@@ -163,7 +163,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 			) };
 			actual = new [] { action };
 			Assert.IsFalse( SirenMatchers.Matches( expected, actual, out message ) );
-			Assert.IsTrue( Regex.IsMatch( message, "Expected 1, but was " ), message );
+			Assert.AreEqual( message, "Expected 1, but was " );
 		}
 
 		[Test]
@@ -188,7 +188,6 @@ namespace D2L.Hypermedia.Siren.Tests {
 			expected = new[] { new SirenEntity(
 				rel: entity.Rel,
 				@class: entity.Class,
-				properties: entity.Properties,
 				entities: entity.Entities,
 				links: entity.Links,
 				actions: entity.Actions,
@@ -202,7 +201,6 @@ namespace D2L.Hypermedia.Siren.Tests {
 			expected = new[] { new SirenEntity(
 				rel: entity.Rel,
 				@class: entity.Class,
-				properties: entity.Properties,
 				entities: new [] {
 					entity.Entities.ElementAt( 0 ),
 					entity.Entities.ElementAt( 1 )
@@ -231,7 +229,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 			) };
 			actual = new[] { entity };
 			Assert.IsFalse( SirenMatchers.Matches( expected, actual, out message ) );
-			Assert.IsTrue( Regex.IsMatch( message, "Expected different-title, but was entity3" ), message );
+			Assert.AreEqual( message, "Expected different-title, but was entity3" );
 
 			expected = new[] { new SirenEntity(
 				links: new [] {
@@ -242,7 +240,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 			) };
 			actual = new[] { entity };
 			Assert.IsFalse( SirenMatchers.Matches( expected, actual, out message ) );
-			Assert.IsTrue( Regex.IsMatch( message, "Expected different-title, but was link3" ), message );
+			Assert.AreEqual( message, "Expected different-title, but was link3" );
 
 			expected = new[] { new SirenEntity(
 				actions: new [] {
@@ -253,7 +251,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 			) };
 			actual = new[] { entity };
 			Assert.IsFalse( SirenMatchers.Matches( expected, actual, out message ) );
-			Assert.IsTrue( Regex.IsMatch( message, "Expected different-name, but was action3" ), message );
+			Assert.AreEqual( message, "Expected different-name, but was action3" );
 		}
 
 		[Test]
@@ -299,7 +297,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 			) };
 			actual = new[] { field };
 			Assert.IsFalse( SirenMatchers.Matches( expected, actual, out message ) );
-			Assert.IsTrue( Regex.IsMatch( message, "Expected foo, but was 1" ) );
+			Assert.AreEqual( message, "Expected foo, but was 1" );
 		}
 
 		[Test]
@@ -354,7 +352,19 @@ namespace D2L.Hypermedia.Siren.Tests {
 			) };
 			actual = new[] { link };
 			Assert.IsFalse( SirenMatchers.Matches( expected, actual, out message ) );
-			Assert.IsTrue( Regex.IsMatch( message, "Expected .*, but was .*" ) );
+			Assert.AreEqual( message, "Expected [different-rel], but was [foo]" );
+		}
+
+		[Test]
+		public void MatchingHelpers_ThrowsWhenGivenProperties() {
+			ISirenEntity expected = new SirenEntity(
+				properties: new {
+					foo = "bar"
+				}
+			);
+			ISirenEntity actual = expected;
+
+			Assert.Throws<ArgumentException>( () => SirenMatchers.Matches( expected, actual, out string _ ) );
 		}
 
 	}
