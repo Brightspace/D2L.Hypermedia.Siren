@@ -283,7 +283,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 				@class: field.Class,
 				type: field.Type,
 				value: field.Value,
-				title: field.Title
+				title: field.Title,
+				min: field.Min,
+				max: field.Max
 			) };
 			actual = new[] { field };
 			Assert.IsTrue( SirenMatchers.Matches( expected, actual, out message ) );
@@ -293,7 +295,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 				@class: field.Class,
 				type: field.Type,
 				value: "foo",
-				title: field.Title
+				title: field.Title,
+				min: field.Min,
+				max: field.Max
 			) };
 			actual = new[] { field };
 			Assert.IsFalse( SirenMatchers.Matches( expected, actual, out message ) );

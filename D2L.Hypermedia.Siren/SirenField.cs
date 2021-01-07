@@ -12,19 +12,25 @@ namespace D2L.Hypermedia.Siren {
 		private readonly string m_type;
 		private readonly string[] m_class;
 		private readonly string m_name;
+		private readonly int? m_min;
+		private readonly int? m_max;
 
 		public SirenField(
 			string name,
 			string[] @class = null,
 			string type = null,
 			object value = null,
-			string title = null
+			string title = null,
+			int? min = null,
+			int? max = null
 		) {
 			m_name = name;
 			m_class = @class ?? new string[0];
 			m_type = ValidateType( type );
 			m_value = value;
 			m_title = title;
+			m_min = min;
+			m_max = max;
 		}
 
 		private string ValidateType( string type ) {
@@ -55,6 +61,12 @@ namespace D2L.Hypermedia.Siren {
 		[JsonProperty( "title", NullValueHandling = NullValueHandling.Ignore )]
 		public string Title => m_title;
 
+		[JsonProperty( "min", NullValueHandling = NullValueHandling.Ignore )]
+		public int? Min => m_min;
+
+		[JsonProperty( "max", NullValueHandling = NullValueHandling.Ignore )]
+		public int? Max => m_max;
+
 		public bool ShouldSerializeClass() {
 			return Class.Length > 0;
 		}
@@ -69,8 +81,10 @@ namespace D2L.Hypermedia.Siren {
 			bool type = m_type == other.Type;
 			bool value = m_value == other.Value || m_value != null && m_value.Equals( other.Value );
 			bool title = m_title == other.Title;
+			bool min = m_min == other.Min;
+			bool max = m_max == other.Max;
 
-			return name && @class && type && value && title;
+			return name && @class && type && value && title && min && max;
 		}
 
 		int IComparable<ISirenField>.CompareTo( ISirenField other ) {
@@ -97,7 +111,9 @@ namespace D2L.Hypermedia.Siren {
 				^ string.Join( ",", m_class ).GetHashCode()
 				^ m_type?.GetHashCode() ?? 0
 				^ m_value?.ToString().GetHashCode() ?? 0
-				^ m_title?.GetHashCode() ?? 0;
+				^ m_title?.GetHashCode() ?? 0
+				^ m_min?.GetHashCode() ?? 0
+				^ m_max?.GetHashCode() ?? 0;
 		}
 
 		void ISirenSerializable.ToJson( JsonWriter writer ) {
@@ -108,6 +124,8 @@ namespace D2L.Hypermedia.Siren {
 			JsonUtilities.WriteJsonString( writer, "title", m_title );
 			JsonUtilities.WriteJsonString( writer, "name", m_name );
 			JsonUtilities.WriteJsonObject( writer, "value", m_value );
+			JsonUtilities.WriteJsonNumber( writer, "min", m_min );
+			JsonUtilities.WriteJsonNumber( writer, "max", m_max );
 
 			writer.WriteEndObject();
 		}
