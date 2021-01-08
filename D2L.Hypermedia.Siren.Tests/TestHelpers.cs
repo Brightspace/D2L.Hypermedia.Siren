@@ -79,7 +79,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 				@class: new[] { "bar" },
 				type: "number",
 				value: 1,
-				title: "Some field"
+				title: "Some field",
+				min: 0,
+				max: 2
 			);
 		}
 

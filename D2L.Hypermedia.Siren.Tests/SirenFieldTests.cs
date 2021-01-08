@@ -19,6 +19,8 @@ namespace D2L.Hypermedia.Siren.Tests {
 			Assert.IsNull( field.Type );
 			Assert.IsNull( field.Value );
 			Assert.IsNull( field.Title );
+			Assert.IsNull( field.Min );
+			Assert.IsNull( field.Max );
 		}
 
 		[Test]
@@ -33,6 +35,8 @@ namespace D2L.Hypermedia.Siren.Tests {
 			Assert.AreEqual( "number", field.Type );
 			Assert.AreEqual( 1, int.Parse( field.Value.ToString() ) );
 			Assert.AreEqual( "Some field", field.Title );
+			Assert.AreEqual( 0, field.Min );
+			Assert.AreEqual( 2, field.Max );
 		}
 
 		[Test]

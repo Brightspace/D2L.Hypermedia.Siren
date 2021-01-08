@@ -61,7 +61,9 @@ namespace D2L.Hypermedia.Siren {
 				&& Matches( expected.Type, actual.Type, out message )
 				&& Matches( expected.Title, actual.Title, out message )
 				&& Matches( expected.Class, actual.Class, out message )
-				&& Matches( expected.Value, actual.Value, out message );
+				&& Matches( expected.Value, actual.Value, out message )
+				&& Matches( expected.Min, actual.Min, out message )
+				&& Matches( expected.Max, actual.Max, out message );
 		}
 
 		public static bool Matches( ISirenLink expected, ISirenLink actual, out string message ) {

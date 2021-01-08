@@ -14,6 +14,10 @@ namespace D2L.Hypermedia.Siren {
 
 		string Title { get; }
 
+		int? Min { get; }
+
+		int? Max { get; }
+
 	}
 
 }
