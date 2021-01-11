@@ -12,8 +12,8 @@ namespace D2L.Hypermedia.Siren {
 		private readonly string m_type;
 		private readonly string[] m_class;
 		private readonly string m_name;
-		private readonly long? m_min;
-		private readonly long? m_max;
+		private readonly decimal? m_min;
+		private readonly decimal? m_max;
 
 		public SirenField(
 			string name,
@@ -21,8 +21,8 @@ namespace D2L.Hypermedia.Siren {
 			string type = null,
 			object value = null,
 			string title = null,
-			long? min = null,
-			long? max = null
+			decimal? min = null,
+			decimal? max = null
 		) {
 			m_name = name;
 			m_class = @class ?? new string[0];
@@ -62,10 +62,10 @@ namespace D2L.Hypermedia.Siren {
 		public string Title => m_title;
 
 		[JsonProperty( "min", NullValueHandling = NullValueHandling.Ignore )]
-		public long? Min => m_min;
+		public decimal? Min => m_min;
 
 		[JsonProperty( "max", NullValueHandling = NullValueHandling.Ignore )]
-		public long? Max => m_max;
+		public decimal? Max => m_max;
 
 		public bool ShouldSerializeClass() {
 			return Class.Length > 0;
