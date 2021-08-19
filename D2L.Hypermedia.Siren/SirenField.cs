@@ -109,11 +109,11 @@ namespace D2L.Hypermedia.Siren {
 		public override int GetHashCode() {
 			return m_name.GetHashCode()
 				^ string.Join( ",", m_class ).GetHashCode()
-				^ m_type?.GetHashCode() ?? 0
-				^ m_value?.ToString().GetHashCode() ?? 0
-				^ m_title?.GetHashCode() ?? 0
-				^ m_min?.GetHashCode() ?? 0
-				^ m_max?.GetHashCode() ?? 0;
+				^ ( m_type?.GetHashCode() ?? 0 )
+				^ ( m_value?.ToString().GetHashCode() ?? 0 )
+				^ ( m_title?.GetHashCode() ?? 0 )
+				^ ( m_min?.GetHashCode() ?? 0 )
+				^ ( m_max?.GetHashCode() ?? 0 );
 		}
 
 		void ISirenSerializable.ToJson( JsonWriter writer ) {
