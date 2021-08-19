@@ -176,8 +176,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 			TestHelpers.ArrayBidirectionalEquality( actions, others, false );
 		}
 
-		private static ISirenAction[] HashCodeActions()
-        {
+		private static ISirenAction[] HashCodeActions() {
 			return new ISirenAction[]
             {
 				new SirenAction(
