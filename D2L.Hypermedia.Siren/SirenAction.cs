@@ -101,10 +101,10 @@ namespace D2L.Hypermedia.Siren {
 		public override int GetHashCode() {
 			return m_name.GetHashCode()
 				^ string.Join( ",", m_class ).GetHashCode()
-				^ m_method?.GetHashCode() ?? 0
-				^ m_href?.GetHashCode() ?? 0
-				^ m_title?.GetHashCode() ?? 0
-				^ m_type?.GetHashCode() ?? 0
+				^ ( m_method?.GetHashCode() ?? 0 )
+				^ ( m_href?.GetHashCode() ?? 0 )
+				^ ( m_title?.GetHashCode() ?? 0 )
+				^ ( m_type?.GetHashCode() ?? 0 )
 				^ m_fields.Select( x => x.GetHashCode() ).GetHashCode();
 		}
 
