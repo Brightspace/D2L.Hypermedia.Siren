@@ -216,10 +216,10 @@ namespace D2L.Hypermedia.Siren.Tests {
 			others = new [] { TestHelpers.GetEntity( "foo" ) };
 			TestHelpers.ArrayBidirectionalEquality( entities, others, false );
 		}
-				public static SirenEntity[] HashCodeEntities()
-        {
-			return new []
-            {
+
+		public static SirenEntity[] HashCodeEntities() {
+			return new[]
+			{
 				new SirenEntity(
 							rel: new [] { "rootrel" },
 							@class: new []{ "root" },
@@ -229,7 +229,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 							actions: new [] { TestHelpers.GetAction() },
 							title: "fooTitle",
 							href: new Uri("http://localhost"),
-							type: "fooType"		
+							type: "fooType"
 					),
 				new SirenEntity(
 							@class: new []{ "root" },
@@ -239,120 +239,115 @@ namespace D2L.Hypermedia.Siren.Tests {
 							actions: new [] { TestHelpers.GetAction() },
 							title: "fooTitle",
 							href: new Uri("http://localhost"),
-							type: "fooType"		
+							type: "fooType"
 					),
-                new SirenEntity(
-                            rel: new [] { "rootrel" },
-                            properties: new { prop="value" },
-                            entities: new [] { TestHelpers.GetEntity() },
-                            links: new ISirenLink[] { TestHelpers.GetLink() },
-                            actions: new [] { TestHelpers.GetAction() },
-                            title: "fooTitle",
-                            href: new Uri("http://localhost"),
-                            type: "fooType"
-                    ),
-                new SirenEntity(
-                            rel: new [] { "rootrel" },
-                            @class: new []{ "root" },
-                            entities: new [] { TestHelpers.GetEntity() },
-                            links: new ISirenLink[] { TestHelpers.GetLink() },
-                            actions: new [] { TestHelpers.GetAction() },
-                            title: "fooTitle",
-                            href: new Uri("http://localhost"),
-                            type: "fooType"
-                    ),
-                new SirenEntity(
-                            rel: new [] { "rootrel" },
-                            @class: new []{ "root" },
-                            properties: new { prop="value" },
-                            links: new ISirenLink[] { TestHelpers.GetLink() },
-                            actions: new [] { TestHelpers.GetAction() },
-                            title: "fooTitle",
-                            href: new Uri("http://localhost"),
-                            type: "fooType"
-                    ),
-                new SirenEntity(
-                            rel: new [] { "rootrel" },
-                            @class: new []{ "root" },
-                            properties: new { prop="value" },
-                            entities: new [] { TestHelpers.GetEntity() },
-                            actions: new [] { TestHelpers.GetAction() },
-                            title: "fooTitle",
-                            href: new Uri("http://localhost"),
-                            type: "fooType"
-                    ),
-                new SirenEntity(
-                            rel: new [] { "rootrel" },
-                            @class: new []{ "root" },
-                            properties: new { prop="value" },
-                            entities: new [] { TestHelpers.GetEntity() },
-                            links: new ISirenLink[] { TestHelpers.GetLink() },
-                            title: "fooTitle",
-                            href: new Uri("http://localhost"),
-                            type: "fooType"
-                    ),
-                new SirenEntity(
-                            rel: new [] { "rootrel" },
-                            @class: new []{ "root" },
-                            properties: new { prop="value" },
-                            entities: new [] { TestHelpers.GetEntity() },
-                            links: new ISirenLink[] { TestHelpers.GetLink() },
-                            actions: new [] { TestHelpers.GetAction() },
-                            href: new Uri("http://localhost"),
-                            type: "fooType"
-                    ),
-                new SirenEntity(
-                            rel: new [] { "rootrel" },
-                            @class: new []{ "root" },
-                            properties: new { prop="value" },
-                            entities: new [] { TestHelpers.GetEntity() },
-                            links: new ISirenLink[] { TestHelpers.GetLink() },
-                            actions: new [] { TestHelpers.GetAction() },
-                            title: "fooTitle",
-                            type: "fooType"
-                    ),
-                new SirenEntity(
-                            rel: new [] { "rootrel" },
-                            @class: new []{ "root" },
-                            properties: new { prop="value" },
-                            entities: new [] { TestHelpers.GetEntity() },
-                            links: new ISirenLink[] { TestHelpers.GetLink() },
-                            actions: new [] { TestHelpers.GetAction() },
-                            title: "fooTitle",
-                            href: new Uri("http://localhost")
-                    ),
-            };
-        }
+				new SirenEntity(
+							rel: new [] { "rootrel" },
+							properties: new { prop="value" },
+							entities: new [] { TestHelpers.GetEntity() },
+							links: new ISirenLink[] { TestHelpers.GetLink() },
+							actions: new [] { TestHelpers.GetAction() },
+							title: "fooTitle",
+							href: new Uri("http://localhost"),
+							type: "fooType"
+					),
+				new SirenEntity(
+							rel: new [] { "rootrel" },
+							@class: new []{ "root" },
+							entities: new [] { TestHelpers.GetEntity() },
+							links: new ISirenLink[] { TestHelpers.GetLink() },
+							actions: new [] { TestHelpers.GetAction() },
+							title: "fooTitle",
+							href: new Uri("http://localhost"),
+							type: "fooType"
+					),
+				new SirenEntity(
+							rel: new [] { "rootrel" },
+							@class: new []{ "root" },
+							properties: new { prop="value" },
+							links: new ISirenLink[] { TestHelpers.GetLink() },
+							actions: new [] { TestHelpers.GetAction() },
+							title: "fooTitle",
+							href: new Uri("http://localhost"),
+							type: "fooType"
+					),
+				new SirenEntity(
+							rel: new [] { "rootrel" },
+							@class: new []{ "root" },
+							properties: new { prop="value" },
+							entities: new [] { TestHelpers.GetEntity() },
+							actions: new [] { TestHelpers.GetAction() },
+							title: "fooTitle",
+							href: new Uri("http://localhost"),
+							type: "fooType"
+					),
+				new SirenEntity(
+							rel: new [] { "rootrel" },
+							@class: new []{ "root" },
+							properties: new { prop="value" },
+							entities: new [] { TestHelpers.GetEntity() },
+							links: new ISirenLink[] { TestHelpers.GetLink() },
+							title: "fooTitle",
+							href: new Uri("http://localhost"),
+							type: "fooType"
+					),
+				new SirenEntity(
+							rel: new [] { "rootrel" },
+							@class: new []{ "root" },
+							properties: new { prop="value" },
+							entities: new [] { TestHelpers.GetEntity() },
+							links: new ISirenLink[] { TestHelpers.GetLink() },
+							actions: new [] { TestHelpers.GetAction() },
+							href: new Uri("http://localhost"),
+							type: "fooType"
+					),
+				new SirenEntity(
+							rel: new [] { "rootrel" },
+							@class: new []{ "root" },
+							properties: new { prop="value" },
+							entities: new [] { TestHelpers.GetEntity() },
+							links: new ISirenLink[] { TestHelpers.GetLink() },
+							actions: new [] { TestHelpers.GetAction() },
+							title: "fooTitle",
+							type: "fooType"
+					),
+				new SirenEntity(
+							rel: new [] { "rootrel" },
+							@class: new []{ "root" },
+							properties: new { prop="value" },
+							entities: new [] { TestHelpers.GetEntity() },
+							links: new ISirenLink[] { TestHelpers.GetLink() },
+							actions: new [] { TestHelpers.GetAction() },
+							title: "fooTitle",
+							href: new Uri("http://localhost")
+					),
+			};
+		}
 
-        private static TestCaseData[] HashCodeTests()
-        {
-           return HashCodeEntities().Select( x => new TestCaseData( x ) ).ToArray() ;
-        }
+		private static TestCaseData[] HashCodeTests() {
+			return HashCodeEntities().Select( x => new TestCaseData( x ) ).ToArray();
+		}
 
 		private static IEnumerable<TestCaseData> HashCodeEqualityTests() {
-            foreach( var entity1 in HashCodeEntities() )
-            {
-                var innerEntities = HashCodeEntities().ToList();
+			foreach( var entity1 in HashCodeEntities() ) {
+				var innerEntities = HashCodeEntities().ToList();
 				innerEntities.Remove( entity1 );
-                foreach (var entity2 in innerEntities )
-                {
-                    yield return new TestCaseData( entity1, entity2 );
-                }
+				foreach( var entity2 in innerEntities ) {
+					yield return new TestCaseData( entity1, entity2 );
+				}
 
-            }
-        }
+			}
+		}
 
-        [TestCaseSource( nameof( HashCodeTests ) ) ]
-		public void SirenEntity_GetHashcodeNot0( ISirenEntity entity )
-        {
+		[TestCaseSource( nameof( HashCodeTests ) )]
+		public void SirenEntity_GetHashcodeNot0( ISirenEntity entity ) {
 			Assert.AreNotEqual( 0, entity.GetHashCode() );
-        }
+		}
 
-		[TestCaseSource( nameof( HashCodeEqualityTests ) ) ]
-		public void SirenEntity_GetHashCode_NotEqual( ISirenEntity entity1, ISirenEntity entity2 )
-        {
+		[TestCaseSource( nameof( HashCodeEqualityTests ) )]
+		public void SirenEntity_GetHashCode_NotEqual( ISirenEntity entity1, ISirenEntity entity2 ) {
 			Assert.AreNotEqual( entity1.GetHashCode(), entity2.GetHashCode() );
-        }
+		}
 
 	}
 

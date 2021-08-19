@@ -100,10 +100,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 			TestHelpers.ArrayBidirectionalEquality( links, others, false );
 		}
 
-		private static ISirenLink[] HashCodeLinks()
-        {
+		private static ISirenLink[] HashCodeLinks() {
 			return new[]
-            {
+			{
 				new SirenLink(
 					rel: new []{ "linkrel" },
 					href: new Uri( "http://localhost" ),
@@ -129,38 +128,33 @@ namespace D2L.Hypermedia.Siren.Tests {
 					@class: new [] { "linkclass" },
 					title: "title"
 					)
-            };
-        }
+			};
+		}
 
-		private static TestCaseData[] HashCodeTests()
-        {
-           return HashCodeLinks().Select( x => new TestCaseData( x ) ).ToArray() ;
-        }
+		private static TestCaseData[] HashCodeTests() {
+			return HashCodeLinks().Select( x => new TestCaseData( x ) ).ToArray();
+		}
 
 		private static IEnumerable<TestCaseData> HashCodeEqualityTests() {
-            foreach( var link1 in HashCodeLinks() )
-            {
-                var innerEntities = HashCodeLinks().ToList();
+			foreach( var link1 in HashCodeLinks() ) {
+				var innerEntities = HashCodeLinks().ToList();
 				innerEntities.Remove( link1 );
-                foreach (var link2 in innerEntities )
-                {
-                    yield return new TestCaseData( link1, link2 );
-                }
+				foreach( var link2 in innerEntities ) {
+					yield return new TestCaseData( link1, link2 );
+				}
 
-            }
-        }
+			}
+		}
 
-        [TestCaseSource( nameof( HashCodeTests ) ) ]
-		public void SirenLink_GetHashcodeNot0( ISirenLink link )
-        {
+		[TestCaseSource( nameof( HashCodeTests ) )]
+		public void SirenLink_GetHashcodeNot0( ISirenLink link ) {
 			Assert.AreNotEqual( 0, link.GetHashCode() );
-        }
+		}
 
-		[TestCaseSource( nameof( HashCodeEqualityTests ) ) ]
-		public void SirenLink_GetHashCode_NotEqual( ISirenLink link1, ISirenLink link2 )
-        {
+		[TestCaseSource( nameof( HashCodeEqualityTests ) )]
+		public void SirenLink_GetHashCode_NotEqual( ISirenLink link1, ISirenLink link2 ) {
 			Assert.AreNotEqual( link1.GetHashCode(), link2.GetHashCode() );
-        }
+		}
 
 	}
 

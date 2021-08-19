@@ -100,11 +100,10 @@ namespace D2L.Hypermedia.Siren.Tests {
 			Assert.DoesNotThrow( () => new SirenField( "foo", type: "search" ) );
 			Assert.DoesNotThrow( () => new SirenField( "foo", type: SirenFieldType.Search ) );
 		}
-		
-		private static ISirenField[] HashCodeFields()
-        {
+
+		private static ISirenField[] HashCodeFields() {
 			return new ISirenField[]
-            {
+			{
 				new SirenField(
 					name: "field",
 					@class: new[] { "fieldclass" },
@@ -162,38 +161,33 @@ namespace D2L.Hypermedia.Siren.Tests {
 					title: "title",
 					min: decimal.MinValue
 					),
-            };
-        }
+			};
+		}
 
-		private static TestCaseData[] HashCodeTests()
-        {
-           return HashCodeFields().Select( x => new TestCaseData( x ) ).ToArray() ;
-        }
+		private static TestCaseData[] HashCodeTests() {
+			return HashCodeFields().Select( x => new TestCaseData( x ) ).ToArray();
+		}
 
 		private static IEnumerable<TestCaseData> HashCodeEqualityTests() {
-            foreach( var field1 in HashCodeFields() )
-            {
-                var innerEntities = HashCodeFields().ToList();
+			foreach( var field1 in HashCodeFields() ) {
+				var innerEntities = HashCodeFields().ToList();
 				innerEntities.Remove( field1 );
-                foreach (var field2 in innerEntities )
-                {
-                    yield return new TestCaseData( field1, field2 );
-                }
+				foreach( var field2 in innerEntities ) {
+					yield return new TestCaseData( field1, field2 );
+				}
 
-            }
-        }
+			}
+		}
 
-        [TestCaseSource( nameof( HashCodeTests ) ) ]
-		public void SirenField_GetHashcodeNot0( ISirenField field )
-        {
+		[TestCaseSource( nameof( HashCodeTests ) )]
+		public void SirenField_GetHashcodeNot0( ISirenField field ) {
 			Assert.AreNotEqual( 0, field.GetHashCode() );
-        }
+		}
 
-		[TestCaseSource( nameof( HashCodeEqualityTests ) ) ]
-		public void SirenField_GetHashCode_NotEqual( ISirenField field1, ISirenField field2 )
-        {
+		[TestCaseSource( nameof( HashCodeEqualityTests ) )]
+		public void SirenField_GetHashCode_NotEqual( ISirenField field1, ISirenField field2 ) {
 			Assert.AreNotEqual( field1.GetHashCode(), field2.GetHashCode() );
-        }
+		}
 
 	}
 

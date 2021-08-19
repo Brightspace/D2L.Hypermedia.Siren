@@ -236,35 +236,30 @@ namespace D2L.Hypermedia.Siren.Tests {
             };
         }
 
-		private static TestCaseData[] HashCodeTests()
-        {
-           return HashCodeActions().Select( x => new TestCaseData( x ) ).ToArray() ;
-        }
+		private static TestCaseData[] HashCodeTests() {
+			return HashCodeActions().Select( x => new TestCaseData( x ) ).ToArray();
+		}
 
 		private static IEnumerable<TestCaseData> HashCodeEqualityTests() {
-            foreach( var action1 in HashCodeActions() )
-            {
-                var innerEntities = HashCodeActions().ToList();
+			foreach( var action1 in HashCodeActions() ) {
+				var innerEntities = HashCodeActions().ToList();
 				innerEntities.Remove( action1 );
-                foreach (var action2 in innerEntities )
-                {
-                    yield return new TestCaseData( action1, action2 );
-                }
+				foreach( var action2 in innerEntities ) {
+					yield return new TestCaseData( action1, action2 );
+				}
 
-            }
-        }
+			}
+		}
 
-        [TestCaseSource( nameof( HashCodeTests ) ) ]
-		public void SirenAction_GetHashcodeNot0( ISirenAction action )
-        {
+		[TestCaseSource( nameof( HashCodeTests ) )]
+		public void SirenAction_GetHashcodeNot0( ISirenAction action ) {
 			Assert.AreNotEqual( 0, action.GetHashCode() );
-        }
+		}
 
-		[TestCaseSource( nameof( HashCodeEqualityTests ) ) ]
-		public void SirenAction_GetHashCode_NotEqual( ISirenAction action1, ISirenAction action2 )
-        {
+		[TestCaseSource( nameof( HashCodeEqualityTests ) )]
+		public void SirenAction_GetHashCode_NotEqual( ISirenAction action1, ISirenAction action2 ) {
 			Assert.AreNotEqual( action1.GetHashCode(), action2.GetHashCode() );
-        }
+		}
 
 	}
 
