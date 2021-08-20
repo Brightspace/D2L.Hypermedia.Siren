@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -173,6 +174,90 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 			others = new [] { TestHelpers.GetAction( "foo" ) };
 			TestHelpers.ArrayBidirectionalEquality( actions, others, false );
+		}
+
+		private static ISirenAction[] HashCodeActions() {
+			return new ISirenAction[]
+            {
+				new SirenAction(
+					name: "action",
+					href: new Uri( "http://localhost" )
+					),
+				new SirenAction(
+					name: "action",
+					href: new Uri( "http://localhost" ),
+					@class: new [] { "action" },
+					method: "POST",
+					title: "Create",
+					type: "application/x-www-form-urlencoded",
+					fields: new []{ TestHelpers.GetField() }
+					),
+				new SirenAction(
+					name: "action",
+					href: new Uri( "http://localhost" ),
+					method: "POST",
+					title: "Create",
+					type: "application/x-www-form-urlencoded",
+					fields: new []{ TestHelpers.GetField() }
+					),
+				new SirenAction(
+					name: "action",
+					href: new Uri( "http://localhost" ),
+					@class: new [] { "action" },
+					title: "Create",
+					type: "application/x-www-form-urlencoded",
+					fields: new []{ TestHelpers.GetField() }
+					),
+				new SirenAction(
+					name: "action",
+					href: new Uri( "http://localhost" ),
+					@class: new [] { "action" },
+					method: "POST",
+					type: "application/x-www-form-urlencoded",
+					fields: new []{ TestHelpers.GetField() }
+					),
+				new SirenAction(
+					name: "action",
+					href: new Uri( "http://localhost" ),
+					@class: new [] { "action" },
+					method: "POST",
+					title: "Create",
+					fields: new []{ TestHelpers.GetField() }
+					),
+				new SirenAction(
+					name: "action",
+					href: new Uri( "http://localhost" ),
+					@class: new [] { "action" },
+					method: "POST",
+					title: "Create",
+					type: "application/x-www-form-urlencoded"
+					),
+            };
+        }
+
+		private static TestCaseData[] HashCodeTests() {
+			return HashCodeActions().Select( x => new TestCaseData( x ) ).ToArray();
+		}
+
+		private static IEnumerable<TestCaseData> HashCodeEqualityTests() {
+			foreach( var action1 in HashCodeActions() ) {
+				var innerEntities = HashCodeActions().ToList();
+				innerEntities.Remove( action1 );
+				foreach( var action2 in innerEntities ) {
+					yield return new TestCaseData( action1, action2 );
+				}
+
+			}
+		}
+
+		[TestCaseSource( nameof( HashCodeTests ) )]
+		public void SirenAction_GetHashcodeNot0( ISirenAction action ) {
+			Assert.AreNotEqual( 0, action.GetHashCode() );
+		}
+
+		[TestCaseSource( nameof( HashCodeEqualityTests ) )]
+		public void SirenAction_GetHashCode_NotEqual( ISirenAction action1, ISirenAction action2 ) {
+			Assert.AreNotEqual( action1.GetHashCode(), action2.GetHashCode() );
 		}
 
 	}

@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\D2L.Hypermedia.Siren\D2L.Hypermedia.Siren.csproj">
-      <Project>{11695B7A-07C5-4F65-A1E2-8BCC5A9690A6}</Project>
+      <Project>{11695b7a-07c5-4f65-a1e2-8bcc5a9690a6}</Project>
       <Name>D2L.Hypermedia.Siren</Name>
     </ProjectReference>
   </ItemGroup>

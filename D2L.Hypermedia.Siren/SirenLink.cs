@@ -85,8 +85,8 @@ namespace D2L.Hypermedia.Siren {
 			return string.Join( ",", m_rel ).GetHashCode()
 				^ m_href.GetHashCode()
 				^ string.Join( ",", m_class ).GetHashCode()
-				^ m_title?.GetHashCode() ?? 0
-				^ m_type?.GetHashCode() ?? 0;
+				^ ( m_title?.GetHashCode() ?? 0 )
+				^ ( m_type?.GetHashCode() ?? 0 );
 		}
 
 		void ISirenSerializable.ToJson( JsonWriter writer ) {

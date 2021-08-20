@@ -130,13 +130,13 @@ namespace D2L.Hypermedia.Siren {
 		public override int GetHashCode() {
 			return string.Join( ",", m_rel ).GetHashCode()
 				^ string.Join( ",", m_class ).GetHashCode()
-				^ m_properties?.GetHashCode() ?? 0
+				^ ( m_properties?.GetHashCode() ?? 0 )
 				^ string.Join( ",", m_entities ).GetHashCode()
 				^ string.Join( ",", m_links ).GetHashCode()
 				^ string.Join( ",", m_actions ).GetHashCode()
-				^ m_title?.GetHashCode() ?? 0
-				^ m_href?.GetHashCode() ?? 0
-				^ m_type?.GetHashCode() ?? 0;
+				^ ( m_title?.GetHashCode() ?? 0 )
+				^ ( m_href?.GetHashCode() ?? 0 )
+				^ ( m_type?.GetHashCode() ?? 0 );
 
 		}
 
