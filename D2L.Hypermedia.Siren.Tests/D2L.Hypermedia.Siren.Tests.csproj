@@ -2,7 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{D070F17F-D338-4F1C-9DE7-F5367BF2482F}</ProjectGuid>
-    <TargetFrameworks>net472</TargetFrameworks>
+    <TargetFramework>net472</TargetFramework>
+    <!-- Note .NET Standard 2.0 doesn't work well for this due to target frameworks of the NUnit3TestAdapter.  -->
+    <TargetFrameworks>net472;net5.0</TargetFrameworks>
     <AssemblyTitle>D2L.Hypermedia.Siren.Tests</AssemblyTitle>
     <Company>Desire2Learn</Company>
     <Product>D2L.Hypermedia.Siren.Tests</Product>
@@ -19,6 +21,7 @@
     <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\D2L.Hypermedia.Siren\D2L.Hypermedia.Siren.csproj" />
