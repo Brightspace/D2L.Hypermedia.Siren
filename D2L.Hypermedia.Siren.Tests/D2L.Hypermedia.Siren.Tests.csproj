@@ -2,8 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{D070F17F-D338-4F1C-9DE7-F5367BF2482F}</ProjectGuid>
-    <!-- Note .NET Standard 2.0 doesn't work well for this due to target frameworks of the NUnit3TestAdapter -->
-    <TargetFrameworks>net47;net5.0</TargetFrameworks>
+    <TargetFrameworks>net472</TargetFrameworks>
     <AssemblyTitle>D2L.Hypermedia.Siren.Tests</AssemblyTitle>
     <Company>Desire2Learn</Company>
     <Product>D2L.Hypermedia.Siren.Tests</Product>

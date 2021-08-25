@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProjectGuid>{11695B7A-07C5-4F65-A1E2-8BCC5A9690A6}</ProjectGuid>
-    <TargetFrameworks>net47;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
     <AssemblyTitle>D2L.Hypermedia.Siren</AssemblyTitle>
     <Company>Desire2Learn</Company>
     <Product>D2L.Hypermedia.Siren</Product>
@@ -11,6 +11,7 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <Authors>Desire2Learn</Authors>
     <PackageProjectUrl>https://github.com/Brightspace/D2L.Hypermedia.Siren</PackageProjectUrl>
+    <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -19,13 +20,7 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="6.0.6" Condition="'$(TargetFramework)' == 'net47'" />
-    <PackageReference Include="Newtonsoft.Json" Version="[9.0.1,]" Condition="'$(TargetFramework)' != 'net47'" />
+    <PackageReference Include="Newtonsoft.Json" Version="6.0.6" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
 </Project>
