@@ -99,6 +99,13 @@ namespace D2L.Hypermedia.Siren.Tests {
 			Assert.Throws<ArgumentException>( () => new SirenField( "foo", type: "invalid-type" ) );
 			Assert.DoesNotThrow( () => new SirenField( "foo", type: "search" ) );
 			Assert.DoesNotThrow( () => new SirenField( "foo", type: SirenFieldType.Search ) );
+
+			Assert.Throws<ArgumentException>( () => new SirenField( "foo", new[] { TestHelpers.GetFieldValueObject() }, type: "invalid-type" ) );
+			Assert.Throws<ArgumentException>( () => new SirenField( "foo", new[] { TestHelpers.GetFieldValueObject() }, type: SirenFieldType.Search ) );
+			Assert.DoesNotThrow( () => new SirenField( "foo", new[] { TestHelpers.GetFieldValueObject() }, type: "radio" ) );
+			Assert.DoesNotThrow( () => new SirenField( "foo", new[] { TestHelpers.GetFieldValueObject() }, type: SirenFieldType.Radio ) );
+			Assert.DoesNotThrow( () => new SirenField( "foo", new[] { TestHelpers.GetFieldValueObject() }, type: "checkbox" ) );
+			Assert.DoesNotThrow( () => new SirenField( "foo", new[] { TestHelpers.GetFieldValueObject() }, type: SirenFieldType.Checkbox ) );
 		}
 
 		private static ISirenField[] HashCodeFields() {
@@ -187,6 +194,18 @@ namespace D2L.Hypermedia.Siren.Tests {
 		[TestCaseSource( nameof( HashCodeEqualityTests ) )]
 		public void SirenField_GetHashCode_NotEqual( ISirenField field1, ISirenField field2 ) {
 			Assert.AreNotEqual( field1.GetHashCode(), field2.GetHashCode() );
+		}
+
+		[Test]
+		public void SirenField_BuildWithSirenFieldValueObject() {
+			SirenFieldValueObject[] sirenFieldValueObjects = new[] {
+				new SirenFieldValueObject( 1, "This is the first radio button", true ),
+				new SirenFieldValueObject( 2, "This is the second radio button", false )
+			};
+
+			SirenField sirenField = new SirenField( "radio buttons", sirenFieldValueObjects, SirenFieldType.Radio );
+
+			Assert.AreEqual( sirenFieldValueObjects, sirenField.Value );
 		}
 
 	}

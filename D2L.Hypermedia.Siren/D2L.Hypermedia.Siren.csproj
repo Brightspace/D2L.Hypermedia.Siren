@@ -51,6 +51,7 @@
     <Compile Include="JsonUtilities.cs" />
     <Compile Include="SirenEntityBuilder.cs" />
     <Compile Include="SirenFieldType.cs" />
+    <Compile Include="SirenFieldValueObject.cs" />
     <Compile Include="SirenMatchers.cs" />
     <Compile Include="SirenActionExtensions.cs" />
     <Compile Include="SirenEntityExtensions.cs" />

@@ -55,6 +55,7 @@
     <Compile Include="SirenActionTests.cs" />
     <Compile Include="SirenEntityBuilderTests.cs" />
     <Compile Include="SirenEntityTests.cs" />
+    <Compile Include="SirenFieldValueObjectTests.cs" />
     <Compile Include="SirenFieldTests.cs" />
     <Compile Include="SirenLinkTests.cs" />
     <Compile Include="TestHelpers.cs" />
