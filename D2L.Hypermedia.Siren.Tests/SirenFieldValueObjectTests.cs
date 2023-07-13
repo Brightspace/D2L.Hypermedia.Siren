@@ -11,7 +11,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 		[Test]
 		public void SirenFieldValueObject_Serialized_DoesNotIncludeOptionalParametersIfNull() {
-			SirenFieldValueObject sirenFieldValueObject = TestHelpers.GetFieldValueObject();
+			SirenFieldValueObject sirenFieldValueObject = new SirenFieldValueObject( "foo" );
 
 			string serialized = JsonConvert.SerializeObject( sirenFieldValueObject );
 			SirenFieldValueObject field = JsonConvert.DeserializeObject<SirenFieldValueObject>( serialized );
@@ -29,7 +29,7 @@ namespace D2L.Hypermedia.Siren.Tests {
 			SirenFieldValueObject field = JsonConvert.DeserializeObject<SirenFieldValueObject>( serialized );
 
 			Assert.AreEqual( 1, field.Value );
-			Assert.AreEqual( "Some field", field.Title );
+			Assert.AreEqual( "Some field option", field.Title );
 			Assert.AreEqual( false, field.Selected );
 		}
 
