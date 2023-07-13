@@ -15,6 +15,7 @@ namespace D2L.Hypermedia.Siren {
 		private readonly decimal? m_min;
 		private readonly decimal? m_max;
 
+		[JsonConstructor]
 		public SirenField(
 			string name,
 			string[] @class = null,
