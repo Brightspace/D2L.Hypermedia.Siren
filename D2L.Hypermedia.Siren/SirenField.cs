@@ -15,6 +15,7 @@ namespace D2L.Hypermedia.Siren {
 		private readonly decimal? m_min;
 		private readonly decimal? m_max;
 
+		[JsonConstructor]
 		public SirenField(
 			string name,
 			string[] @class = null,
@@ -33,17 +34,37 @@ namespace D2L.Hypermedia.Siren {
 			m_max = max;
 		}
 
+		public SirenField(
+			string name,
+			IEnumerable<SirenFieldValueObject> values,
+			string type,
+			string[] @class = null,
+			string title = null
+		) {
+			if( type != SirenFieldType.Checkbox && type != SirenFieldType.Radio ) {
+				throw new ArgumentException( "Must be either checkbox or radio", nameof( type ) );
+			}
+
+			m_name = name;
+			m_class = @class ?? new string[0];
+			m_type = type;
+			m_value = values;
+			m_title = title;
+			m_min = null;
+			m_max = null;
+		}
+
 		private string ValidateType( string type ) {
 			if( type == null ) {
 				return null;
 			}
 
 			type = type.ToLowerInvariant();
-			if (SirenFieldType.ValidTypes.Contains( type ) ) {
+			if( SirenFieldType.ValidTypes.Contains( type ) ) {
 				return type;
 			}
 
-			throw new ArgumentException( $"\"{type}\" is not a valid type for a Siren Field. See the Siren documentation, or use SirenFieldTypes.");
+			throw new ArgumentException( $"\"{type}\" is not a valid type for a Siren Field. See the Siren documentation, or use SirenFieldTypes." );
 		}
 
 		[JsonProperty( "name" )]
@@ -79,7 +100,7 @@ namespace D2L.Hypermedia.Siren {
 			bool name = m_name == other.Name;
 			bool @class = m_class.OrderBy( x => x ).SequenceEqual( other.Class.OrderBy( x => x ) );
 			bool type = m_type == other.Type;
-			bool value = m_value == other.Value || m_value != null && m_value.Equals( other.Value );
+			bool value = m_value == other.Value || ( m_value != null && m_value.Equals( other.Value ) );
 			bool title = m_title == other.Title;
 			bool min = m_min == other.Min;
 			bool max = m_max == other.Max;

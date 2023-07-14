@@ -85,6 +85,20 @@ namespace D2L.Hypermedia.Siren.Tests {
 			);
 		}
 
+		public static SirenFieldValueObject GetFieldValueObject( string value = "foo" ) {
+			return new SirenFieldValueObject(
+				value: value,
+				title: "Some field option"
+			);
+		}
+
+		public static SirenFieldValueObject GetFieldValueObject( int value ) {
+			return new SirenFieldValueObject(
+				value: value,
+				title: "Some field option"
+			);
+		}
+
 		public static ISirenLink GetLink( string rel = "foo" ) {
 			return new SirenLink(
 				rel: new[] { rel },
