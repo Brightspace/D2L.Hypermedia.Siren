@@ -1,0 +1,18 @@
+<Project>
+  <Import Project="VersionInfo.props" />
+
+  <PropertyGroup>
+    <Deterministic>true</Deterministic>
+    <LangVersion>10.0</LangVersion>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <IncludeSymbols>true</IncludeSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Company>D2L Corporation</Company>
+    <Copyright>Copyright © 2023</Copyright>
+    <PackageProjectUrl>https://github.com/Brightspace/D2L.Hypermedia.Siren</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Brightspace/D2L.Hypermedia.Siren</RepositoryUrl>
+  </PropertyGroup>
+</Project>
