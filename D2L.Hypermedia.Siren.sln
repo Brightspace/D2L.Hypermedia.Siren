@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2L.Hypermedia.Siren", "D2L.Hypermedia.Siren.csproj", "{11695B7A-07C5-4F65-A1E2-8BCC5A9690A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2L.Hypermedia.Siren", "D2L.Hypermedia.Siren\D2L.Hypermedia.Siren.csproj", "{11695B7A-07C5-4F65-A1E2-8BCC5A9690A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2L.Hypermedia.Siren.Tests", "..\D2L.Hypermedia.Siren.Tests\D2L.Hypermedia.Siren.Tests.csproj", "{D070F17F-D338-4F1C-9DE7-F5367BF2482F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2L.Hypermedia.Siren.Tests", "D2L.Hypermedia.Siren.Tests\D2L.Hypermedia.Siren.Tests.csproj", "{D070F17F-D338-4F1C-9DE7-F5367BF2482F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -5,6 +5,11 @@ on:
   push:
     branches:
       - master
+    tags:
+      - v*
+
+env:
+  VERSION_PREFIX: 2.3.0
 
 jobs:
   all:
@@ -15,27 +20,23 @@ jobs:
 
       - uses: Brightspace/third-party-actions@actions/checkout
       - uses: Brightspace/third-party-actions@actions/setup-dotnet
-        with:
-          dotnet-version: 7.0.x
-      - uses: Brightspace/third-party-actions@NuGet/setup-nuget 
- 
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
 
-      - name: Install dependencies
-        run: nuget restore D2L.Hypermedia.Siren
+      - run: dotnet tool restore
+
+      - name: Generate version properties
+        run: dotnet ci-version-properties --output VersionInfo.props && cat VersionInfo.props
 
       - name: Build
-        run: msbuild -p:Configuration=Release D2L.Hypermedia.Siren
+        run: dotnet build -c Release
 
       - name: Test
-        run: dotnet test D2L.Hypermedia.Siren.Tests -c Release --no-build
+        run: dotnet test -c Release --no-build
         
       - name: Pack
-        run: nuget pack D2L.Hypermedia.Siren -Properties Configuration=Release
+        run: dotnet pack -c Release --no-build
 
       - name: Archive
         uses: Brightspace/third-party-actions@actions/upload-artifact
         with:
           name: D2L.Hypermedia.Siren.${{ github.sha }}
-          path: '**/D2L.Hypermedia.Siren.*.nupkg'
+          path: '**/*.symbols.nupkg'
