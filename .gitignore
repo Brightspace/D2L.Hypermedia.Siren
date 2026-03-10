@@ -7,4 +7,5 @@ obj
 packages
 build/*
 project.lock.json
+D2L.Hypermedia.Siren/.vs/*
 .vs/

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AwesomeAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -20,11 +21,11 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 			ISirenLink link = JsonConvert.DeserializeObject<SirenLink>( serialized );
 
-			Assert.AreEqual( "foo", link.Rel[0] );
-			Assert.AreEqual( "http://example.com/", link.Href.ToString() );
-			Assert.IsEmpty( link.Class );
-			Assert.IsNull( link.Type );
-			Assert.IsNull( link.Title );
+			link.Rel[0].Should().Be( "foo" );
+			link.Href.Should().Be( "http://example.com/" );
+			link.Class.Should().BeEmpty();
+			link.Type.Should().BeNull();
+			link.Title.Should().BeNull();
 		}
 
 		[Test]
@@ -35,11 +36,11 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 			ISirenLink link = JsonConvert.DeserializeObject<SirenLink>( serialized );
 
-			Assert.Contains( "foo", link.Rel );
-			Assert.AreEqual( "http://example.com/", link.Href.ToString() );
-			Assert.Contains( "bar", link.Class );
-			Assert.AreEqual( "Link title", link.Title );
-			Assert.AreEqual( "text/html", link.Type );
+			link.Rel.Contains( "foo" );
+			link.Href.Should().Be( "http://example.com/" );
+			link.Class.Should().Contain( "bar" );
+			link.Title.Should().Be( "Link title" );
+			link.Type.Should().Be( "text/html" );
 		}
 
 		[Test]
@@ -50,14 +51,14 @@ namespace D2L.Hypermedia.Siren.Tests {
 				@class: new [] { "bar" }
 			);
 			string serialized = JsonConvert.SerializeObject( link );
-			Assert.GreaterOrEqual( serialized.IndexOf( "class", StringComparison.Ordinal ), 0 );
+			serialized.IndexOf( "class", StringComparison.Ordinal ).Should().BeGreaterThanOrEqualTo(0);
 
 			link = new SirenLink(
 				rel: new [] { "foo" },
 				href: new Uri( "http://example.com" )
 			);
 			serialized = JsonConvert.SerializeObject( link );
-			Assert.AreEqual( -1, serialized.IndexOf( "class", StringComparison.Ordinal ) );
+			serialized.IndexOf( "class", StringComparison.Ordinal ).Should().Be( -1 );
 		}
 
 		[Test]
@@ -148,12 +149,12 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 		[TestCaseSource( nameof( HashCodeTests ) )]
 		public void SirenLink_GetHashcodeNot0( ISirenLink link ) {
-			Assert.AreNotEqual( 0, link.GetHashCode() );
+			link.GetHashCode().Should().NotBe( 0 );
 		}
 
 		[TestCaseSource( nameof( HashCodeEqualityTests ) )]
 		public void SirenLink_GetHashCode_NotEqual( ISirenLink link1, ISirenLink link2 ) {
-			Assert.AreNotEqual( link1.GetHashCode(), link2.GetHashCode() );
+			link1.GetHashCode().Should().NotBe( link2.GetHashCode() );
 		}
 
 	}

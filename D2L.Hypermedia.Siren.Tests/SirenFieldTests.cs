@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AwesomeAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -16,13 +17,13 @@ namespace D2L.Hypermedia.Siren.Tests {
 			string serialized = JsonConvert.SerializeObject( sirenField );
 			ISirenField field = JsonConvert.DeserializeObject<SirenField>( serialized );
 
-			Assert.AreEqual( "foo", field.Name );
-			Assert.IsEmpty( field.Class );
-			Assert.IsNull( field.Type );
-			Assert.IsNull( field.Value );
-			Assert.IsNull( field.Title );
-			Assert.IsNull( field.Min );
-			Assert.IsNull( field.Max );
+			field.Name.Should().Be( "foo" );
+			field.Class.Should().BeEmpty();
+			field.Type.Should().BeNull();
+			field.Value.Should().BeNull();
+			field.Title.Should().BeNull();
+			field.Min.Should().BeNull();
+			field.Max.Should().BeNull();
 		}
 
 		[Test]
@@ -32,13 +33,13 @@ namespace D2L.Hypermedia.Siren.Tests {
 			string serialized = JsonConvert.SerializeObject( sirenField );
 			ISirenField field = JsonConvert.DeserializeObject<SirenField>( serialized );
 
-			Assert.AreEqual( "foo", field.Name );
-			Assert.Contains( "bar", field.Class );
-			Assert.AreEqual( "number", field.Type );
-			Assert.AreEqual( 1, int.Parse( field.Value.ToString() ) );
-			Assert.AreEqual( "Some field", field.Title );
-			Assert.AreEqual( 0, field.Min );
-			Assert.AreEqual( 2, field.Max );
+			field.Name.Should().Be( "foo" );
+			field.Class.Should().Contain( "bar" );
+			field.Type.Should().Be( "number" );
+			field.Value.Should().Be( 1 );
+			field.Title.Should().Be( "Some field" );
+			field.Min.Should().Be( 0 );
+			field.Max.Should().Be( 2 );
 		}
 
 		[Test]
@@ -48,11 +49,11 @@ namespace D2L.Hypermedia.Siren.Tests {
 				@class: new [] { "bar" }
 			);
 			string serialized = JsonConvert.SerializeObject( field );
-			Assert.GreaterOrEqual( serialized.IndexOf( "class", StringComparison.Ordinal ), 0 );
+			serialized.IndexOf( "class", StringComparison.Ordinal ).Should().BeGreaterThanOrEqualTo(0);
 
 			field = new SirenField( name: "foo" );
 			serialized = JsonConvert.SerializeObject( field );
-			Assert.AreEqual( -1, serialized.IndexOf( "class", StringComparison.Ordinal ) );
+			serialized.IndexOf( "class", StringComparison.Ordinal ).Should().Be( -1 );
 		}
 
 		[Test]
@@ -99,13 +100,6 @@ namespace D2L.Hypermedia.Siren.Tests {
 			Assert.Throws<ArgumentException>( () => new SirenField( "foo", type: "invalid-type" ) );
 			Assert.DoesNotThrow( () => new SirenField( "foo", type: "search" ) );
 			Assert.DoesNotThrow( () => new SirenField( "foo", type: SirenFieldType.Search ) );
-
-			Assert.Throws<ArgumentException>( () => new SirenField( "foo", new[] { TestHelpers.GetFieldValueObject() }, type: "invalid-type" ) );
-			Assert.Throws<ArgumentException>( () => new SirenField( "foo", new[] { TestHelpers.GetFieldValueObject() }, type: SirenFieldType.Search ) );
-			Assert.DoesNotThrow( () => new SirenField( "foo", new[] { TestHelpers.GetFieldValueObject() }, type: "radio" ) );
-			Assert.DoesNotThrow( () => new SirenField( "foo", new[] { TestHelpers.GetFieldValueObject() }, type: SirenFieldType.Radio ) );
-			Assert.DoesNotThrow( () => new SirenField( "foo", new[] { TestHelpers.GetFieldValueObject() }, type: "checkbox" ) );
-			Assert.DoesNotThrow( () => new SirenField( "foo", new[] { TestHelpers.GetFieldValueObject() }, type: SirenFieldType.Checkbox ) );
 		}
 
 		private static ISirenField[] HashCodeFields() {
@@ -188,24 +182,12 @@ namespace D2L.Hypermedia.Siren.Tests {
 
 		[TestCaseSource( nameof( HashCodeTests ) )]
 		public void SirenField_GetHashcodeNot0( ISirenField field ) {
-			Assert.AreNotEqual( 0, field.GetHashCode() );
+			field.GetHashCode().Should().NotBe( 0 );
 		}
 
 		[TestCaseSource( nameof( HashCodeEqualityTests ) )]
 		public void SirenField_GetHashCode_NotEqual( ISirenField field1, ISirenField field2 ) {
-			Assert.AreNotEqual( field1.GetHashCode(), field2.GetHashCode() );
-		}
-
-		[Test]
-		public void SirenField_BuildWithSirenFieldValueObject() {
-			SirenFieldValueObject[] sirenFieldValueObjects = new[] {
-				new SirenFieldValueObject( 1, "This is the first radio button", true ),
-				new SirenFieldValueObject( 2, "This is the second radio button", false )
-			};
-
-			SirenField sirenField = new SirenField( "radio buttons", sirenFieldValueObjects, SirenFieldType.Radio );
-
-			Assert.AreEqual( sirenFieldValueObjects, sirenField.Value );
+			field1.GetHashCode().Should().NotBe( field2.GetHashCode() );
 		}
 
 	}

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using AwesomeAssertions;
 using NUnit.Framework;
 
 namespace D2L.Hypermedia.Siren.Tests {
@@ -16,15 +16,15 @@ namespace D2L.Hypermedia.Siren.Tests {
 
             ISirenEntity entity = builder.Build();
 
-            Assert.IsEmpty( entity.Class );
-            Assert.IsNull( entity.Properties );
-            Assert.IsEmpty( entity.Entities );
-            Assert.IsEmpty( entity.Links );
-            Assert.IsEmpty( entity.Actions );
-            Assert.IsNull( entity.Title );
-            Assert.IsEmpty( entity.Rel );
-            Assert.IsNull( entity.Href );
-            Assert.IsNull( entity.Type );
+            entity.Class.Should().BeEmpty();
+            entity.Properties?.Should().BeNull();
+            entity.Entities.Should().BeEmpty();
+            entity.Links.Should().BeEmpty();
+            entity.Actions.Should().BeEmpty();
+            entity.Title.Should().BeNull();
+            entity.Rel.Should().BeEmpty();
+            entity.Href.Should().BeNull();
+            entity.Type.Should().BeNull();
         }
 
         [Test]
@@ -37,9 +37,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 
             ISirenEntity entity = builder.Build( expectedTitle, expectedHref, expectedType );
 
-            Assert.AreEqual( expectedTitle, entity.Title );
-            Assert.AreEqual( expectedHref, entity.Href );
-            Assert.AreEqual( expectedType, entity.Type );
+            entity.Title.Should().Be( expectedTitle );
+            entity.Href.Should().Be( expectedHref );
+            entity.Type.Should().Be( expectedType );
         }
 
         [Test]
@@ -53,9 +53,8 @@ namespace D2L.Hypermedia.Siren.Tests {
             builder.AddRel( expectedRel2 );
             ISirenEntity entity = builder.Build();
 
-            Assert.AreEqual( 2, entity.Rel.Length );
-            Assert.Contains( expectedRel1, entity.Rel );
-            Assert.Contains( expectedRel2, entity.Rel );
+            entity.Rel.Should().HaveCount( 2 );
+			entity.Rel.Should().BeEquivalentTo( new[] { expectedRel1, expectedRel2 } );
         }
 
         [Test]
@@ -73,11 +72,9 @@ namespace D2L.Hypermedia.Siren.Tests {
             builder.AddRel( expectedRel2 );
             ISirenEntity entity = builder.Build();
 
-            Assert.AreEqual( 3, entity.Rel.Length );
-            Assert.Contains( expectedRel1, entity.Rel );
-            Assert.Contains( expectedRel2, entity.Rel );
-            Assert.Contains( expectedRel3, entity.Rel );
-        }
+            entity.Rel.Should().HaveCount( 3 );
+			entity.Rel.Should().BeEquivalentTo( new[] { expectedRel1, expectedRel2, expectedRel3 } );
+		}
 
         [Test]
         public void SirenEntityBuilder_AddAction_ExpectEntityWithActions() {
@@ -90,9 +87,8 @@ namespace D2L.Hypermedia.Siren.Tests {
             builder.AddAction( expectedAction2 );
             ISirenEntity entity = builder.Build();
 
-            Assert.AreEqual( 2, entity.Actions.Count() );
-            CollectionAssert.Contains( entity.Actions, expectedAction1 );
-            CollectionAssert.Contains( entity.Actions, expectedAction2 );
+            entity.Actions.Should().HaveCount( 2 );
+            entity.Actions.Should().BeEquivalentTo( new[] { expectedAction1, expectedAction2 } );
         }
 
         [Test]
@@ -110,10 +106,8 @@ namespace D2L.Hypermedia.Siren.Tests {
             builder.AddActions( actions );
             ISirenEntity entity = builder.Build();
 
-            Assert.AreEqual( 3, entity.Actions.Count() );
-            CollectionAssert.Contains( entity.Actions, expectedAction1 );
-            CollectionAssert.Contains( entity.Actions, expectedAction2 );
-            CollectionAssert.Contains( entity.Actions, expectedAction3 );
+            entity.Actions.Should().HaveCount( 3 );
+            entity.Actions.Should().BeEquivalentTo( new[] { expectedAction1, expectedAction2, expectedAction3 } );
         }
 
         [Test]
@@ -127,9 +121,8 @@ namespace D2L.Hypermedia.Siren.Tests {
             builder.AddLink( expectedLink2 );
             ISirenEntity entity = builder.Build();
 
-            Assert.AreEqual( 2, entity.Links.Count() );
-            CollectionAssert.Contains( entity.Links, expectedLink1 );
-            CollectionAssert.Contains( entity.Links, expectedLink2 );
+            entity.Links.Should().HaveCount( 2 );
+            entity.Links.Should().BeEquivalentTo( new[] { expectedLink1, expectedLink2 } );
         }
 
         [Test]
@@ -147,10 +140,8 @@ namespace D2L.Hypermedia.Siren.Tests {
             builder.AddLink( expectedLink3 );
             ISirenEntity entity = builder.Build();
 
-            Assert.AreEqual( 3, entity.Links.Count() );
-            CollectionAssert.Contains( entity.Links, expectedLink1 );
-            CollectionAssert.Contains( entity.Links, expectedLink2 );
-            CollectionAssert.Contains( entity.Links, expectedLink3 );
+            entity.Links.Should().HaveCount( 3 );
+            entity.Links.Should().BeEquivalentTo( new[] { expectedLink1, expectedLink2, expectedLink3 } );
         }
 
         [Test]
@@ -164,9 +155,8 @@ namespace D2L.Hypermedia.Siren.Tests {
             builder.AddEntity( expectedEntity2 );
             ISirenEntity entity = builder.Build();
 
-            Assert.AreEqual( 2, entity.Entities.Count() );
-            CollectionAssert.Contains( entity.Entities, expectedEntity1 );
-            CollectionAssert.Contains( entity.Entities, expectedEntity2 );
+			entity.Entities.Should().HaveCount( 2 );
+			entity.Entities.Should().BeEquivalentTo( new[] { expectedEntity1, expectedEntity2 } );
         }
 
         [Test]
@@ -182,11 +172,9 @@ namespace D2L.Hypermedia.Siren.Tests {
             builder.AddEntities( entities );
             builder.AddEntity( expectedEntity3 );
             ISirenEntity entity = builder.Build();
-
-            Assert.AreEqual( 3, entity.Entities.Count() );
-            CollectionAssert.Contains( entity.Entities, expectedEntity1 );
-            CollectionAssert.Contains( entity.Entities, expectedEntity2 );
-            CollectionAssert.Contains( entity.Entities, expectedEntity3 );
+			
+            entity.Entities.Should().HaveCount( 3 );
+            entity.Entities.Should().BeEquivalentTo( new[] { expectedEntity1, expectedEntity2, expectedEntity3 } );
         }
 
         [Test]
@@ -197,8 +185,8 @@ namespace D2L.Hypermedia.Siren.Tests {
             builder.AddProperty( "testNullProperty", null );
             ISirenEntity entity = builder.Build();
 
-            Assert.IsNotNull( entity.Properties );
-            Assert.IsNull( entity.Properties.testNullProperty );
+			Assert.That( entity.Properties, Is.Not.Null);
+			Assert.That( entity.Properties.testNullProperty, Is.Null );
         }
 
         [Test]
@@ -213,9 +201,9 @@ namespace D2L.Hypermedia.Siren.Tests {
             builder.AddProperty( "myProp2", value2 );
             ISirenEntity entity = builder.Build();
 
-            Assert.IsNotNull( entity.Properties );
-            Assert.AreEqual( value1, entity.Properties.myProp1 );
-            Assert.AreEqual( value2, entity.Properties.myProp2 );
+            Assert.That( entity.Properties, Is.Not.Null );
+            Assert.That( entity.Properties.myProp1, Is.EquivalentTo(value1));
+            Assert.That( entity.Properties.myProp2, Is.EqualTo( value2 ) );
         }
 
         [Test]
@@ -229,9 +217,8 @@ namespace D2L.Hypermedia.Siren.Tests {
             builder.AddClass( expectedClass2 );
             ISirenEntity entity = builder.Build();
 
-            Assert.AreEqual( 2, entity.Class.Length );
-            Assert.Contains( expectedClass1, entity.Class );
-            Assert.Contains( expectedClass2, entity.Class );
+            entity.Class.Should().HaveCount( 2 );
+            entity.Class.Should().BeEquivalentTo( new[] { expectedClass1, expectedClass2 } );
         }
 
         [Test]
@@ -248,10 +235,8 @@ namespace D2L.Hypermedia.Siren.Tests {
             builder.AddClass( expectedClass3 );
             ISirenEntity entity = builder.Build();
 
-            Assert.AreEqual( 3, entity.Class.Length );
-            Assert.Contains( expectedClass1, entity.Class );
-            Assert.Contains( expectedClass2, entity.Class );
-            Assert.Contains( expectedClass3, entity.Class );
+            entity.Class.Should().HaveCount( 3 );
+            entity.Class.Should().BeEquivalentTo( new[] { expectedClass1, expectedClass2, expectedClass3 } );
         }
 
     }

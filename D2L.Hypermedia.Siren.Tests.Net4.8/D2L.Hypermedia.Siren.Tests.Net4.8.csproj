@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<RootNamespace>D2L.Hypermedia.Siren.Tests.Net4._8</RootNamespace>
+
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\D2L.Hypermedia.Siren.Tests\MatchersTests.cs" Link="MatchersTests.cs" />
+		<Compile Include="..\D2L.Hypermedia.Siren.Tests\SirenActionTests.cs" Link="SirenActionTests.cs" />
+		<Compile Include="..\D2L.Hypermedia.Siren.Tests\SirenEntityBuilderTests.cs" Link="SirenEntityBuilderTests.cs" />
+		<Compile Include="..\D2L.Hypermedia.Siren.Tests\SirenEntityTests.cs" Link="SirenEntityTests.cs" />
+		<Compile Include="..\D2L.Hypermedia.Siren.Tests\SirenFieldTests.cs" Link="SirenFieldTests.cs" />
+		<Compile Include="..\D2L.Hypermedia.Siren.Tests\SirenLinkTests.cs" Link="SirenLinkTests.cs" />
+		<Compile Include="..\D2L.Hypermedia.Siren.Tests\TestHelpers.cs" Link="TestHelpers.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AwesomeAssertions" Version="9.4.0" />
+		<PackageReference Include="NUnit" Version="3.12.0" />
+		<PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\D2L.Hypermedia.Siren\D2L.Hypermedia.Siren.csproj" />
+	</ItemGroup>
+
+</Project>

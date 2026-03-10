@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AwesomeAssertions;
 using NUnit.Framework;
 
 namespace D2L.Hypermedia.Siren.Tests {
@@ -12,8 +13,8 @@ namespace D2L.Hypermedia.Siren.Tests {
 			IComparable<T> second,
 			bool equal
 		) {
-			Assert.AreEqual( equal, first.Equals( second ) );
-			Assert.AreEqual( equal, second.Equals( first ) );
+			first.Equals( second ).Should().Be( equal );
+			second.Equals( first ).Should().Be( equal );
 		}
 
 		public static void ArrayBidirectionalEquality<T>(
@@ -21,8 +22,9 @@ namespace D2L.Hypermedia.Siren.Tests {
 			IEnumerable<IComparable<T>> second,
 			bool equal
 		) {
-			Assert.AreEqual( equal, first.OrderBy( x => x ).SequenceEqual( second.OrderBy( x => x ) ) );
-			Assert.AreEqual( equal, second.OrderBy( x => x ).SequenceEqual( first.OrderBy( x => x ) ) );
+
+			first.OrderBy( x => x ).SequenceEqual( second.OrderBy( x => x ) ).Should().Be( equal );
+			second.OrderBy( x => x ).SequenceEqual( first.OrderBy( x => x ) ).Should().Be( equal );
 		}
 
 		public static ISirenAction GetAction( string name = "action-name" ) {
@@ -82,20 +84,6 @@ namespace D2L.Hypermedia.Siren.Tests {
 				title: "Some field",
 				min: 0,
 				max: 2
-			);
-		}
-
-		public static SirenFieldValueObject GetFieldValueObject( string value = "foo" ) {
-			return new SirenFieldValueObject(
-				value: value,
-				title: "Some field option"
-			);
-		}
-
-		public static SirenFieldValueObject GetFieldValueObject( int value ) {
-			return new SirenFieldValueObject(
-				value: value,
-				title: "Some field option"
 			);
 		}
 
